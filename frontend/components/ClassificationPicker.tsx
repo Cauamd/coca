@@ -1,0 +1,108 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import { ModoFalha, fetchModosFalha, updateClassificacao } from "../lib/api";
+
+interface Props {
+  apontamentoId: number;
+  currentModoFalha: string | null;
+  onClassified: (novoModo: string | null) => void;
+}
+
+export default function ClassificationPicker({
+  apontamentoId,
+  currentModoFalha,
+  onClassified,
+}: Props) {
+  const [open, setOpen] = useState(false);
+  const [modos, setModos] = useState<ModoFalha[]>([]);
+  const [loadingModos, setLoadingModos] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  async function openPicker() {
+    setOpen(true);
+    setError(null);
+    if (modos.length === 0) {
+      setLoadingModos(true);
+      try {
+        const data = await fetchModosFalha();
+        setModos(data);
+      } catch {
+        setError("Erro ao carregar modos de falha.");
+      } finally {
+        setLoadingModos(false);
+      }
+    }
+  }
+
+  async function handleSelect(modoFalhaId: number | null, nomePadrao: string | null) {
+    setSaving(true);
+    setError(null);
+    try {
+      await updateClassificacao(apontamentoId, modoFalhaId);
+      onClassified(nomePadrao);
+      setOpen(false);
+    } catch (err: any) {
+      setError(err.message || "Erro ao salvar classificação");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="classification-picker" ref={wrapperRef}>
+      <div className="classification-current">
+        {currentModoFalha ? (
+          <span className="tag tag-classified">{currentModoFalha}</span>
+        ) : (
+          <span className="tag tag-unclassified">Não classificado</span>
+        )}
+        <button className="btn-classify" onClick={openPicker} disabled={saving}>
+          {saving ? "Salvando..." : "Classificar"}
+        </button>
+      </div>
+
+      {open && (
+        <div className="classification-dropdown">
+          {loadingModos ? (
+            <div className="classification-dropdown-state">Carregando...</div>
+          ) : error ? (
+            <div className="classification-dropdown-state error">{error}</div>
+          ) : (
+            <>
+              <button
+                className="classification-option classification-option-clear"
+                onClick={() => handleSelect(null, null)}
+              >
+                Remover classificação
+              </button>
+              <div className="classification-divider" />
+              {modos.map((modo) => (
+                <button
+                  key={modo.id}
+                  className="classification-option"
+                  onClick={() => handleSelect(modo.id, modo.nome_padrao)}
+                >
+                  <span>{modo.nome_padrao}</span>
+                  {modo.categoria && <span className="classification-category">{modo.categoria}</span>}
+                </button>
+              ))}
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
