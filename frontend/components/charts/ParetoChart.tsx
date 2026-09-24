@@ -53,28 +53,28 @@ export default function ParetoChart({ data }: Props) {
   return (
     <ResponsiveContainer width="100%" height={420}>
       <ComposedChart data={data} margin={{ top: 20, right: 40, left: 10, bottom: 60 }}>
-        {/* Grid: cinza sutil, visível sobre o creme, sem competir com os dados */}
-        <CartesianGrid stroke="#DCC9C2" strokeDasharray="3 3" vertical={false} />
+        {/* Grid: cinza claro sutil, visível sobre o fundo escuro sem competir com os dados */}
+        <CartesianGrid stroke="#3A3A44" strokeDasharray="3 3" vertical={false} />
 
         <XAxis
           dataKey="modo_falha"
-          tick={{ fill: "#6B5A54", fontSize: 11 }}
+          tick={{ fill: "#F5F5F7", fontSize: 11 }}
           angle={-30}
           textAnchor="end"
           interval={0}
           height={80}
-          stroke="#9C8A82"
+          stroke="#3A3A44"
         />
 
         <YAxis
           yAxisId="left"
-          tick={{ fill: "#6B5A54", fontSize: 11 }}
-          stroke="#9C8A82"
+          tick={{ fill: "#F5F5F7", fontSize: 11 }}
+          stroke="#3A3A44"
           label={{
             value: "Minutos de parada",
             angle: -90,
             position: "insideLeft",
-            fill: "#6B5A54",
+            fill: "#9898A0",
             fontSize: 11,
           }}
         />
@@ -83,32 +83,37 @@ export default function ParetoChart({ data }: Props) {
           yAxisId="right"
           orientation="right"
           domain={[0, 100]}
-          tick={{ fill: "#6B5A54", fontSize: 11 }}
-          stroke="#9C8A82"
+          tick={{ fill: "#F5F5F7", fontSize: 11 }}
+          stroke="#3A3A44"
           tickFormatter={(v) => `${v}%`}
         />
 
-        <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(244,0,9,0.06)" }} />
+        <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(244,0,9,0.08)" }} />
 
+        {/* Linha de referência dos 80%: âmbar, a cor de "atenção" que mais se
+            destaca contra fundo escuro + barras vermelhas + linha branca */}
         <ReferenceLine
           yAxisId="right"
           y={80}
-          stroke="#A30006"
+          stroke="#F0A030"
+          strokeWidth={1.5}
           strokeDasharray="4 4"
-          label={{ value: "80%", position: "right", fill: "#A30006", fontSize: 11 }}
+          label={{ value: "80%", position: "right", fill: "#F0A030", fontSize: 11, fontWeight: 600 }}
         />
 
-        {/* Barra: vermelho Coca-Cola sólido, alto contraste sobre o creme */}
+        {/* Barra: vermelho Coca-Cola, alto contraste sobre o fundo escuro */}
         <Bar yAxisId="left" dataKey="tempo_total" fill="#F40009" radius={[3, 3, 0, 0]} barSize={36} />
 
-        {/* Linha de % acumulado: preto, para se destacar tanto das barras quanto do fundo */}
+        {/* Linha de % acumulado: branco puro, a linha mais importante do
+            gráfico — precisa se destacar de tudo, inclusive das barras */}
         <Line
           yAxisId="right"
           type="monotone"
           dataKey="percentual_acumulado"
-          stroke="#1A1A1A"
-          strokeWidth={2}
-          dot={{ fill: "#1A1A1A", r: 3 }}
+          stroke="#F5F5F7"
+          strokeWidth={2.5}
+          dot={{ fill: "#F5F5F7", r: 3.5, strokeWidth: 0 }}
+          activeDot={{ fill: "#F0A030", r: 5, strokeWidth: 0 }}
         />
       </ComposedChart>
     </ResponsiveContainer>

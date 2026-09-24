@@ -193,3 +193,36 @@ export async function addKeyword(modoFalhaId: number, palavraChave: string, prio
   if (!res.ok) throw new Error("Erro ao adicionar palavra-chave");
   return res.json();
 }
+export function buildExportUrl(params: ListParams): string {
+  const query = new URLSearchParams();
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== "" && key !== "page" && key !== "pageSize" && key !== "orderBy" && key !== "orderDir") {
+      query.set(key, String(value));
+    }
+  });
+  return `${API_URL}/apontamentos/export?${query.toString()}`;
+}
+
+export async function downloadExport(params: ListParams): Promise<void> {
+  const url = buildExportUrl(params);
+  const res = await fetch(url);
+
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.detail || "Erro ao exportar dados");
+  }
+
+  const blob = await res.blob();
+  const downloadUrl = window.URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = downloadUrl;
+
+  const contentDisposition = res.headers.get("Content-Disposition");
+  const filenameMatch = contentDisposition?.match(/filename="(.+)"/);
+  link.download = filenameMatch ? filenameMatch[1] : "apontamentos.xlsx";
+
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.URL.revokeObjectURL(downloadUrl);
+}

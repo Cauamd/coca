@@ -56,15 +56,15 @@ function AnimatedDot(props: any) {
   return (
     <g>
       {isHovered && (
-        <circle cx={cx} cy={cy} r={radius + 6} fill={fill} opacity={0.18} />
+        <circle cx={cx} cy={cy} r={radius + 6} fill={fill} opacity={0.22} />
       )}
       <circle
         cx={cx}
         cy={cy}
         r={radius}
         fill={fill}
-        fillOpacity={0.9}
-        stroke={isHovered ? "#1A1A1A" : "#FFFFFF"}
+        fillOpacity={0.92}
+        stroke={isHovered ? "#F5F5F7" : "#0E0E10"}
         strokeWidth={isHovered ? 1.5 : 1}
         style={{ transition: "r 0.18s cubic-bezier(0.22,1,0.36,1), stroke-width 0.18s ease" }}
       />
@@ -89,7 +89,7 @@ export default function JackKnifeChart({ data, limiteQ, limiteMttr, onPointClick
   return (
     <ResponsiveContainer width="100%" height={460}>
       <ScatterChart margin={{ top: 20, right: 40, left: 10, bottom: 20 }}>
-        <CartesianGrid stroke="#DCC9C2" strokeDasharray="3 3" />
+        <CartesianGrid stroke="#3A3A44" strokeDasharray="3 3" />
 
         <XAxis
           type="number"
@@ -97,9 +97,9 @@ export default function JackKnifeChart({ data, limiteQ, limiteMttr, onPointClick
           name="Nº de falhas"
           scale="log"
           domain={["auto", "auto"]}
-          tick={{ fill: "#6B5A54", fontSize: 11 }}
-          stroke="#9C8A82"
-          label={{ value: "Nº de falhas (frequência)", position: "insideBottom", offset: -10, fill: "#6B5A54", fontSize: 11 }}
+          tick={{ fill: "#F5F5F7", fontSize: 11 }}
+          stroke="#3A3A44"
+          label={{ value: "Nº de falhas (frequência)", position: "insideBottom", offset: -10, fill: "#9898A0", fontSize: 11 }}
         />
 
         <YAxis
@@ -108,17 +108,31 @@ export default function JackKnifeChart({ data, limiteQ, limiteMttr, onPointClick
           name="MTTR"
           scale="log"
           domain={["auto", "auto"]}
-          tick={{ fill: "#6B5A54", fontSize: 11 }}
-          stroke="#9C8A82"
-          label={{ value: "MTTR (min)", angle: -90, position: "insideLeft", fill: "#6B5A54", fontSize: 11 }}
+          tick={{ fill: "#F5F5F7", fontSize: 11 }}
+          stroke="#3A3A44"
+          label={{ value: "MTTR (min)", angle: -90, position: "insideLeft", fill: "#9898A0", fontSize: 11 }}
         />
 
         <ZAxis range={[60, 60]} />
 
-        <Tooltip content={<CustomTooltip />} cursor={{ strokeDasharray: "3 3", stroke: "#9C8A82" }} />
+        <Tooltip content={<CustomTooltip />} cursor={{ strokeDasharray: "3 3", stroke: "#3A3A44" }} />
 
-        <ReferenceLine x={limiteQ} stroke="#A38076" strokeDasharray="4 4" label={{ value: `${limiteQ}`, position: "top", fill: "#6B5A54", fontSize: 10 }} />
-        <ReferenceLine y={limiteMttr} stroke="#A38076" strokeDasharray="4 4" label={{ value: `${limiteMttr}`, position: "right", fill: "#6B5A54", fontSize: 10 }} />
+        {/* Linhas de corte (limites de frequência/MTTR): âmbar — a cor de
+            "atenção" que separa os quadrantes, precisa ser fácil de achar */}
+        <ReferenceLine
+          x={limiteQ}
+          stroke="#F0A030"
+          strokeWidth={1.5}
+          strokeDasharray="4 4"
+          label={{ value: `${limiteQ}`, position: "top", fill: "#F0A030", fontSize: 10, fontWeight: 600 }}
+        />
+        <ReferenceLine
+          y={limiteMttr}
+          stroke="#F0A030"
+          strokeWidth={1.5}
+          strokeDasharray="4 4"
+          label={{ value: `${limiteMttr}`, position: "right", fill: "#F0A030", fontSize: 10, fontWeight: 600 }}
+        />
 
         <Scatter
           data={safeData}

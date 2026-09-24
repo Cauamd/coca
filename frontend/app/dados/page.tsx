@@ -8,6 +8,7 @@ import {
     Apontamento,
     Filtros,
     ListParams,
+    downloadExport,
 } from "../../lib/api";
 import ClassificationPicker from "../../components/ClassificationPicker";
 
@@ -89,6 +90,20 @@ export default function DadosApontamentos() {
 
     function clearEquipamentoFilter() {
         setParams((prev) => ({ ...prev, equipamento: undefined, page: 1 }));
+    }
+    const [exporting, setExporting] = useState(false);
+    const [exportError, setExportError] = useState<string | null>(null);
+
+    async function handleExport() {
+        setExporting(true);
+        setExportError(null);
+        try {
+            await downloadExport(params);
+        } catch (err: any) {
+            setExportError(err.message || "Erro ao exportar");
+        } finally {
+            setExporting(false);
+        }
     }
 
     return (
@@ -197,8 +212,12 @@ export default function DadosApontamentos() {
                     <span className="result-count">
                         {loading ? "Carregando..." : `${pagination.total.toLocaleString("pt-BR")} registros`}
                     </span>
-                </div>
 
+                    <button className="btn-export" onClick={handleExport} disabled={exporting || loading}>
+                        {exporting ? "Exportando..." : "Exportar Excel"}
+                    </button>
+                </div>
+            {exportError && <div className="status-message error">{exportError}</div>}
                 {/* --- Tabela --- */}
                 <div className="table-wrapper">
                     {error && <div className="status-message error">{error}</div>}

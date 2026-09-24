@@ -1,6 +1,7 @@
 const pool = require("../config/db");
 const { parseExcelBuffer } = require("../services/excelImport.service");
 const { classifyAllPending } = require("../services/classification.service");
+const { buildApontamentosWorkbook } = require("../services/export.service");
 
 const BATCH_SIZE = 1000;
 
@@ -63,22 +64,12 @@ async function uploadApontamentos(req, res) {
   });
 }
 
-async function listApontamentos(req, res) {
+function buildWhereClause(query) {
   const {
-    centro,
-    linha,
-    tipo_parada,
-    equipamento,
-    turno,
-    data_inicio,
-    data_fim,
-    busca,
+    centro, linha, tipo_parada, equipamento, turno,
+    data_inicio, data_fim, busca,
     apenas_validos = "true",
-    page = "1",
-    pageSize = "50",
-    orderBy = "data_inicio",
-    orderDir = "desc",
-  } = req.query;
+  } = query;
 
   const where = [];
   const params = [];
@@ -97,40 +88,31 @@ async function listApontamentos(req, res) {
     where.push(`NOT (${validClause})`);
   }
 
-  if (centro) {
-    where.push("a.centro = ?");
-    params.push(centro);
-  }
-  if (linha) {
-    where.push("a.linha = ?");
-    params.push(linha);
-  }
-  if (tipo_parada) {
-    where.push("a.tipo_parada = ?");
-    params.push(tipo_parada);
-  }
-  if (equipamento) {
-    where.push("a.chave_parada = ?");
-    params.push(equipamento);
-  }
-  if (turno) {
-    where.push("a.turno = ?");
-    params.push(parseInt(turno, 10));
-  }
-  if (data_inicio) {
-    where.push("a.data_inicio >= ?");
-    params.push(`${data_inicio} 00:00:00`);
-  }
-  if (data_fim) {
-    where.push("a.data_inicio <= ?");
-    params.push(`${data_fim} 23:59:59`);
-  }
+  if (centro) { where.push("a.centro = ?"); params.push(centro); }
+  if (linha) { where.push("a.linha = ?"); params.push(linha); }
+  if (tipo_parada) { where.push("a.tipo_parada = ?"); params.push(tipo_parada); }
+  if (equipamento) { where.push("a.chave_parada = ?"); params.push(equipamento); }
+  if (turno) { where.push("a.turno = ?"); params.push(parseInt(turno, 10)); }
+  if (data_inicio) { where.push("a.data_inicio >= ?"); params.push(`${data_inicio} 00:00:00`); }
+  if (data_fim) { where.push("a.data_inicio <= ?"); params.push(`${data_fim} 23:59:59`); }
   if (busca) {
     where.push("(a.observacoes LIKE ? OR a.descricao_material LIKE ?)");
     params.push(`%${busca}%`, `%${busca}%`);
   }
 
   const whereClause = where.length ? `WHERE ${where.join(" AND ")}` : "";
+  return { whereClause, params };
+}
+
+async function listApontamentos(req, res) {
+  const {
+    page = "1",
+    pageSize = "50",
+    orderBy = "data_inicio",
+    orderDir = "desc",
+  } = req.query;
+
+  const { whereClause, params } = buildWhereClause(req.query);
 
   const sortField = ALLOWED_SORT_FIELDS.has(orderBy) ? orderBy : "data_inicio";
   const sortDir = orderDir.toLowerCase() === "asc" ? "ASC" : "DESC";
@@ -195,4 +177,54 @@ async function getFiltros(req, res) {
   }
 }
 
-module.exports = { uploadApontamentos, listApontamentos, getFiltros };
+async function exportApontamentos(req, res) {
+  const { whereClause, params } = buildWhereClause(req.query);
+
+  // Limite de segurança: exportações muito grandes travam o navegador do usuário.
+  const MAX_EXPORT_ROWS = 50000;
+
+  try {
+    const [countRows] = await pool.query(
+      `SELECT COUNT(*) AS total FROM apontamentos a ${whereClause}`,
+      params
+    );
+    if (countRows[0].total > MAX_EXPORT_ROWS) {
+      return res.status(400).json({
+        detail: `A exportação tem ${countRows[0].total.toLocaleString("pt-BR")} registros, acima do limite de ${MAX_EXPORT_ROWS.toLocaleString("pt-BR")}. Refine os filtros (período, centro ou linha) antes de exportar.`,
+      });
+    }
+
+    const [rows] = await pool.query(
+      `SELECT a.id, a.centro, a.linha, a.ordem, a.material, a.descricao_material,
+              a.data_inicio, a.turno, a.intervalo, a.tipo_parada, a.chave_parada,
+              a.subchave_parada, a.observacoes, a.tempo_parada, a.total_minutos,
+              mf.nome_padrao AS modo_falha_padrao
+       FROM apontamentos a
+       LEFT JOIN modos_falha_padrao mf ON mf.id = a.modo_falha_id
+       ${whereClause}
+       ORDER BY a.data_inicio DESC`,
+      params
+    );
+
+    const workbook = await buildApontamentosWorkbook(rows);
+
+    const filename = `apontamentos_${new Date().toISOString().slice(0, 10)}.xlsx`;
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+
+    await workbook.xlsx.write(res);
+    res.end();
+  } catch (err) {
+    res.status(500).json({ detail: `Erro ao exportar: ${err.message}` });
+  }
+}
+
+module.exports = {
+  uploadApontamentos,
+  listApontamentos,
+  getFiltros,
+  exportApontamentos,
+};
