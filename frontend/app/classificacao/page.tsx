@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { fetchSuggestions, fetchModosFalha, addKeyword, SuggestionsResponse, ModoFalha } from "../../lib/api";
+import MorphSelect from "../../components/ui/select-morph";
 
 export default function ClassificacaoPage() {
   const [suggestions, setSuggestions] = useState<SuggestionsResponse | null>(null);
@@ -80,17 +81,15 @@ export default function ClassificacaoPage() {
                       <td><span className="tag">{s.termo}</span></td>
                       <td className="col-num">{s.ocorrencias}</td>
                       <td>
-                        <select
-                          value={selectedModo[s.termo] || ""}
-                          onChange={(e) =>
-                            setSelectedModo((prev) => ({ ...prev, [s.termo]: Number(e.target.value) }))
-                          }
-                        >
-                          <option value="">Selecione um modo de falha...</option>
-                          {modos.map((m) => (
-                            <option key={m.id} value={m.id}>{m.nome_padrao}</option>
-                          ))}
-                        </select>
+                        <MorphSelect
+                          value={String(selectedModo[s.termo] || "")}
+                          ariaLabel={`Modo de falha para ${s.termo}`}
+                          onValueChange={(value) => setSelectedModo((prev) => ({ ...prev, [s.termo]: Number(value) }))}
+                          options={[
+                            { value: "", label: "Selecione um modo de falha..." },
+                            ...modos.map((m) => ({ value: String(m.id), label: m.nome_padrao })),
+                          ]}
+                        />
                       </td>
                       <td>
                         <button

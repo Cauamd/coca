@@ -3,6 +3,9 @@ const cors = require("cors");
 require("dotenv").config();
 
 const apontamentosRoutes = require("./routes/apontamentos.routes");
+const alertsRoutes = require("./routes/alerts.routes");
+
+
 
 const app = express();
 
@@ -27,4 +30,5 @@ app.use("/classificacao", classificationRoutes);
 const dashboardRoutes = require("./routes/dashboard.routes");
 app.use("/dashboard", dashboardRoutes);
 
+app.use("/planos-acao",alertsRoutes);
 module.exports = app;

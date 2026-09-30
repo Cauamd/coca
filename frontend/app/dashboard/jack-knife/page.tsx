@@ -4,6 +4,8 @@ import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { fetchJackKnife, fetchFiltros, JackKnifeResponse, JackKnifePonto, Filtros } from "../../../lib/api";
 import JackKnifeChart from "../../../components/charts/JackKnifeChart";
+import MorphSelect from "../../../components/ui/select-morph";
+import DatePicker from "../../../components/ui/date-picker";
 
 const CATEGORY_LEGEND = [
   { label: "Crítico-Crônico", color: "#F0A030", desc: "Alta frequência e alto impacto — prioridade máxima" },
@@ -77,40 +79,22 @@ export default function DashboardJackKnife() {
           <div className="filter-bar">
             <div className="filter-field">
               <label>Centro</label>
-              <select value={params.centro} onChange={(e) => updateFilter("centro", e.target.value)}>
-                <option value="">Todos</option>
-                {filtros.centros.map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </select>
+              <MorphSelect value={params.centro} ariaLabel="Centro" onValueChange={(value) => updateFilter("centro", value)} options={[{ value: "", label: "Todos" }, ...filtros.centros.map((c) => ({ value: c, label: c }))]} />
             </div>
 
             <div className="filter-field">
               <label>Linha</label>
-              <select value={params.linha} onChange={(e) => updateFilter("linha", e.target.value)}>
-                <option value="">Todas</option>
-                {filtros.linhas.map((l) => (
-                  <option key={l} value={l}>{l}</option>
-                ))}
-              </select>
+              <MorphSelect value={params.linha} ariaLabel="Linha" onValueChange={(value) => updateFilter("linha", value)} options={[{ value: "", label: "Todas" }, ...filtros.linhas.map((l) => ({ value: l, label: l }))]} />
             </div>
 
             <div className="filter-field">
               <label>De</label>
-              <input
-                type="date"
-                value={params.data_inicio}
-                onChange={(e) => updateFilter("data_inicio", e.target.value)}
-              />
+              <DatePicker value={params.data_inicio} ariaLabel="Data inicial" onValueChange={(value) => updateFilter("data_inicio", value)} />
             </div>
 
             <div className="filter-field">
               <label>Até</label>
-              <input
-                type="date"
-                value={params.data_fim}
-                onChange={(e) => updateFilter("data_fim", e.target.value)}
-              />
+              <DatePicker value={params.data_fim} ariaLabel="Data final" onValueChange={(value) => updateFilter("data_fim", value)} />
             </div>
           </div>
 

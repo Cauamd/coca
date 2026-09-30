@@ -11,6 +11,8 @@ import {
     downloadExport,
 } from "../../lib/api";
 import ClassificationPicker from "../../components/ClassificationPicker";
+import MorphSelect from "../../components/ui/select-morph";
+import DatePicker from "../../components/ui/date-picker";
 
 function formatDate(iso: string) {
     const d = new Date(iso);
@@ -128,60 +130,32 @@ export default function DadosApontamentos() {
                 <div className="filter-bar">
                     <div className="filter-field">
                         <label>Centro</label>
-                        <select value={params.centro || ""} onChange={(e) => updateFilter("centro", e.target.value)}>
-                            <option value="">Todos</option>
-                            {filtros.centros.map((c) => (
-                                <option key={c} value={c}>{c}</option>
-                            ))}
-                        </select>
+                        <MorphSelect value={params.centro || ""} ariaLabel="Centro" onValueChange={(value) => updateFilter("centro", value)} options={[{ value: "", label: "Todos" }, ...filtros.centros.map((c) => ({ value: c, label: c }))]} />
                     </div>
 
                     <div className="filter-field">
                         <label>Linha</label>
-                        <select value={params.linha || ""} onChange={(e) => updateFilter("linha", e.target.value)}>
-                            <option value="">Todas</option>
-                            {filtros.linhas.map((l) => (
-                                <option key={l} value={l}>{l}</option>
-                            ))}
-                        </select>
+                        <MorphSelect value={params.linha || ""} ariaLabel="Linha" onValueChange={(value) => updateFilter("linha", value)} options={[{ value: "", label: "Todas" }, ...filtros.linhas.map((l) => ({ value: l, label: l }))]} />
                     </div>
 
                     <div className="filter-field">
                         <label>Tipo de parada</label>
-                        <select value={params.tipo_parada || ""} onChange={(e) => updateFilter("tipo_parada", e.target.value)}>
-                            <option value="">Todos</option>
-                            {filtros.tipos_parada.map((t) => (
-                                <option key={t} value={t}>{t}</option>
-                            ))}
-                        </select>
+                        <MorphSelect value={params.tipo_parada || ""} ariaLabel="Tipo de parada" onValueChange={(value) => updateFilter("tipo_parada", value)} options={[{ value: "", label: "Todos" }, ...filtros.tipos_parada.map((t) => ({ value: t, label: t }))]} />
                     </div>
 
                     <div className="filter-field">
                         <label>Turno</label>
-                        <select value={params.turno || ""} onChange={(e) => updateFilter("turno", e.target.value)}>
-                            <option value="">Todos</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                        </select>
+                        <MorphSelect value={params.turno || ""} ariaLabel="Turno" onValueChange={(value) => updateFilter("turno", value)} options={[{ value: "", label: "Todos" }, { value: "1", label: "1" }, { value: "2", label: "2" }, { value: "3", label: "3" }]} />
                     </div>
 
                     <div className="filter-field">
                         <label>De</label>
-                        <input
-                            type="date"
-                            value={params.data_inicio || ""}
-                            onChange={(e) => updateFilter("data_inicio", e.target.value)}
-                        />
+                        <DatePicker value={params.data_inicio || ""} ariaLabel="Data inicial" onValueChange={(value) => updateFilter("data_inicio", value)} />
                     </div>
 
                     <div className="filter-field">
                         <label>Até</label>
-                        <input
-                            type="date"
-                            value={params.data_fim || ""}
-                            onChange={(e) => updateFilter("data_fim", e.target.value)}
-                        />
+                        <DatePicker value={params.data_fim || ""} ariaLabel="Data final" onValueChange={(value) => updateFilter("data_fim", value)} />
                     </div>
 
                     <div className="filter-field filter-field-wide">

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -6,19 +6,19 @@ import { useRef } from "react";
 
 
 const NAV_ITEMS = [
-  { href: "/", label: "Início" },
+  { href: "/", label: "Ini­cio" },
   { href: "/upload", label: "Importar" },
   { href: "/dados", label: "Apontamentos" },
   { href: "/dashboard", label: "Pareto" },
-  { href: "/dashboard/jack-knife", label: "Crítico-Crônico" },
-  { href: "/classificacao", label: "Dicionário" },
+  { href: "/dashboard/jack-knife", label: "Cri­tico-Cronico" },
+  { href: "/alertas", label: "Alertas" },
+  { href: "/classificacao", label: "DicionÃ¡rio" },
 ];
-
 export default function Nav() {
   const pathname = usePathname();
   const navRef = useRef<HTMLElement>(null);
 
-  // Atualiza --mx/--my do link sob o cursor, para o gradiente radial "seguir a água"
+  // Atualiza --mx/--my do link sob o cursor, para o gradiente radial "seguir a Ã¡gua"
   function handlePointerMove(e: React.PointerEvent<HTMLElement>) {
     const target = (e.target as HTMLElement).closest(".nav-link") as HTMLElement | null;
     if (!target) return;

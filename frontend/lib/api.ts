@@ -226,3 +226,86 @@ export async function downloadExport(params: ListParams): Promise<void> {
   link.remove();
   window.URL.revokeObjectURL(downloadUrl);
 }
+export interface Alerta {
+  linha: string;
+  equipamento: string;
+  qtd_falhas: number;
+  tempo_total: number;
+  plano_status: "sem_plano" | "aberto" | "em_andamento" | "concluido";
+  plano_atualizado_em: string | null;
+}
+
+export interface AlertasResponse {
+  limite_minutos: number;
+  alertas: Alerta[];
+}
+
+export interface CincoW2HItem {
+  what: string;
+  why: string;
+  where: string;
+  when: string;
+  who: string;
+  how: string;
+  how_much: string;
+}
+
+export interface Ishikawa {
+  metodo: string;
+  maquina: string;
+  mao_de_obra: string;
+  material: string;
+  meio_ambiente: string;
+  medida: string;
+}
+
+export interface PlanoAcao {
+  id?: number;
+  status: "aberto" | "em_andamento" | "concluido";
+  descricao_problema: string;
+  ishikawa: Ishikawa;
+  brainstorming: string[];
+  cinco_porques: string[];
+  cinco_w2h: CincoW2HItem[];
+}
+
+export interface Sugestao {
+  modos_falha_predominantes: { nome: string; ocorrencias: number; tempo_total: number }[];
+  observacoes_amostra: string[];
+}
+
+export interface PlanoResponse {
+  plano: (PlanoAcao & { linha?: string; equipamento?: string }) | null;
+  sugestao: Sugestao;
+}
+
+export async function fetchAlertas(): Promise<AlertasResponse> {
+  const res = await fetch(`${API_URL}/planos-acao`, { credentials: "include" });
+  if (!res.ok) throw new Error("Erro ao buscar alertas");
+  return res.json();
+}
+
+export async function fetchPlano(linha: string, equipamento: string): Promise<PlanoResponse> {
+  const res = await fetch(
+    `${API_URL}/planos-acao/${encodeURIComponent(linha)}/${encodeURIComponent(equipamento)}`,
+    { credentials: "include" }
+  );
+  if (!res.ok) throw new Error("Erro ao buscar plano de ação");
+  return res.json();
+}
+
+export async function savePlano(linha: string, equipamento: string, plano: PlanoAcao): Promise<void> {
+  const res = await fetch(
+    `${API_URL}/planos-acao/${encodeURIComponent(linha)}/${encodeURIComponent(equipamento)}`,
+    {
+      method: "PUT",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(plano),
+    }
+  );
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.detail || "Erro ao salvar plano de ação");
+  }
+}
