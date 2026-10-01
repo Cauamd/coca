@@ -5,7 +5,8 @@ const pool = require("../config/db");
 // ============================================
 
 async function getParetoModoFalha(req, res) {
-  const { centro, linha, data_inicio, data_fim } = req.query;
+  const { linha, data_inicio, data_fim } = req.query;
+  const centro = req.user?.centro;
 
   const where = ["a.tempo_parada > 0", "mf.id IS NOT NULL"];
   const params = [];
@@ -104,7 +105,8 @@ function categorizar(q, mttr, limiteQ, limiteMttr) {
 }
 
 async function getJackKnife(req, res) {
-  const { centro, linha, data_inicio, data_fim, limite_q, limite_mttr } = req.query;
+  const { linha, data_inicio, data_fim, limite_q, limite_mttr } = req.query;
+  const centro = req.user?.centro;
 
   const where = ["a.tempo_parada > 0", "a.chave_parada IS NOT NULL", "a.chave_parada <> ''"];
   const params = [];

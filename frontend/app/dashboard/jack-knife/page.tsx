@@ -30,7 +30,10 @@ export default function DashboardJackKnife() {
   });
 
   useEffect(() => {
-    fetchFiltros().then(setFiltros).catch(() => {});
+    fetchFiltros().then((result) => {
+      setFiltros(result);
+      setParams((prev) => ({ ...prev, centro: result.centros[0] || "" }));
+    }).catch(() => {});
   }, []);
 
   const loadData = useCallback(async () => {

@@ -20,6 +20,11 @@ app.use(
 
 app.use(express.json());
 
+const authRoutes = require("./routes/auth.routes");
+const { requireAdmin } = require("./middleware/auth");
+app.use("/auth", authRoutes);
+app.use(requireAdmin);
+
 app.use("/apontamentos", apontamentosRoutes);
 
 app.get("/health", (req, res) => res.json({ status: "ok" }));

@@ -50,13 +50,17 @@ function classify(observacaoTexto, dictionary) {
   return null;
 }
 
-async function classifyAllPending({ forceAll = false } = {}) {
+async function classifyAllPending({ forceAll = false, centro = null } = {}) {
   const dictionary = await loadDictionary();
 
-  const whereClause = forceAll ? "" : "WHERE modo_falha_id IS NULL";
+  const conditions = [];
+  if (!forceAll) conditions.push("modo_falha_id IS NULL");
+  if (centro) conditions.push("centro = ?");
+  const whereClause = conditions.length ? `WHERE ${conditions.join(" AND ")}` : "";
 
   const [rows] = await pool.query(
-    `SELECT id, observacoes FROM apontamentos ${whereClause}`
+    `SELECT id, observacoes FROM apontamentos ${whereClause}`,
+    centro ? [centro] : []
   );
 
   let classified = 0;
@@ -81,7 +85,8 @@ async function classifyAllPending({ forceAll = false } = {}) {
     await pool.query(
       `UPDATE apontamentos
        SET modo_falha_id = CASE id ${caseSql} END
-       WHERE id IN (${ids.join(",")})`
+       WHERE id IN (${ids.join(",")})${centro ? " AND centro = ?" : ""}`,
+      centro ? [centro] : []
     );
 
     classified += updates.length;

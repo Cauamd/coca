@@ -1,5 +1,35 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
+export async function fetchCentros(): Promise<string[]> {
+  const res = await fetch(`${API_URL}/auth/centros`, { credentials: "include" });
+  if (!res.ok) throw new Error("Não foi possível carregar os centros");
+  const data = await res.json();
+  return data.centros;
+}
+
+export async function loginAdmin(usuario: string, senha: string, centro: string): Promise<void> {
+  const res = await fetch(`${API_URL}/auth/login`, {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ usuario, senha, centro }),
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.detail || "Não foi possível entrar");
+  }
+}
+
+export async function logoutAdmin(): Promise<void> {
+  await fetch(`${API_URL}/auth/logout`, { method: "POST", credentials: "include" });
+}
+
+export async function fetchSession(): Promise<{ usuario: string; centro: string; role: "admin" }> {
+  const res = await fetch(`${API_URL}/auth/me`, { credentials: "include" });
+  if (!res.ok) throw new Error("Sessão inválida");
+  return res.json();
+}
+
 
 export interface Apontamento {
   id: number;
@@ -59,13 +89,13 @@ export async function fetchApontamentos(params: ListParams): Promise<ListRespons
     if (value !== undefined && value !== "") query.set(key, String(value));
   });
 
-  const res = await fetch(`${API_URL}/apontamentos?${query.toString()}`);
+  const res = await fetch(`${API_URL}/apontamentos?${query.toString()}`, { credentials: "include" });
   if (!res.ok) throw new Error("Erro ao buscar apontamentos");
   return res.json();
 }
 
 export async function fetchFiltros(): Promise<Filtros> {
-  const res = await fetch(`${API_URL}/apontamentos/filtros`);
+  const res = await fetch(`${API_URL}/apontamentos/filtros`, { credentials: "include" });
   if (!res.ok) throw new Error("Erro ao buscar filtros");
   return res.json();
 }
@@ -77,7 +107,7 @@ export interface ModoFalha {
 }
 
 export async function fetchModosFalha(): Promise<ModoFalha[]> {
-  const res = await fetch(`${API_URL}/classificacao/modos-falha`);
+  const res = await fetch(`${API_URL}/classificacao/modos-falha`, { credentials: "include" });
   if (!res.ok) throw new Error("Erro ao buscar modos de falha");
   return res.json();
 }
@@ -88,6 +118,7 @@ export async function updateClassificacao(
 ): Promise<{ id: number; modo_falha_padrao: string | null }> {
   const res = await fetch(`${API_URL}/classificacao/apontamentos/${id}`, {
     method: "PATCH",
+    credentials: "include",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ modo_falha_id: modoFalhaId }),
   });
@@ -125,7 +156,7 @@ export async function fetchPareto(params: ParetoParams): Promise<ParetoResponse>
     if (value) query.set(key, value);
   });
 
-  const res = await fetch(`${API_URL}/dashboard/pareto-modo-falha?${query.toString()}`);
+  const res = await fetch(`${API_URL}/dashboard/pareto-modo-falha?${query.toString()}`, { credentials: "include" });
   if (!res.ok) throw new Error("Erro ao buscar Pareto");
   return res.json();
 }
@@ -157,7 +188,7 @@ export async function fetchJackKnife(params: JackKnifeParams): Promise<JackKnife
     if (value) query.set(key, value);
   });
 
-  const res = await fetch(`${API_URL}/dashboard/jack-knife?${query.toString()}`);
+  const res = await fetch(`${API_URL}/dashboard/jack-knife?${query.toString()}`, { credentials: "include" });
   if (!res.ok) throw new Error("Erro ao buscar Jack-Knife");
   return res.json();
 }
@@ -179,7 +210,7 @@ export interface SuggestionsResponse {
 }
 
 export async function fetchSuggestions(minOccurrences = 5): Promise<SuggestionsResponse> {
-  const res = await fetch(`${API_URL}/classificacao/sugestoes?min=${minOccurrences}`);
+  const res = await fetch(`${API_URL}/classificacao/sugestoes?min=${minOccurrences}`, { credentials: "include" });
   if (!res.ok) throw new Error("Erro ao buscar sugestões");
   return res.json();
 }
@@ -187,6 +218,7 @@ export async function fetchSuggestions(minOccurrences = 5): Promise<SuggestionsR
 export async function addKeyword(modoFalhaId: number, palavraChave: string, prioridade = 5) {
   const res = await fetch(`${API_URL}/classificacao/palavras-chave`, {
     method: "POST",
+    credentials: "include",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ modo_falha_id: modoFalhaId, palavra_chave: palavraChave, prioridade }),
   });
@@ -205,7 +237,7 @@ export function buildExportUrl(params: ListParams): string {
 
 export async function downloadExport(params: ListParams): Promise<void> {
   const url = buildExportUrl(params);
-  const res = await fetch(url);
+  const res = await fetch(url, { credentials: "include" });
 
   if (!res.ok) {
     const data = await res.json().catch(() => ({}));

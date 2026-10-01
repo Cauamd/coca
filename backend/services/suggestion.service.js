@@ -7,13 +7,14 @@ const STOPWORDS = new Set([
   "POR", "SEM", "AO", "AOS", "UM", "UMA", "FOI", "SER", "APOS", "DEVIDO",
 ]);
 
-async function suggestKeywords({ minOccurrences = 5, limit = 50 } = {}) {
+async function suggestKeywords({ minOccurrences = 5, limit = 50, centro = null } = {}) {
   const dictionary = await loadDictionary();
   const knownWords = new Set(dictionary.map((d) => d.palavra_normalizada));
 
   const [rows] = await pool.query(
     `SELECT observacoes FROM apontamentos
-     WHERE modo_falha_id IS NULL AND observacoes IS NOT NULL AND observacoes <> ''`
+     WHERE modo_falha_id IS NULL AND observacoes IS NOT NULL AND observacoes <> ''${centro ? " AND centro = ?" : ""}`,
+    centro ? [centro] : []
   );
 
   // Conta frequência de cada palavra (e de bigramas — pares de palavras

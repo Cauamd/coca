@@ -44,6 +44,7 @@ export default function UploadApontamentos() {
     try {
       const res = await fetch(`${API_URL}/apontamentos/upload`, {
         method: "POST",
+        credentials: "include",
         body: formData,
       });
 

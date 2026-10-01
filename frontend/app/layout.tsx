@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Nav from "../components/Nav";
+import AuthShell from "../components/AuthShell";
 
 
 export const metadata: Metadata = {
@@ -16,16 +16,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body>
-        <header className="global-header">
-          <div className="global-header-inner">
-            <div className="brand">
-       
-              <span className="brand-title"></span>
-            </div>
-            <Nav />
-          </div>
-        </header>
-        <div className="app-content">{children}</div>
+        <AuthShell>{children}</AuthShell>
       </body>
     </html>
   );

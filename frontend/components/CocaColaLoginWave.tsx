@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { fetchCentros, loginAdmin } from "../lib/api";
 
 // viewBox fixo: 1280 x 720.
 
@@ -35,10 +37,30 @@ const springTransition = {
 };
 
 export default function CocaColaLoginWave() {
+  const router = useRouter();
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [usuario, setUsuario] = useState("");
+  const [senha, setSenha] = useState("");
+  const [centro, setCentro] = useState("");
+  const [centros, setCentros] = useState<string[]>([]);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  function handleSubmit() {
-    setIsTransitioning(true);
+  useEffect(() => {
+    fetchCentros().then(setCentros).catch((err) => setError(err.message));
+  }, []);
+
+  async function handleSubmit() {
+    setError("");
+    setLoading(true);
+    try {
+      await loginAdmin(usuario, senha, centro);
+      setIsTransitioning(true);
+      window.setTimeout(() => router.replace("/"), 1050);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Não foi possível entrar.");
+      setLoading(false);
+    }
   }
 
   return (
@@ -90,29 +112,50 @@ export default function CocaColaLoginWave() {
       <AnimatePresence>
         {!isTransitioning && (
           <motion.div
-            className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-4"
+            className="absolute inset-0 z-30 flex items-center justify-center"
             style={{ paddingTop: "60px" }}
             exit={{ opacity: 0, y: -16 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
           >
+            <form
+              onSubmit={(event) => { event.preventDefault(); void handleSubmit(); }}
+              className="flex flex-col items-center gap-4"
+            >
+            <select
+              value={centro}
+              onChange={(event) => setCentro(event.target.value)}
+              aria-label="Centro"
+              className="w-64 h-12 rounded-full bg-white px-5 text-sm text-neutral-800 outline-none shadow-[0_6px_16px_rgba(0,0,0,0.18)]"
+              disabled={loading || centros.length === 0}
+            >
+              <option value="">{centros.length ? "Escolha o centro" : "Carregando centros..."}</option>
+              {centros.map((item) => <option key={item} value={item}>{item}</option>)}
+            </select>
             <input
               type="text"
               placeholder="Usuário"
+              value={usuario}
+              onChange={(event) => setUsuario(event.target.value)}
               className="w-64 h-12 rounded-full bg-white px-5 text-sm text-neutral-800 placeholder:text-neutral-400 outline-none shadow-[0_6px_16px_rgba(0,0,0,0.18)]"
             />
             <input
               type="password"
               placeholder="Senha"
+              value={senha}
+              onChange={(event) => setSenha(event.target.value)}
               className="w-64 h-12 rounded-full bg-white px-5 text-sm text-neutral-800 placeholder:text-neutral-400 outline-none shadow-[0_6px_16px_rgba(0,0,0,0.18)]"
             />
             <motion.button
-              onClick={handleSubmit}
+              type="submit"
+              disabled={loading || !centro}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               className="w-48 h-9 rounded-full bg-white text-sm font-semibold text-red-600 shadow-[0_6px_16px_rgba(0,0,0,0.2)] cursor-pointer"
             >
-              Entrar
+              {loading ? "Entrando..." : "Entrar"}
             </motion.button>
+            {error && <p role="alert" className="max-w-72 rounded-xl bg-white/95 px-4 py-2 text-center text-sm text-red-700 shadow">{error}</p>}
+            </form>
           </motion.div>
         )}
       </AnimatePresence>

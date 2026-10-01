@@ -25,6 +25,10 @@ async function uploadApontamentos(req, res) {
     return res.status(400).json({ detail: err.message });
   }
 
+  if (rows.some((row) => row[0] !== req.user?.centro)) {
+    return res.status(403).json({ detail: "A planilha contém registros de um centro diferente do centro selecionado no login." });
+  }
+
   const insertSql = `
     INSERT INTO apontamentos
       (centro, linha, ordem, material, descricao_material, data_inicio,
@@ -54,7 +58,7 @@ async function uploadApontamentos(req, res) {
     connection.release();
   }
 
-  const classificacao = await classifyAllPending({ forceAll: false });
+  const classificacao = await classifyAllPending({ forceAll: false, centro: req.user?.centro });
 
   return res.json({
     status: "sucesso",
@@ -64,7 +68,7 @@ async function uploadApontamentos(req, res) {
   });
 }
 
-function buildWhereClause(query) {
+function buildWhereClause(query, centroSessao) {
   const {
     centro, linha, tipo_parada, equipamento, turno,
     data_inicio, data_fim, busca,
@@ -88,7 +92,7 @@ function buildWhereClause(query) {
     where.push(`NOT (${validClause})`);
   }
 
-  if (centro) { where.push("a.centro = ?"); params.push(centro); }
+  if (centroSessao) { where.push("a.centro = ?"); params.push(centroSessao); }
   if (linha) { where.push("a.linha = ?"); params.push(linha); }
   if (tipo_parada) { where.push("a.tipo_parada = ?"); params.push(tipo_parada); }
   if (equipamento) { where.push("a.chave_parada = ?"); params.push(equipamento); }
@@ -112,7 +116,7 @@ async function listApontamentos(req, res) {
     orderDir = "desc",
   } = req.query;
 
-  const { whereClause, params } = buildWhereClause(req.query);
+  const { whereClause, params } = buildWhereClause(req.query, req.user?.centro);
 
   const sortField = ALLOWED_SORT_FIELDS.has(orderBy) ? orderBy : "data_inicio";
   const sortDir = orderDir.toLowerCase() === "asc" ? "ASC" : "DESC";
@@ -157,14 +161,15 @@ async function listApontamentos(req, res) {
 
 async function getFiltros(req, res) {
   try {
+    const centro = req.user?.centro;
     const [centros] = await pool.query(
-      "SELECT DISTINCT centro FROM apontamentos WHERE centro IS NOT NULL AND centro <> '' ORDER BY centro"
+      "SELECT DISTINCT centro FROM apontamentos WHERE centro = ? ORDER BY centro", [centro]
     );
     const [linhas] = await pool.query(
-      "SELECT DISTINCT linha FROM apontamentos WHERE linha IS NOT NULL AND linha <> '' ORDER BY linha"
+      "SELECT DISTINCT linha FROM apontamentos WHERE centro = ? AND linha IS NOT NULL AND linha <> '' ORDER BY linha", [centro]
     );
     const [tipos] = await pool.query(
-      "SELECT DISTINCT tipo_parada FROM apontamentos WHERE tipo_parada IS NOT NULL AND tipo_parada <> '' ORDER BY tipo_parada"
+      "SELECT DISTINCT tipo_parada FROM apontamentos WHERE centro = ? AND tipo_parada IS NOT NULL AND tipo_parada <> '' ORDER BY tipo_parada", [centro]
     );
 
     res.json({
@@ -178,7 +183,7 @@ async function getFiltros(req, res) {
 }
 
 async function exportApontamentos(req, res) {
-  const { whereClause, params } = buildWhereClause(req.query);
+  const { whereClause, params } = buildWhereClause(req.query, req.user?.centro);
 
   // Limite de segurança: exportações muito grandes travam o navegador do usuário.
   const MAX_EXPORT_ROWS = 50000;

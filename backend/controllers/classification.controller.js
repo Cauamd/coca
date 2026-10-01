@@ -4,7 +4,7 @@ const { suggestKeywords } = require("../services/suggestion.service");
 
 async function reclassifyAll(req, res) {
   try {
-    const result = await classifyAllPending({ forceAll: true });
+    const result = await classifyAllPending({ forceAll: true, centro: req.user?.centro });
     res.json({ status: "sucesso", ...result });
   } catch (err) {
     res.status(500).json({ detail: err.message });
@@ -60,8 +60,8 @@ async function updateClassificacaoManual(req, res) {
     }
 
     const [result] = await pool.query(
-      "UPDATE apontamentos SET modo_falha_id = ? WHERE id = ?",
-      [modo_falha_id, id]
+      "UPDATE apontamentos SET modo_falha_id = ? WHERE id = ? AND centro = ?",
+      [modo_falha_id, id, req.user.centro]
     );
 
     if (result.affectedRows === 0) {
@@ -72,8 +72,8 @@ async function updateClassificacaoManual(req, res) {
       `SELECT a.id, mf.nome_padrao AS modo_falha_padrao
        FROM apontamentos a
        LEFT JOIN modos_falha_padrao mf ON mf.id = a.modo_falha_id
-       WHERE a.id = ?`,
-      [id]
+       WHERE a.id = ? AND a.centro = ?`,
+      [id, req.user.centro]
     );
 
     res.json({ status: "sucesso", apontamento: rows[0] });
@@ -85,7 +85,7 @@ async function updateClassificacaoManual(req, res) {
 async function getSuggestions(req, res) {
   const minOccurrences = req.query.min ? parseInt(req.query.min, 10) : 5;
   try {
-    const result = await suggestKeywords({ minOccurrences });
+    const result = await suggestKeywords({ minOccurrences, centro: req.user?.centro });
     res.json(result);
   } catch (err) {
     res.status(500).json({ detail: err.message });
