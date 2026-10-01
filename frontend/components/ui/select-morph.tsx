@@ -12,20 +12,26 @@ interface MorphSelectProps {
   value: string;
   options: MorphSelectOption[];
   onValueChange: (value: string) => void;
+  id?: string;
   className?: string;
   ariaLabel?: string;
+  placeholder?: string;
+  disabled?: boolean;
 }
 
 export default function MorphSelect({
   value,
   options,
   onValueChange,
+  id: triggerId,
   className = "",
   ariaLabel,
+  placeholder = "Selecione",
+  disabled = false,
 }: MorphSelectProps) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
-  const id = useId();
+  const selectId = useId();
   const reduceMotion = useReducedMotion();
   const selectedLabel = options.find((option) => option.value === value)?.label ?? "";
 
@@ -48,36 +54,38 @@ export default function MorphSelect({
   return (
     <div ref={rootRef} className={`morph-select ${className}`}>
       <div aria-hidden="true" className="morph-select-sizer">
-        <span>{selectedLabel || " "}</span><Chevron />
+        <span>{placeholder}</span><Chevron />
       </div>
       <AnimatePresence initial={false} mode="popLayout">
         {!open ? (
           <motion.button
             key="trigger"
-            layoutId={`${id}-surface`}
+            layoutId={`${selectId}-surface`}
             type="button"
             aria-label={ariaLabel}
             aria-haspopup="listbox"
             aria-expanded={false}
-            aria-controls={`${id}-list`}
+            id={triggerId}
+            aria-controls={`${selectId}-list`}
+            disabled={disabled}
             onClick={() => setOpen(true)}
             transition={reduceMotion ? { duration: 0 } : { type: "spring", duration: 0.5, bounce: 0.22 }}
             className="morph-select-trigger"
           >
-            <span className="morph-select-label">{selectedLabel || "Selecione"}</span><Chevron />
+            <span className="morph-select-label">{selectedLabel || placeholder}</span><Chevron />
           </motion.button>
         ) : (
           <motion.div
             key="panel"
-            layoutId={`${id}-surface`}
-            id={`${id}-list`}
+            layoutId={`${selectId}-surface`}
+            id={`${selectId}-list`}
             role="listbox"
             aria-label={ariaLabel}
             transition={reduceMotion ? { duration: 0 } : { type: "spring", duration: 0.5, bounce: 0.22 }}
             className="morph-select-panel"
           >
             <button type="button" className="morph-select-heading" onClick={() => setOpen(false)}>
-              <span className="morph-select-label">{selectedLabel || "Selecione"}</span><Chevron open />
+              <span className="morph-select-label">{selectedLabel || placeholder}</span><Chevron open />
             </button>
             <div className="morph-select-divider" />
             <motion.ul initial="hidden" animate="show" className="morph-select-options">

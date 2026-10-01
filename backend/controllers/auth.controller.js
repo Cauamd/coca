@@ -14,7 +14,8 @@ async function listCentros(req, res) {
     const [rows] = await pool.query("SELECT DISTINCT centro FROM apontamentos WHERE centro IS NOT NULL AND centro <> '' ORDER BY centro");
     res.json({ centros: rows.map((row) => row.centro) });
   } catch (err) {
-    res.status(500).json({ detail: "Não foi possível carregar os centros." });
+    console.error("Falha ao consultar centros na tabela apontamentos:", err);
+    res.status(500).json({ detail: `Falha ao consultar os centros no banco de dados (${err.code || "erro de consulta"}).` });
   }
 }
 
@@ -33,16 +34,12 @@ async function login(req, res) {
     res.cookie(COOKIE_NAME, createSession(centro), cookieOptions());
     res.json({ usuario: process.env.ADMIN_USERNAME, centro, role: "admin" });
   } catch (err) {
-    res.status(500).json({ detail: "Não foi possível iniciar a sessão." });
+    res.status(500).json({ detail: `Falha ao consultar os centros no banco de dados (${err.code || "erro de consulta"}).` });
   }
 }
 
 function me(req, res) {
-  const token = req.headers.cookie?.split(";").map((part) => part.trim()).find((part) => part.startsWith(`${COOKIE_NAME}=`))?.slice(COOKIE_NAME.length + 1);
-  const { readSession } = require("../middleware/auth");
-  const session = readSession(token);
-  if (!session) return res.status(401).json({ detail: "Sessão expirada." });
-  res.json({ usuario: process.env.ADMIN_USERNAME, centro: session.centro, role: "admin" });
+  res.json({ usuario: process.env.ADMIN_USERNAME, centro: req.user.centro, role: "admin" });
 }
 
 function logout(req, res) {

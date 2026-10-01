@@ -535,6 +535,41 @@ a {
 .morph-select-option.selected { background: var(--bg-surface-hover); color: var(--text-primary); outline: none; }
 .morph-select-check { width: 14px; height: 14px; flex: 0 0 auto; color: var(--accent-red-bright); }
 
+.login-page .login-center-select .morph-select-sizer,
+.login-page .login-center-select .morph-select-trigger,
+.login-page .login-center-select .morph-select-heading {
+  min-height: 48px;
+  padding: 0 14px;
+  border-radius: 12px;
+  color: var(--ink);
+  font: inherit;
+  font-size: 1rem;
+}
+.login-page .login-center-select .morph-select-trigger {
+  border: 1px solid var(--field-border);
+  background: rgba(255, 255, 255, .78);
+}
+.login-page .login-center-select .morph-select-trigger:disabled {
+  cursor: not-allowed;
+  opacity: .7;
+}
+.login-page .login-center-select .morph-select-panel {
+  border-color: var(--card-border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .84);
+  color: var(--ink);
+}
+.login-page.dark .login-center-select .morph-select-trigger,
+.login-page.dark .login-center-select .morph-select-panel {
+  background: rgba(28, 18, 18, .82);
+}
+.login-page .login-center-select .morph-select-heading { color: var(--ink); }
+.login-page .login-center-select .morph-select-divider { background: var(--field-border); }
+.login-page .login-center-select .morph-select-option { color: var(--ink); font: inherit; font-size: .95rem; }
+.login-page .login-center-select .morph-select-option:hover,
+.login-page .login-center-select .morph-select-option:focus-visible,
+.login-page .login-center-select .morph-select-option.selected { background: rgba(244, 0, 9, .12); }
+
 .date-picker { position: relative; width: 100%; min-width: 0; }
 .date-picker-trigger {
   display: flex;

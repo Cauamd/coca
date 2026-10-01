@@ -2,8 +2,12 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 export async function fetchCentros(): Promise<string[]> {
   const res = await fetch(`${API_URL}/auth/centros`, { credentials: "include" });
-  if (!res.ok) throw new Error("Não foi possível carregar os centros");
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.detail || `Não foi possível carregar os centros (HTTP ${res.status}).`);
+  }
   const data = await res.json();
+  if (!Array.isArray(data.centros)) throw new Error("A resposta da API de centros está em formato inválido.");
   return data.centros;
 }
 

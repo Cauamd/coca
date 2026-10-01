@@ -1,62 +1,100 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { fetchCentros, loginAdmin } from "../lib/api";
-
-// viewBox fixo: 1280 x 720.
-
-// Fronteira compartilhada entre preto e vermelho — evita gap entre as duas formas.
-const BOUNDARY_CURVE =
-  "C120,175 180,120 300,140 C430,162 470,205 560,210 " +
-  "C660,215 700,175 800,180 C900,185 940,225 1020,220 " +
-  "C1110,214 1140,160 1200,150 C1230,145 1260,150 1280,155";
-
-// Fronteira compartilhada entre vermelho e branco.
-const RED_WHITE_BOUNDARY =
-  "C1150,660 1080,690 960,650 C860,617 760,615 660,650 " +
-  "C540,692 380,660 260,620 C160,588 60,600 0,610";
-
-// Onda preta: do topo até a fronteira com o vermelho. Sempre estática.
-
-
-// Onda vermelha: da fronteira com o preto até a fronteira com o branco.
-const RED_PATH = `M0,205 ${BOUNDARY_CURVE} L1280,610 ${RED_WHITE_BOUNDARY} Z`;
-
-// Onda branca: nasce na MESMA fronteira onde o vermelho termina, mas se estende
-// bem além da base do viewBox (até 1400, bem abaixo dos 720 visíveis) — assim,
-// mesmo subindo junto com o vermelho, ela nunca deixa de cobrir tudo atrás dela.
-const WHITE_PATH = `M0,610 ${RED_WHITE_BOUNDARY} L1280,1400 L0,1400 Z`;
-
-const springTransition = {
-  type: "spring" as const,
-  stiffness: 45,
-  damping: 16,
-  mass: 1,
-};
+import MorphSelect from "./ui/select-morph";
 
 export default function CocaColaLoginWave() {
   const router = useRouter();
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const [usuario, setUsuario] = useState("");
   const [senha, setSenha] = useState("");
   const [centro, setCentro] = useState("");
   const [centros, setCentros] = useState<string[]>([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [centrosLoading, setCentrosLoading] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
+  const [dark, setDark] = useState(false);
+  const waveRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    fetchCentros().then(setCentros).catch((err) => setError(err.message));
+    try {
+      const saved = localStorage.getItem("tema");
+      setDark(saved ? saved === "dark" : matchMedia("(prefers-color-scheme: dark)").matches);
+    } catch { setDark(false); }
+    fetchCentros().then((items) => {
+      setCentros(items);
+      if (!items.length) setError("Nenhum centro foi encontrado. Verifique se há dados na tabela apontamentos.");
+    }).catch((err: unknown) => {
+      setError(err instanceof Error ? err.message : "Não foi possível carregar os centros.");
+    }).finally(() => setCentrosLoading(false));
   }, []);
 
-  async function handleSubmit() {
+  useEffect(() => {
+    const canvas = waveRef.current;
+    const context = canvas?.getContext("2d");
+    if (!canvas || !context) return;
+    const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let frame = 0;
+    let time = 0;
+    let width = 0;
+    let height = 0;
+    const resize = () => {
+      const ratio = Math.min(devicePixelRatio || 1, 2);
+      width = innerWidth;
+      height = innerHeight;
+      canvas.width = width * ratio;
+      canvas.height = height * ratio;
+      context.setTransform(ratio, 0, 0, ratio, 0, 0);
+    };
+    const draw = () => {
+      context.clearRect(0, 0, width, height);
+      const colors = dark
+        ? ["rgba(11,11,11,.84)", "rgba(244,0,9,.53)", "rgba(58,0,3,.72)", "rgba(199,0,7,.48)"]
+        : ["rgba(244,0,9,.55)", "rgba(255,255,255,.76)", "rgba(184,0,7,.48)", "rgba(255,106,111,.52)"];
+      colors.forEach((color, layer) => {
+        const baseline = height * (0.27 + layer * 0.16);
+        const amplitude = height * (0.09 + layer * 0.008);
+        context.beginPath();
+        context.moveTo(0, height);
+        for (let x = 0; x <= width; x += 8) {
+          const y = baseline + Math.sin(x / (width * 0.12 + 1) + time + layer) * amplitude
+            + Math.sin(x / (width * 0.055 + 1) - time * 0.7 + layer) * amplitude * 0.28;
+          context.lineTo(x, y);
+        }
+        context.lineTo(width, height);
+        context.closePath();
+        context.fillStyle = color;
+        context.fill();
+      });
+      if (!reducedMotion) {
+        time += 0.008;
+        frame = requestAnimationFrame(draw);
+      }
+    };
+    resize();
+    draw();
+    addEventListener("resize", resize);
+    return () => {
+      cancelAnimationFrame(frame);
+      removeEventListener("resize", resize);
+    };
+  }, [dark]);
+
+  function toggleTheme() {
+    const next = !dark;
+    setDark(next);
+    try { localStorage.setItem("tema", next ? "dark" : "light"); } catch { /* armazenamento opcional */ }
+  }
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     setError("");
     setLoading(true);
     try {
       await loginAdmin(usuario, senha, centro);
-      setIsTransitioning(true);
-      window.setTimeout(() => router.replace("/"), 1050);
+      router.replace("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Não foi possível entrar.");
       setLoading(false);
@@ -64,115 +102,58 @@ export default function CocaColaLoginWave() {
   }
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-white">
-      {/* Fundo: branco -> preto (só relevante para a área acima da onda preta, no topo) */}
-      <motion.div
-        className="absolute inset-0"
-        animate={{ backgroundColor: isTransitioning ? "#ffffff" : "#ffffff" }}
-        transition={{ duration: 1.1, ease: "easeInOut" }}
-      />
-
-      {/* Logo */}
-      <div className="absolute top-8 left-1/2 -translate-x-1/2 z-30">
-        <svg width="260" height="80" viewBox="0 0 260 80" xmlns="http://www.w3.org/2000/svg">
-          <text
-            x="130"
-            y="52"
-            textAnchor="middle"
-            fontFamily="'Brush Script MT', 'Segoe Script', cursive"
-            fontSize="46"
-            fill="#E00000"
-          >
-            Coca-Cola
-          </text>
-        </svg>
-      </div>
-
-      {/* Onda preta — estática */}
-
-
-      {/* Vermelho e branco sobem JUNTOS, no mesmo <motion.g>, com a mesma
-          animação — assim ficam sempre grudados, sem vão preto entre eles */}
-      <motion.svg
-        className="absolute inset-0 w-full h-full z-20"
-        viewBox="0 0 1280 720"
-        preserveAspectRatio="none"
-      >
-        <motion.g
-          initial={false}
-          animate={{ y: isTransitioning ? -190 : 0 }}
-          transition={springTransition}
-        >
-          <path d={WHITE_PATH} fill="#FFFFFF" />
-          <path d={RED_PATH} fill="#FF3B3B" />
-        </motion.g>
-      </motion.svg>
-
-      {/* Pílulas — só no Estado 1 */}
-      <AnimatePresence>
-        {!isTransitioning && (
-          <motion.div
-            className="absolute inset-0 z-30 flex items-center justify-center"
-            style={{ paddingTop: "60px" }}
-            exit={{ opacity: 0, y: -16 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-          >
-            <form
-              onSubmit={(event) => { event.preventDefault(); void handleSubmit(); }}
-              className="flex flex-col items-center gap-4"
-            >
-            <select
+    <main className={`login-page${dark ? " dark" : ""}`}>
+      <canvas ref={waveRef} className="wave" aria-hidden="true" />
+      <button className="theme-toggle" type="button" onClick={toggleTheme} aria-label="Alternar tema claro/escuro">
+        {dark ? "☀" : "☾"}
+      </button>
+      <section className="login-card" aria-labelledby="login-title">
+        <div className="brand" aria-label="Coca-Cola FEMSA"><img src="https://coca-cola-femsa.com.br/wp-content/uploads/2023/01/logo-femsa.png" alt="" /></div>
+        <h1 id="login-title">Login</h1>
+        <form onSubmit={handleSubmit}>
+          <div className="field">
+            <label htmlFor="centro">Centro</label>
+            <MorphSelect
+              id="centro"
               value={centro}
-              onChange={(event) => setCentro(event.target.value)}
-              aria-label="Centro"
-              className="w-64 h-12 rounded-full bg-white px-5 text-sm text-neutral-800 outline-none shadow-[0_6px_16px_rgba(0,0,0,0.18)]"
-              disabled={loading || centros.length === 0}
-            >
-              <option value="">{centros.length ? "Escolha o centro" : "Carregando centros..."}</option>
-              {centros.map((item) => <option key={item} value={item}>{item}</option>)}
-            </select>
-            <input
-              type="text"
-              placeholder="Usuário"
-              value={usuario}
-              onChange={(event) => setUsuario(event.target.value)}
-              className="w-64 h-12 rounded-full bg-white px-5 text-sm text-neutral-800 placeholder:text-neutral-400 outline-none shadow-[0_6px_16px_rgba(0,0,0,0.18)]"
+              ariaLabel="Centro"
+              placeholder={centrosLoading ? "Carregando centros..." : centros.length ? "Selecione seu centro" : "Centros indisponíveis"}
+              disabled={centrosLoading || !centros.length || loading}
+              onValueChange={setCentro}
+              options={centros.map((item) => ({ value: item, label: item }))}
+              className="login-center-select"
             />
-            <input
-              type="password"
-              placeholder="Senha"
-              value={senha}
-              onChange={(event) => setSenha(event.target.value)}
-              className="w-64 h-12 rounded-full bg-white px-5 text-sm text-neutral-800 placeholder:text-neutral-400 outline-none shadow-[0_6px_16px_rgba(0,0,0,0.18)]"
-            />
-            <motion.button
-              type="submit"
-              disabled={loading || !centro}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="w-48 h-9 rounded-full bg-white text-sm font-semibold text-red-600 shadow-[0_6px_16px_rgba(0,0,0,0.2)] cursor-pointer"
-            >
-              {loading ? "Entrando..." : "Entrar"}
-            </motion.button>
-            {error && <p role="alert" className="max-w-72 rounded-xl bg-white/95 px-4 py-2 text-center text-sm text-red-700 shadow">{error}</p>}
-            </form>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Conteúdo pós-transição — placeholder */}
-      <AnimatePresence>
-        {isTransitioning && (
-          <motion.div
-            className="absolute inset-0 z-30 flex items-center justify-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.7, duration: 0.5 }}
-          >
-            <span className="text-white text-lg font-medium">Carregando dashboard...</span>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+          </div>
+          <div className="field">
+            <label htmlFor="usuario">E-mail ou usuário</label>
+            <input id="usuario" type="text" autoComplete="username" placeholder="Digite seu usuário" value={usuario} onChange={(e) => setUsuario(e.target.value)} required disabled={loading} />
+          </div>
+          <div className="field">
+            <label htmlFor="senha">Senha</label>
+            <div className="password-wrap">
+              <input id="senha" type={showPassword ? "text" : "password"} autoComplete="current-password" placeholder="Digite sua senha" value={senha} onChange={(e) => setSenha(e.target.value)} required disabled={loading} />
+              <button className="reveal" type="button" onClick={() => setShowPassword((value) => !value)} aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"} aria-pressed={showPassword}>◉</button>
+            </div>
+          </div>
+          <button className="submit" type="submit" disabled={loading || !centro}>{loading ? "Entrando…" : "Entrar"}</button>
+          <p className="status" role="status" aria-live="polite">{error}</p>
+        </form>
+      </section>
+      <style jsx>{`
+        .login-page{--card:rgba(255, 255, 255, 0.51);--card-border:rgba(255, 255, 255, 0.36);--ink:#161616;--muted:rgba(22,22,22,.68);--field:#fff;--field-border:rgba(0,0,0,.16);--link:#c20007;min-height:100vh;display:grid;place-items:center;padding:32px 20px;color:var(--ink);font-family:'Outfit',Arial,sans-serif;background:radial-gradient(62% 55% at 50% 44%,rgba(255,255,255,.38),transparent 72%),linear-gradient(160deg,#ff2b31,#f40009 55%,#9e0005);position:relative;overflow:hidden}
+        .login-page:before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 20% 80%,rgba(255,255,255,.14),transparent 38%),radial-gradient(ellipse at 80% 20%,rgba(90,0,0,.16),transparent 42%)}
+        .login-page.dark{--card:rgba(20, 20, 20, 0.37);--card-border:rgba(255, 255, 255, 0.27);--ink:#fff;--muted:rgba(255,255,255,.72);--field:rgba(255,255,255,.07);--field-border:rgba(255,255,255,.22);--link:#ff6f74;background:radial-gradient(62% 55% at 50% 44%,rgba(244,0,9,.35),transparent 72%),linear-gradient(160deg,#2b0004,#0e0e0e 55%,#000)}
+        .wave{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+        .login-card{position:relative;z-index:1;width:min(100%,420px);padding:34px 36px 28px;border-radius:26px;background:var(--card);border:1px solid var(--card-border);box-shadow:0 34px 80px -24px rgba(70,0,3,.6);backdrop-filter:blur(20px) saturate(140%)}
+        .brand{height:104px;margin:0 auto 18px;display:flex;align-items:center;justify-content:center}.brand img{display:block;width:250px;height:82px;object-fit:contain}
+        h1{font-family:'Outfit',Arial,sans-serif;font-size:2.35rem;font-weight:600;line-height:1.1;margin:0 0 22px}
+        .field{margin-bottom:15px}label{display:block;font-size:.95rem;font-weight:500;margin-bottom:7px}input,select{width:100%;height:48px;padding:0 14px;border-radius:12px;border:1px solid var(--field-border);background:var(--field);color:var(--ink);font:inherit;font-size:1rem;outline:none}input::placeholder{color:var(--muted);opacity:.7}input:focus,select:focus{border-color:#f40009;box-shadow:0 0 0 3px rgba(244,0,9,.2)}.password-wrap{position:relative}.password-wrap input{padding-right:48px}.reveal{position:absolute;right:4px;top:4px;width:40px;height:40px;border:0;border-radius:9px;background:none;color:var(--muted);cursor:pointer;font-size:18px}
+        .forgot{display:inline-block;color:var(--link);font-size:.92rem;font-weight:500;text-underline-offset:3px;margin:0 0 20px}
+        .submit{width:100%;height:50px;border:0;border-radius:12px;background:#d9000a;color:#fff;font:inherit;font-size:1.1rem;font-weight:700;cursor:pointer;box-shadow:0 14px 28px -14px rgba(244,0,9,.9);transition:background .2s,transform .12s}.submit:hover{background:#a80006}.submit:active{transform:scale(.985)}.submit:disabled{opacity:.7;cursor:wait}.status{min-height:1.3em;margin:12px 0 0;font-size:.9rem;text-align:center;color:var(--link)}
+        .or{display:flex;align-items:center;gap:12px;margin:14px 0 16px;font-size:.92rem;color:var(--muted)}.or:before,.or:after{content:"";height:1px;flex:1;background:var(--field-border)}.social{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.social button{height:46px;border-radius:12px;border:1px solid var(--field-border);background:var(--field);color:var(--ink);cursor:pointer;display:grid;place-items:center}.social button:hover{border-color:#f40009;transform:translateY(-2px)}.google{font:bold 20px Arial;color:#4285f4}.microsoft{width:18px;height:18px;display:grid;grid-template-columns:1fr 1fr;gap:2px}.microsoft i:nth-child(1){background:#f25022}.microsoft i:nth-child(2){background:#7fba00}.microsoft i:nth-child(3){background:#00a4ef}.microsoft i:nth-child(4){background:#ffb900}.apple{font-size:24px;color:var(--ink)}.signup{margin-top:22px;text-align:center;font-size:.92rem;color:var(--muted)}.signup a{color:var(--link);font-weight:600}
+        .theme-toggle{position:fixed;z-index:2;top:14px;right:14px;width:44px;height:44px;border-radius:50%;border:1px solid var(--card-border);background:var(--card);color:var(--ink);font-size:23px;cursor:pointer;backdrop-filter:blur(12px)}:focus-visible{outline:2px solid #f40009;outline-offset:2px}
+        @media(max-width:420px){.login-card{padding:28px 22px 24px}}
+      `}</style>
+    </main>
   );
 }
