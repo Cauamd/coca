@@ -1,0 +1,785 @@
+{
+ "centro": "BAAD",
+ "examples": [
+  {
+   "text": "PRESILHA DE GARGALO DANIFICADA, REALIZADA A TROCA",
+   "label": "Presilha danificada"
+  },
+  {
+   "text": "TROCA DAS MOLAS DO SNIFFER N.70",
+   "label": "Mola danificada"
+  },
+  {
+   "text": "TROCA DA PRESILHA DE GARGALO VÁLVULA 60.",
+   "label": "Presilha danificada"
+  },
+  {
+   "text": "SENSOR DE SEGURANÇA PORTA EM FALHA",
+   "label": "Sensor danificado"
+  },
+  {
+   "text": "TROCA DA MOLA DO BLOCO N°78.",
+   "label": "Mola danificada"
+  },
+  {
+   "text": "FALHA DE ENCHIMENTO, REALIZANDO AJUSTES NAS VALVULAS 20. 79 E 90",
+   "label": "Ajuste em valvula"
+  },
+  {
+   "text": "FALHA DE ENCHIMENTO, REALIZANDO AJUSTES NAS VALVULAS 20. 79 E 90",
+   "label": "Ajuste em valvula"
+  },
+  {
+   "text": "AJUSTE VALVULA",
+   "label": "Ajuste em valvula"
+  },
+  {
+   "text": "FALHA NO ENCHIMENTO DA VÁLVULA 90, CARCAÇA TRAVANDO NA MODULAÇÃO",
+   "label": "Falha no enchimento"
+  },
+  {
+   "text": "MANGUEIRA DE AR DO ACIONAMENTO DA VÁLVULA MODULADORA DE PRESSÃO, ESTAVA COM VAZAMENTO (CAUSANDO VARIAÇÃO NA CÚPULA)",
+   "label": "Mangueira danificada"
+  },
+  {
+   "text": "VÁLVULAS N°79 E N°90, TRAVANDO DURANTE O ENCHIMENTO. FALTA DE PEÇAS PARA A TROCA E/OU REVISÃO.",
+   "label": "Valvula travada"
+  },
+  {
+   "text": "VÁLVULA N°90 TRAVADA DURANTE A ABERTURA, CAUSANDO VAZAMENTO DE BEBIDA",
+   "label": "Valvula travada"
+  },
+  {
+   "text": "VÁLVULA N°20 TRAVADA DURANTE O FECHAMENTO",
+   "label": "Valvula travada"
+  },
+  {
+   "text": "FREIO DA VÁLVULA 62 ESTAVA DANIFICADO.",
+   "label": "Freio danificado"
+  },
+  {
+   "text": "TROCA DO FREIO DA BORBOLETA N°61",
+   "label": "Freio danificado"
+  },
+  {
+   "text": "MANGUEIRA DA VÁLVULA DE DRENO DE PRESSÃO FURADA. REALIZADO O CORTE E COLOCADO A EMENDA",
+   "label": "Mangueira danificada"
+  },
+  {
+   "text": "VALVULA DE ALIVIO DE PRESSÃO COM MANGUEIRA FURADA,",
+   "label": "Mangueira danificada"
+  },
+  {
+   "text": "TROCA DA MOLA DO BLOCO DE SNIFER N:6  AJUSTE NA BORBOLETA",
+   "label": "Mola danificada"
+  },
+  {
+   "text": "PRESILHA QUEBRADA, CAUSANDO ENROSCO DE GARRAFAS NA SAÍDA DA ENCHEDORA",
+   "label": "Presilha danificada"
+  },
+  {
+   "text": "VÁLVULA DE RETENÇÃO DE ALIVIO TRAVANDO",
+   "label": "Valvula danificada"
+  },
+  {
+   "text": "VÀLVULA DE RETENÇÃO DE ALIVIO TRAVANDO",
+   "label": "Valvula danificada"
+  },
+  {
+   "text": "VÃLVULA DE RETENÇÃO DE ALIVIO TRAVANDO",
+   "label": "Valvula danificada"
+  },
+  {
+   "text": "TROCA BORBOLETA 90",
+   "label": "Borboleta danificada"
+  },
+  {
+   "text": "VALVUA DRT TRAVADA FECHADA",
+   "label": "Valvula danificada"
+  },
+  {
+   "text": "VALVULA 90 TRAVADA GERANDO ESVAZIAMENTO DO BALÃO",
+   "label": "Valvula danificada"
+  },
+  {
+   "text": "AJUSTE GUIAS",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "TROCA DA TRAVA DE GARGALO 35",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "TROCA DA TRAVA DE GARGALO DAS VÁLVULAS N°14, N°45, N°48 E N°80",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "GARRAFAS COM GARGALO DANIFICADO, NECESSARIO AJUSTE NA GUIA DE SAIDA.",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "GARRAFAS COM GARGALO DANIFICADO, NECESSARIO AJUSTE NA GUIA DE SAIDA.",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "GARRAFA ENTROU TORTA NO MANEJO",
+   "label": "Garrafa torta"
+  },
+  {
+   "text": "GUIA DE APOIO EMPENADA, GERANDO MARCAS NO GARGALO_ALINHAMENTO. NIVELAMENTO E AJUSTE DE SINCRONISMO",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "GUIA DE APOIO EMPENADA, GERANDO MARCAS NO GARGALO_ALINHAMENTO. NIVELAMENTO E AJUSTE DE SINCRONISMO",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "GUIA DE APOIO EMPENADA, GERANDO MARCAS NO GARGALO_ALINHAMENTO. NIVELAMENTO E AJUSTE DE SINCRONISMO",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "PARAFUSO DE FIXAÇÃO DA HASTE DE ELEVAÇÃO DA VÁLVULA N°44, DANIFICADO.",
+   "label": "Haste danificada"
+  },
+  {
+   "text": "CONJUNTO DA TRAVA DE GARGALO N°43, DANIFICADO. FEITO A TROCA.",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "TROCA DAS TRAVAS DE GARGALO N° 61, N°27, N°41.",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "VALVULA N:6 CAUSANDO MAL ENCHIMENTO",
+   "label": "Valvula danificada"
+  },
+  {
+   "text": "VALVULA N:6 CAUSANDO MAL ENCHIMENTO",
+   "label": "Valvula danificada"
+  },
+  {
+   "text": "PARADA PRA AJUSTAR AS GUIAS DE ENTRADA E SAIDA DAS ESTRELAS",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "PARADA PRA AJUSTAR AS GUIAS DE ENTRADA E SAIDA DAS ESTRELAS",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "QUEBRA DA MOLA DE SNIFTER 53, FEITO A TROCA",
+   "label": "Mola danificada"
+  },
+  {
+   "text": "QUEBRA DAS TRAVAS  DE GARGALO 5,19,29,44 E 82 FOI FEITO AS TROCAS",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "AJUSTE SINCRONISMO",
+   "label": "Ajuste no sincronismo"
+  },
+  {
+   "text": "AJUSTES GUIAS",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "VALVULA 42 E 45 TRAVANDO NO ENCHIMENTO",
+   "label": "Valvula travada"
+  },
+  {
+   "text": "QUEDA DA BORBOLETA N°102_REALIZADO REPOSIÇÃO DO ITEM",
+   "label": "Borboleta danificada"
+  },
+  {
+   "text": "QUEBRA DA MOLA DE SNIFTER 28, FEITO A TROCA.",
+   "label": "Mola danificada"
+  },
+  {
+   "text": "PERDA DE SINCRONISMO",
+   "label": "Perda de sincronismo"
+  },
+  {
+   "text": "TROCADO  MOLA SNIFER/ ALINHADO SUPORTA DE PRESILHA / REAPERTO BORBOLETA",
+   "label": "Mola danificada"
+  },
+  {
+   "text": "MAL ENCHIMENTO NA VALVULA 25,REALIZADO AJUSTES PARA DESOBSTRUÇÃO",
+   "label": "nivel baixo"
+  },
+  {
+   "text": "TROCA DA PRESILHA DE GARGALO N°83 E N°105",
+   "label": "Presilha danificada"
+  },
+  {
+   "text": "FLANGE DE CONEXÃO DO BLOCO SNIFFER ESTAVA SOLTA, CAUSANDO VAZAMENTO DE PRESSÃO E FALHA NO ENCHIMENTO DA GARRAFA. (VÁLVULA N°",
+   "label": "Flange danificada"
+  },
+  {
+   "text": "TROCA DO FREIO E REAPERTO BORBOLETA",
+   "label": "Freio danificado"
+  },
+  {
+   "text": "SISTEMA DE LUBRIFICAÇÃO DOS PISTÕES ESTAVA FORA DE POSIÇÃO, CAUSANDO AQUECIMENTO DO SERVOMOTOR.",
+   "label": "Pistão fora de posição"
+  },
+  {
+   "text": "FILTRO   ( Y ) VERIFICAÇÃO DA INTEGRIDADE",
+   "label": "Filtro danificado"
+  },
+  {
+   "text": "GARRAFAS AMASSANDO O GARGALO DIFICULDADE NO AJUSTE DAS GUIAS",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "GARRAFAS AMASSANDO O GARGALO DIFICULDADE NO AJUSTE DAS GUIAS",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "GARRAFAS AMASSANDO O GARGALO DIFICULDADE NO AJUSTE DAS GUIAS",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "GARRAFAS AMASSANDO O GARGALO DIFICULDADE NO AJUSTE DAS GUIAS",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "GARRAFAS AMASSANDO O GARGALO DIFICULDADE NO AJUSTE DAS GUIAS",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "SAINDO GARRAFAS COM DEFORMIDADES E MARCAS NO GARGALO_REALIZADO AJUSTES DE GUIAS.",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "BORBOLETA TRAVANDO",
+   "label": "Borboleta travando"
+  },
+  {
+   "text": "FALHA DE ENCHIMENTO / TROCACA DO PINO E MOLA DO SNIFER",
+   "label": "Mola danificada"
+  },
+  {
+   "text": "VALVULA 108 TRAVADA 2X",
+   "label": "Valvula travada"
+  },
+  {
+   "text": "REALIZADA A TROCA DO FREIO DA VÁLVULA N°6",
+   "label": "Freio danificado"
+  },
+  {
+   "text": "PINO DO ALIVIO DANIFICADO BLOCO N:6",
+   "label": "Pino danificado"
+  },
+  {
+   "text": "VÁLVULA 06 TRAVADA, FEITO REAPERTO DA BORBOLETA.",
+   "label": "Valvula travada"
+  },
+  {
+   "text": "TROCA DA MOLA DA AGULHA DO BLOCO DE ENCHIMENTO Nº25 CAUSANDO MAL ENCHIMENTO",
+   "label": "Mola danificada"
+  },
+  {
+   "text": "QUEBRA DA CHAVE DE ACIONAMENTO DAS PORTAS",
+   "label": "Chave danificada"
+  },
+  {
+   "text": "QUEBRA DA CHAVE DE ACIONAMENTO DAS PORTAS",
+   "label": "Chave danificada"
+  },
+  {
+   "text": "AJUSTE NA POSIÇÃO DO TUBO DE AR DA VÁLVULA N°34",
+   "label": "Ajuste no tubo de ar"
+  },
+  {
+   "text": "ASTE DE ELEVAÇÃO TRAVOU",
+   "label": "Haste danificada"
+  },
+  {
+   "text": "CORPO DA BORBOLETA Nº5 DANIFICADO",
+   "label": "Borboleta danificada"
+  },
+  {
+   "text": "CORPO DA BORBOLETA N5 DANIFICADO CAUSANDO MAL ENCHIMENTO",
+   "label": "Nivel baixo"
+  },
+  {
+   "text": "CORPO COMANDO ABERTURA DANIFICADO_REALIZADO TROCA DO CORPO, VEDAÇÃO E BORBOLETA.",
+   "label": "Valvula danificada"
+  },
+  {
+   "text": "FALHA DE TENSÃO PAINEL ENCHEDORA",
+   "label": "Falha de tensão"
+  },
+  {
+   "text": "FALHA NA ALIMENTAÇÃO DE TENSÃO (USV).",
+   "label": "Falha na tensão"
+  },
+  {
+   "text": "FALHA NA ALIMENTAÇÃO DE TENSÃO (USV).",
+   "label": "Falha na tensão"
+  },
+  {
+   "text": "FALHA NA ALIMENTAÇÃO DE TENSÃO (USV).",
+   "label": "Falha na tensão"
+  },
+  {
+   "text": "ALIMENTAÇÃO DE TENSÃO, INTERRUPTA NÃO ESTÁ PREPARADA",
+   "label": "Falha na tensão"
+  },
+  {
+   "text": "AJUSTE NAS GUIAS DE SETUP",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "FALHA NA ALIMENTACAO DE TENSAO",
+   "label": "Falha na tensão"
+  },
+  {
+   "text": "FALHA NA ALIMENTACAO DE TENSAO",
+   "label": "Falha na tensão"
+  },
+  {
+   "text": "QUEBRA DAS TRAVAS DE GARGALOS 41 E 68, FOI FEITO A TROCA",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "AJUSTE NA VELOCIDADE DA ESTEIRA DE SAIDA DA ENCHEDORA",
+   "label": "Ajuste de velocidade"
+  },
+  {
+   "text": "TROCA DA TRAVA DE GARGALO N°5.",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "QUEDA DO BICO DA VÁLVULA N°98",
+   "label": "Bico danificado"
+  },
+  {
+   "text": "TROCA TRAVA 56",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "REALIZADO A TROCA DA PRESILHA DA HASTE DA VÁLVULA N°33",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "AJUSTE DE ABA 84",
+   "label": "Ajuste na aba"
+  },
+  {
+   "text": "ENROSCO NA SAIDA. TRAVAS DANIFICADAS.",
+   "label": "Enrosco de garrafas"
+  },
+  {
+   "text": "ENROSCO  NA VALVULA 108",
+   "label": "Enrosco de garrafas"
+  },
+  {
+   "text": "TROCA DO FREIO DAS VÁLVULAS N°108 E N°102",
+   "label": "Freio danificado"
+  },
+  {
+   "text": "TROCA DA MOLA DA VÁLVULA N°87, N°108 E N°40",
+   "label": "Mola danificada"
+  },
+  {
+   "text": "TROCA DA MOLA DA VÁLVULA N°70",
+   "label": "Mola danificada"
+  },
+  {
+   "text": "FALHA NO FECHAMENTO DA VALVULA 108, FREIO DANIFICADO.",
+   "label": "Valvula danificada"
+  },
+  {
+   "text": "GUIAS DE MARGEM, ESTRELAS EMPENADAS. DANIFICANDO GARRAFAS. EXECUTANDO AJUSTES.",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "GUIAS DE MARGEM, ESTRELAS EMPENADAS. DANIFICANDO GARRAFAS. EXECUTANDO AJUSTES.",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "TRAVAS DE GARGALO DANIFICADAS. N°S: 55, 65, 84 E 103.",
+   "label": "Trava danificada"
+  },
+  {
+   "text": "MOLA DANIFICADA, REALIZADA A TROCA",
+   "label": "Mola danificada"
+  },
+  {
+   "text": "QUEBRA DA MOLA DE SNIFTER 104,FOI FEITO A TROCA.",
+   "label": "Mola danificada"
+  },
+  {
+   "text": "TROCA DA MOLA  DANIFICADA N° 106",
+   "label": "Mola danificada"
+  },
+  {
+   "text": "GUIA DE SAIDA EMPENADA.",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "GUIA EMPENADA CAUSANDO ENROSCO.",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "VÁLVULA N°79 TRAVADA_SEM VÁLVULAS RESERVAS PARA TROCA_REALIZADA A TROCA DO CORPO E ANEL PARA RODAR",
+   "label": "Valvula travada"
+  },
+  {
+   "text": "VÁLVULA N°79 TRAVADA_SEM VÁLVULAS RESERVAS PARA TROCA_REALIZADA A TROCA DO CORPO E ANEL PARA RODAR",
+   "label": "Valvula travada"
+  },
+  {
+   "text": "QUEBRA DAS TRAVAS DE GARGALOS 28 E 82, FEITO A TROCA",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "BICOS DE LIMPEZA DO GARGALO OBSTRUÍDOS",
+   "label": "Bico obstruido"
+  },
+  {
+   "text": "GUIAS DE ENTRADA EMPENADA",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "GUIAS DE ENTRADA EMPENADAS",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "GUIAS DANIFICADAS",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "ESTRELA FORA DE SINCRONISMO RASGANDO ROTULOS NA SAIDA",
+   "label": "Perda de sincronismo"
+  },
+  {
+   "text": "REALIZADA A TROCA DA PRESILHA",
+   "label": "Presilha danificada"
+  },
+  {
+   "text": "ENROSCO DE GRFS NA SAIDA",
+   "label": "Enrosco de garrafas"
+  },
+  {
+   "text": "QUEBRA DAS MOLAS DE SNIFTER DO BLOCO 76, FOI FEITO A TROCA",
+   "label": "Mola danificada"
+  },
+  {
+   "text": "QUEBRA DO PARAFUSO DO APOIO DE GRFS + AJUSTE DE SINCRONISMO.",
+   "label": "Parafuso danificado"
+  },
+  {
+   "text": "QUEBRA DO PARAFUSO DO APOIO DE GRFS.",
+   "label": "Parafuso danificado"
+  },
+  {
+   "text": "FALHA DE ENCHIMENTO _ CRASH DE GARRAFAS VÁZIAS.",
+   "label": "Nivel baixo"
+  },
+  {
+   "text": "SUPORTE DAS GUIAS FIXAS APOS ENTRADA CAPSULADOR EMPENADAS",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "LAVAGEM DE BOCALAPOS CAPSULADOR OBSTRUIDO",
+   "label": "Limpeza no bocal"
+  },
+  {
+   "text": "GARRAFAS MARCANDO NO GARGALO",
+   "label": "Gargalo danificado"
+  },
+  {
+   "text": "GARRAFAS MARCANDO NO GARGALO",
+   "label": "Gargalo danificado"
+  },
+  {
+   "text": "VALVULA 28 TRAVANDO",
+   "label": "Valvula travada"
+  },
+  {
+   "text": "FALHA NO SISTEMA DE LIBERAÇÃO DE TAMPA;NÃO LIBERA TAMPA",
+   "label": "Falha liberação de tampas"
+  },
+  {
+   "text": "FALHA NO SISTEMA DE LIBERAÇÃO DE TAMPA;NÃO LIBERA TAMPA",
+   "label": "Falha liberação de tampas"
+  },
+  {
+   "text": "QUEBRA DA MOLA DE SNIFTER DO BLOCO 40, FEITO A TROCA.",
+   "label": "Mola danificada"
+  },
+  {
+   "text": "TROCA DA TRAVA DE GARGALO 25 E AJUSTES NA TRAVA 39",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "RABO DE ANDURINHA DANIFICADO, FOI NECESSÁRIO REALIZAR A TROCA",
+   "label": "Alinhamento do garfo"
+  },
+  {
+   "text": "REALIZADO A TROCA DE 9 TRAVAS DE GARGALO QUE ESTAVAM DANIFICADAS.",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "AJUSTE NA PONTEIRA DA GUIA DE ENTRADA PARA O CAPSULADOR",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "VALVULA 25 TRAVADA",
+   "label": "Valvula travada"
+  },
+  {
+   "text": "TROCA DA PRESILHA DA VÁLVULA N°62",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "TROCA DA TRAVA DE GARGALO 62",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "REALIZADA A TROCA DO FREIO DA BORBOLETA  VÁLVULA N°83",
+   "label": "Valvula travada"
+  },
+  {
+   "text": "REBARBA NA  GUIA DA ESTRELA DE ENTRADA",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "MARCANDO GARGALO DA GARRAFA TROCA DE INSERTOS",
+   "label": "Gargalo danificado"
+  },
+  {
+   "text": "TROCA DA TRAVA DE GARGALO N° 54.",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "TROCA DO SUPORTE DA HASTE N° 103.",
+   "label": "Haste danificada"
+  },
+  {
+   "text": "TROCA DAS TRAVAS DE GARGALO N°12 E N°85",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "TROCA DO SUPORTE DE GARRAFA 25",
+   "label": "Haste danificada"
+  },
+  {
+   "text": "AJUSTE HASTE 17",
+   "label": "Haste danificada"
+  },
+  {
+   "text": "SENSOR DE ABERTURA DE VALVULA FALHANDO OCASIONANDO ACIONAMENTO INDEVIDO",
+   "label": "Sensor danificado"
+  },
+  {
+   "text": "SENSOR MAGNETICO DA PORTA ST105 COM MAL CONTATO",
+   "label": "Sensor danificado"
+  },
+  {
+   "text": "TRAVA DE GARGALO 35 DANIFICADA,GARFOS DA  ESTRELA DE SAIDA COM REBARBA;REALIZADO DEVIDOS AJUSTES",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "ENROSCO DE GRFS NA CARGA ESTRELA DE ENTRADA",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "TROCA DAS TRAVAS DE GARGALO 3 E 84.",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "TROCA DO SUPORTE DA HASTE N°9.",
+   "label": "Haste danificada"
+  },
+  {
+   "text": "DESCARTE DE GARRAFAS VAZIAS",
+   "label": "Descarte Garrafas Vazias"
+  },
+  {
+   "text": "CONEXÃO PU DANIFICADA,REALIZADO TROCA",
+   "label": "Conexão Danificada"
+  },
+  {
+   "text": "FALHA SENSOR ABERTURA DE ALVULA",
+   "label": "Sensor danificado"
+  },
+  {
+   "text": "FALHA AO APLICAR TAMPA NA ÚLTIMA GARRAFA PÓS CORTE DA ENTRADA / ELETRONICOS ATUANDO NA AUTOMAÇÃO.",
+   "label": "Falha liberação de tampas"
+  },
+  {
+   "text": "FALHA AO APLICAR TAMPA NA ÚLTIMA GARRAFA PÓS CORTE DA ENTRADA / ELETRONICOS ATUANDO NA AUTOMAÇÃO.",
+   "label": "Falha liberação de tampas"
+  },
+  {
+   "text": "IHM TRAVOU.",
+   "label": "Falha no IHM"
+  },
+  {
+   "text": "FALHA NA SONDA WIRELESS MANUTENÇÃO ELETRÔNICA",
+   "label": "Falha Sinal Sonda"
+  },
+  {
+   "text": "TROCA DA PRESILHA DAS VÁLVULAS N°83, N°92 E N°102",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "TROCA DAS TRAVAS DE GARGALO 40 E 60.",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "GUIA DE ENTRADA DA ENCHEDORA DESAJUSTADA",
+   "label": "Ajuste de guias"
+  },
+  {
+   "text": "TROCA DA TRAVA DE GARGALO N° 90, AJSUTE DE HASTE.",
+   "label": "Haste danificada"
+  },
+  {
+   "text": "ALINHAMENTO DO SUPORTE DA HASTE N° 86.",
+   "label": "Haste danificada"
+  },
+  {
+   "text": "REALIZADA A TROCA DE DUAS PRESILHAS DE GARGALO QUE ESTAVAM DANIFICADAS",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "QUEBRA DA MOLA DE SNIFTER DO BLOCO 32, FEITO A TROCA.",
+   "label": "Mola danificada"
+  },
+  {
+   "text": "QUEBRA DA TRAVA DE GARGALO DA HASTE 49,FEITO A TROCA",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "SENSOR DE PRESENÇA DE GARRAFAS DESAJUSTADO",
+   "label": "Sensor danificado"
+  },
+  {
+   "text": "BORBOLETA N° 107 COM O EIXO EMPENADO.",
+   "label": "Borboleta danificada"
+  },
+  {
+   "text": "BORBOLETA N° 107 COM O EIXO EMPENADO.",
+   "label": "Borboleta danificada"
+  },
+  {
+   "text": "PRESILHA DE GARGALO DANIFICADA, TROCA REALIZADA",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "TROCA DA VEDAÇÃO AGULHA DA VÁLVULA N° 104.",
+   "label": "Vedação danificada"
+  },
+  {
+   "text": "TROCA TRAVA 59",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "MANGUEIRA DE AR DO SISTEMA DOS PISTÕES DE ELEVAÇÃO, DANIFICADA. OCASIONANDO FALHA NO ENCHIMENTO.",
+   "label": "Mangueira danificada"
+  },
+  {
+   "text": "TRAVA DE GARGALO DANIFICADA",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "ENROSCO DE GARRAFAS CAUSOU EMPENAMENTO DOS SUPORTES DE ESTRELA DE SAÍDA (N RABO DE ANDORINHA) 3, 11 E 15.",
+   "label": "Enrosco de garrafas"
+  },
+  {
+   "text": "ENROSCO DE GARRAFAS CAUSOU EMPENAMENTO DOS SUPORTES DE ESTRELA DE SAÍDA (N RABO DE ANDORINHA) 4 E 12.",
+   "label": "Enrosco de garrafas"
+  },
+  {
+   "text": "SUPORTE DA PRESILHA DA VÁLVULA N°101 DANIFICADO, REALIZADA TROCA.",
+   "label": "Suporte danificado"
+  },
+  {
+   "text": "SUPORTE DA HASTE N° 24 ESTAVA SOLTO, CAUSANDO ENROSCO NA SAÍDA DA ENCHEDORA.",
+   "label": "Haste danificada"
+  },
+  {
+   "text": "TROCA DA TRAVA DE GARGALO E SUPORTE EMPENADO, VALVULA 101",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "QUEBRA DAS TRAVAS DE GARGALO 82 E 96,FEITO A TROCA",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "TRAVA DANIFICADA",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "TROCA DA TRAVA DE GARGALO N° 91.",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "TROCA DA PRESILHA DA VÁLVULA N°86 QUE ESTAVA DANIFICADA",
+   "label": "Presilha danificada"
+  },
+  {
+   "text": "PRESILHAS DANIFICADAS, REALIZADA A TROCA VÁLVULA N°52, 87, 91. TROCA DO SUPORTE DA PRESILHA DA VÁLVULA N°86",
+   "label": "Presilha danificada"
+  },
+  {
+   "text": "TROCA DO SUPORTE DA PRESILHA DA VÁLVULA N°91",
+   "label": "Presilha danificada"
+  },
+  {
+   "text": "GARRAFAS MARCANDO FINISH",
+   "label": "Alinhamento do garfo"
+  },
+  {
+   "text": "ALINHAMENTO NAS HASTES 21, 46, 52, 56 E 72.",
+   "label": "Haste danificada"
+  },
+  {
+   "text": "ALINHAMENTO DOS GARFOS DA ESTRELA DE SAÍDA.",
+   "label": "Alinhamento do garfo"
+  },
+  {
+   "text": "ALINHAMENTO NAS HASTES 10, 35, 42,86 E 105.",
+   "label": "Haste danificada"
+  },
+  {
+   "text": "TROCA DAS TRAVAS DE GARGALO 35, 41, 51, 64, 75, 86 2 92.",
+   "label": "Trava Gargalo danificada"
+  },
+  {
+   "text": "ENROSCO DE GARRAFAS NA SAIDA DA ENCHEDORA",
+   "label": "Enrosco de garrafas"
+  },
+  {
+   "text": "RABO DE ANDORINHA GASTO/DANIFICADO - SERA TROCADO NA REFORMA.",
+   "label": "Alinhamento do garfo"
+  },
+  {
+   "text": "VELOCIDADE REDUZIDA / RABO DE ANDORINHA GASTO",
+   "label": "Alinhamento do garfo"
+  },
+  {
+   "text": "VELOCIDADE REDUZIDA / RABO DE ANDORINHA GASTO",
+   "label": "Alinhamento do garfo"
+  },
+  {
+   "text": "VELOCIDADE REDUZIDA / RABO DE ANDORINHA GASTO",
+   "label": "Alinhamento do garfo"
+  },
+  {
+   "text": "FALHA NA  TRANSFERÊNCIA DE DADOS CLP",
+   "label": "Falha no IHM"
+  },
+  {
+   "text": "REAPERTO HASTE DE ELEVAÇÃO N°40",
+   "label": "Haste danificada"
+  },
+  {
+   "text": "GARFO (RABO DE ANDORINHA) DANIFICADO, REALIZADO A TROCA",
+   "label": "Alinhamento do garfo"
+  }
+ ]
+}

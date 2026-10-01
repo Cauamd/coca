@@ -1,0 +1,38 @@
+[
+  {
+    "centro": "BAAD",
+    "totalExemplosHistoricos": 195,
+    "totalExemplosFeedback": 0,
+    "totalExemplos": 195,
+    "coberturaPercent": 76.67,
+    "precisaoQuandoRespondePercent": 82.61,
+    "testados": 30,
+    "respondeu": 23,
+    "acertos": 19,
+    "treinadoEm": "2026-10-01T01:05:00.575Z"
+  },
+  {
+    "centro": "BAAI",
+    "totalExemplosHistoricos": 2634,
+    "totalExemplosFeedback": 0,
+    "totalExemplos": 2634,
+    "coberturaPercent": 41.16,
+    "precisaoQuandoRespondePercent": 32.52,
+    "testados": 396,
+    "respondeu": 163,
+    "acertos": 53,
+    "treinadoEm": "2026-10-01T01:05:00.778Z"
+  },
+  {
+    "centro": "BAAK",
+    "totalExemplosHistoricos": 4480,
+    "totalExemplosFeedback": 0,
+    "totalExemplos": 4480,
+    "coberturaPercent": 75,
+    "precisaoQuandoRespondePercent": 74.01,
+    "testados": 672,
+    "respondeu": 504,
+    "acertos": 373,
+    "treinadoEm": "2026-10-01T01:05:01.485Z"
+  }
+]
