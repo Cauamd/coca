@@ -8,9 +8,9 @@ import MorphSelect from "../../../components/ui/select-morph";
 import DatePicker from "../../../components/ui/date-picker";
 
 const CATEGORY_LEGEND = [
-  { label: "Crítico-Crônico", color: "#F0A030", desc: "Alta frequência e alto impacto — prioridade máxima" },
-  { label: "Crítico", color: "#D9534F", desc: "Baixa frequência, alto impacto — risco elevado" },
-  { label: "Crônico", color: "#4C9A6A", desc: "Alta frequência, baixo impacto — foco na causa raiz" },
+  { label: "Crítico-Crônico", color: "#FFB74D", desc: "Alta frequência e alto impacto — prioridade máxima" },
+  { label: "Crítico", color: "#EF5350", desc: "Baixa frequência, alto impacto — risco elevado" },
+  { label: "Crônico", color: "#81C784", desc: "Alta frequência, baixo impacto — foco na causa raiz" },
   { label: "Conforto", color: "#5C6577", desc: "Baixa frequência e baixo impacto" },
 ];
 
@@ -154,7 +154,7 @@ export default function DashboardJackKnife() {
                         className="clickable-row"
                         onClick={() => goToApontamentos(p)}
                       >
-                        <td><span className="tag" style={{ borderColor: "#F0A030", color: "#F0A030" }}>{i + 1}</span></td>
+                        <td><span className="tag" style={{ borderColor: "#FFB74D", color: "#FFB74D" }}>{i + 1}</span></td>
                         <td>{p.linha}</td>
                         <td>{p.equipamento}</td>
                         <td className="col-num">{p.q}</td>

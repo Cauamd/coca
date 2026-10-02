@@ -16,9 +16,9 @@ const EMPTY_5W2H: CincoW2HItem = {
 
 const STATUS_LABELS: Record<string, { label: string; color: string }> = {
   sem_plano: { label: "Sem plano", color: "#67676F" },
-  aberto: { label: "Aberto", color: "#F0A030" },
-  em_andamento: { label: "Em andamento", color: "#4C9A6A" },
-  concluido: { label: "Concluído", color: "#34C77B" },
+  aberto: { label: "Aberto", color: "#FFB74D" },
+  em_andamento: { label: "Em andamento", color: "#81C784" },
+  concluido: { label: "Concluído", color: "#81C784" },
 };
 
 export default function AlertasPage() {

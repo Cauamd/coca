@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { ModoFalha, fetchModosFalha, updateClassificacao } from "../lib/api";
 
 interface Props {
@@ -19,11 +20,16 @@ export default function ClassificationPicker({
   const [loadingModos, setLoadingModos] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+      if (
+        wrapperRef.current && !wrapperRef.current.contains(e.target as Node) &&
+        !dropdownRef.current?.contains(e.target as Node)
+      ) {
         setOpen(false);
       }
     }
@@ -32,6 +38,14 @@ export default function ClassificationPicker({
   }, []);
 
   async function openPicker() {
+    const button = wrapperRef.current?.querySelector(".btn-classify");
+    if (button) {
+      const rect = button.getBoundingClientRect();
+      setDropdownPosition({
+        top: Math.max(8, Math.min(rect.bottom + 6, window.innerHeight - 340)),
+        left: Math.max(8, Math.min(rect.left, window.innerWidth - 280)),
+      });
+    }
     setOpen(true);
     setError(null);
     if (modos.length === 0) {
@@ -74,8 +88,16 @@ export default function ClassificationPicker({
         </button>
       </div>
 
-      {open && (
-        <div className="classification-dropdown">
+      {open && typeof document !== "undefined" && createPortal(
+        <div
+          className="classification-dropdown"
+          ref={dropdownRef}
+          style={{ top: dropdownPosition.top, left: dropdownPosition.left }}
+          onWheel={(event) => {
+            event.preventDefault();
+            event.currentTarget.scrollTop += event.deltaY;
+          }}
+        >
           {loadingModos ? (
             <div className="classification-dropdown-state">Carregando...</div>
           ) : error ? (
@@ -101,7 +123,8 @@ export default function ClassificationPicker({
               ))}
             </>
           )}
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

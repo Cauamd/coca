@@ -18,9 +18,9 @@ import DatePicker from "../components/ui/date-picker";
 type Categoria = "CRÍTICO-CRÔNICO" | "CRÍTICO" | "CRÔNICO" | "CONFORTO";
 
 const CATEGORY_CONFIG: { key: Categoria; label: string; desc: string; color: string }[] = [
-  { key: "CRÍTICO-CRÔNICO", label: "Crítico-Crônico", desc: "Alta frequência e alto impacto — prioridade máxima", color: "#F0A030" },
-  { key: "CRÍTICO", label: "Crítico", desc: "Baixa frequência, alto impacto — risco elevado", color: "#D9534F" },
-  { key: "CRÔNICO", label: "Crônico", desc: "Alta frequência, baixo impacto — foco na causa raiz", color: "#4C9A6A" },
+  { key: "CRÍTICO-CRÔNICO", label: "Crítico-Crônico", desc: "Alta frequência e alto impacto — prioridade máxima", color: "#FFB74D" },
+  { key: "CRÍTICO", label: "Crítico", desc: "Baixa frequência, alto impacto — risco elevado", color: "#EF5350" },
+  { key: "CRÔNICO", label: "Crônico", desc: "Alta frequência, baixo impacto — foco na causa raiz", color: "#81C784" },
   { key: "CONFORTO", label: "Conforto", desc: "Baixa frequência e baixo impacto", color: "#5C6577" },
 ];
 
@@ -251,7 +251,11 @@ export default function HomePage() {
 
         {!selectedCategoria && !loading && (
           <div className="empty-hint">
-            Selecione uma categoria acima para ver os equipamentos em detalhe.
+            <svg className="empty-hint-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" />
+              <path d="m16 16 4 4M8 11h6M11 8v6" />
+            </svg>
+            <span>Selecione uma categoria acima para ver os equipamentos em detalhe.</span>
           </div>
         )}
       </div>

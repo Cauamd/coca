@@ -6,13 +6,13 @@ import { useRef } from "react";
 
 
 const NAV_ITEMS = [
-  { href: "/", label: "Ini­cio" },
+  { href: "/", label: "Início" },
   { href: "/upload", label: "Importar" },
   { href: "/dados", label: "Apontamentos" },
   { href: "/dashboard", label: "Pareto" },
-  { href: "/dashboard/jack-knife", label: "Cri­tico-Cronico" },
+  { href: "/dashboard/jack-knife", label: "Crítico-Crônico" },
   { href: "/alertas", label: "Alertas" },
-  { href: "/classificacao", label: "DicionÃ¡rio" },
+  { href: "/classificacao", label: "Dicionário" },
 ];
 export default function Nav() {
   const pathname = usePathname();

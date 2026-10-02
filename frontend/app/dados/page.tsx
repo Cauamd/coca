@@ -112,7 +112,7 @@ export default function DadosApontamentos() {
     }
 
     return (
-        <main className="panel-main data-main">
+        <main className="panel-main data-main apontamentos-main">
             <div className="page-subtitle">Apontamentos</div>
 
             <div className="data-container">
@@ -191,6 +191,12 @@ export default function DadosApontamentos() {
                     </span>
 
                     <button className="btn-export" onClick={handleExport} disabled={exporting || loading}>
+                        {!exporting && (
+                            <svg className="btn-export-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                <path d="m7 10 5 5 5-5M12 15V3" />
+                            </svg>
+                        )}
                         {exporting ? "Exportando..." : "Exportar Excel"}
                     </button>
                 </div>
@@ -199,7 +205,7 @@ export default function DadosApontamentos() {
                 <div className="table-wrapper">
                     {error && <div className="status-message error">{error}</div>}
 
-                    <table className="data-table">
+                    <table className="data-table apontamentos-table">
                         <thead>
                             <tr>
                                 <th>Data</th>

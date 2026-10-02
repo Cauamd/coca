@@ -22,9 +22,9 @@ interface Props {
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  "CRÍTICO-CRÔNICO": "#F0A030",
-  "CRÍTICO": "#D9534F",
-  "CRÔNICO": "#4C9A6A",
+  "CRÍTICO-CRÔNICO": "#FFB74D",
+  "CRÍTICO": "#EF5350",
+  "CRÔNICO": "#81C784",
   "CONFORTO": "#5C6577",
 };
 
@@ -121,17 +121,17 @@ export default function JackKnifeChart({ data, limiteQ, limiteMttr, onPointClick
             "atenção" que separa os quadrantes, precisa ser fácil de achar */}
         <ReferenceLine
           x={limiteQ}
-          stroke="#F0A030"
+          stroke="#FFB74D"
           strokeWidth={1.5}
           strokeDasharray="4 4"
-          label={{ value: `${limiteQ}`, position: "top", fill: "#F0A030", fontSize: 10, fontWeight: 600 }}
+          label={{ value: `${limiteQ}`, position: "top", fill: "#FFB74D", fontSize: 10, fontWeight: 600 }}
         />
         <ReferenceLine
           y={limiteMttr}
-          stroke="#F0A030"
+          stroke="#FFB74D"
           strokeWidth={1.5}
           strokeDasharray="4 4"
-          label={{ value: `${limiteMttr}`, position: "right", fill: "#F0A030", fontSize: 10, fontWeight: 600 }}
+          label={{ value: `${limiteMttr}`, position: "right", fill: "#FFB74D", fontSize: 10, fontWeight: 600 }}
         />
 
         <Scatter
