@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import { ToggleTheme } from "./ui/toggle-theme";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Nav from "./Nav";
@@ -47,10 +49,11 @@ export default function AuthShell({ children }: { children: React.ReactNode }) {
     <>
       <header className="global-header">
         <div className="global-header-inner">
-          <div className="brand"><span className="brand-title"></span></div>
+          <Link href="/" className="brand" aria-label="Página inicial"><img src="https://coca-cola-femsa.com.br/wp-content/uploads/2023/01/logo-femsa.png" alt="Coca-Cola FEMSA" className="brand-logo" /></Link>
           <Nav />
           <div className="flex items-center gap-3 px-2 text-sm">
             <span className="whitespace-nowrap">Centro: <strong>{centro}</strong></span>
+            <ToggleTheme />
             <button className="btn-secondary" onClick={() => void handleLogout()}>Sair</button>
           </div>
         </div>

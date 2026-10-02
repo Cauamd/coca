@@ -2,6 +2,8 @@
 
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
+import { ToggleTheme } from "./ui/toggle-theme";
 import { fetchCentros, loginAdmin } from "../lib/api";
 import MorphSelect from "./ui/select-morph";
 
@@ -15,14 +17,11 @@ export default function CocaColaLoginWave() {
   const [loading, setLoading] = useState(false);
   const [centrosLoading, setCentrosLoading] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
-  const [dark, setDark] = useState(false);
+  const { resolvedTheme } = useTheme();
+  const dark = resolvedTheme === "dark";
   const waveRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem("tema");
-      setDark(saved ? saved === "dark" : matchMedia("(prefers-color-scheme: dark)").matches);
-    } catch { setDark(false); }
     fetchCentros().then((items) => {
       setCentros(items);
       if (!items.length) setError("Nenhum centro foi encontrado. Verifique se há dados na tabela apontamentos.");
@@ -82,12 +81,6 @@ export default function CocaColaLoginWave() {
     };
   }, [dark]);
 
-  function toggleTheme() {
-    const next = !dark;
-    setDark(next);
-    try { localStorage.setItem("tema", next ? "dark" : "light"); } catch { /* armazenamento opcional */ }
-  }
-
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
@@ -104,9 +97,7 @@ export default function CocaColaLoginWave() {
   return (
     <main className={`login-page${dark ? " dark" : ""}`}>
       <canvas ref={waveRef} className="wave" aria-hidden="true" />
-      <button className="theme-toggle" type="button" onClick={toggleTheme} aria-label="Alternar tema claro/escuro">
-        {dark ? "☀" : "☾"}
-      </button>
+      <div className="login-theme-toggle"><ToggleTheme /></div>
       <section className="login-card" aria-labelledby="login-title">
         <div className="brand" aria-label="Coca-Cola FEMSA"><img src="https://coca-cola-femsa.com.br/wp-content/uploads/2023/01/logo-femsa.png" alt="" /></div>
         <h1 id="login-title">Login</h1>
@@ -151,7 +142,7 @@ export default function CocaColaLoginWave() {
         .forgot{display:inline-block;color:var(--link);font-size:.92rem;font-weight:500;text-underline-offset:3px;margin:0 0 20px}
         .submit{width:100%;height:50px;border:0;border-radius:12px;background:#d9000a;color:#fff;font:inherit;font-size:1.1rem;font-weight:700;cursor:pointer;box-shadow:0 14px 28px -14px rgba(244,0,9,.9);transition:background .2s,transform .12s}.submit:hover{background:#a80006}.submit:active{transform:scale(.985)}.submit:disabled{opacity:.7;cursor:wait}.status{min-height:1.3em;margin:12px 0 0;font-size:.9rem;text-align:center;color:var(--link)}
         .or{display:flex;align-items:center;gap:12px;margin:14px 0 16px;font-size:.92rem;color:var(--muted)}.or:before,.or:after{content:"";height:1px;flex:1;background:var(--field-border)}.social{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.social button{height:46px;border-radius:12px;border:1px solid var(--field-border);background:var(--field);color:var(--ink);cursor:pointer;display:grid;place-items:center}.social button:hover{border-color:#f40009;transform:translateY(-2px)}.google{font:bold 20px Arial;color:#4285f4}.microsoft{width:18px;height:18px;display:grid;grid-template-columns:1fr 1fr;gap:2px}.microsoft i:nth-child(1){background:#f25022}.microsoft i:nth-child(2){background:#7fba00}.microsoft i:nth-child(3){background:#00a4ef}.microsoft i:nth-child(4){background:#ffb900}.apple{font-size:24px;color:var(--ink)}.signup{margin-top:22px;text-align:center;font-size:.92rem;color:var(--muted)}.signup a{color:var(--link);font-weight:600}
-        .theme-toggle{position:fixed;z-index:2;top:14px;right:14px;width:44px;height:44px;border-radius:50%;border:1px solid var(--card-border);background:var(--card);color:var(--ink);font-size:23px;cursor:pointer;backdrop-filter:blur(12px)}:focus-visible{outline:2px solid #f40009;outline-offset:2px}
+        :focus-visible{outline:2px solid #f40009;outline-offset:2px}
         @media(max-width:420px){.login-card{padding:28px 22px 24px}}
       `}</style>
     </main>

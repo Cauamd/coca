@@ -25,10 +25,14 @@ async function uploadApontamentos(req, res) {
     return res.status(400).json({ detail: err.message });
   }
 
-  if (rows.some((row) => row[0] !== req.user?.centro)) {
-    return res.status(403).json({ detail: "A planilha contém registros de um centro diferente do centro selecionado no login." });
-  }
+  const linhasPlanilha = rows.length;
+  const centroSelecionado = req.user?.centro;
+  rows = rows.filter((row) => row[0] === centroSelecionado);
+  const linhasIgnoradas = linhasPlanilha - rows.length;
 
+  if (!rows.length) {
+    return res.status(400).json({ detail: `Nenhuma linha da planilha corresponde ao centro selecionado (${centroSelecionado}).` });
+  }
   const insertSql = `
     INSERT INTO apontamentos
       (centro, linha, ordem, material, descricao_material, data_inicio,
@@ -62,7 +66,8 @@ async function uploadApontamentos(req, res) {
 
   return res.json({
     status: "sucesso",
-    linhas_processadas: rows.length,
+    linhas_processadas: linhasPlanilha,
+    linhas_ignoradas: linhasIgnoradas,
     linhas_inseridas: inserted,
     classificacao,
   });

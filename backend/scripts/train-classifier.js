@@ -34,7 +34,6 @@ function trainAndEvaluate(examples) {
 
   const clf = new KNNTextClassifier({ k: 5, minSimilarity: 0.3, minAgreement: 0.6 });
   clf.train(trainSet);
-
   const evalResult = clf.evaluate(testSet);
 
   const finalClf = new KNNTextClassifier({ k: 5, minSimilarity: 0.3, minAgreement: 0.6 });
@@ -43,7 +42,8 @@ function trainAndEvaluate(examples) {
   return { model: finalClf, evalResult };
 }
 
-async function main() {
+// Função principal, reutilizável tanto pelo CLI quanto pelo agendador noturno.
+async function runTraining({ log = console.log } = {}) {
   if (!fs.existsSync(MODELS_DIR)) fs.mkdirSync(MODELS_DIR, { recursive: true });
 
   const files = fs.readdirSync(TRAINING_DIR).filter((f) => f.endsWith(".json"));
@@ -56,16 +56,17 @@ async function main() {
     const feedbackExamples = await loadFeedbackDoBanco(centro);
     const allExamples = [...staticExamples, ...feedbackExamples];
 
-    console.log(`\n=== Treinando centro ${centro} ===`);
-    console.log(`Histórico (planilha): ${staticExamples.length} | Feedback manual: ${feedbackExamples.length}`);
+    log(`[treino] Centro ${centro}: histórico=${staticExamples.length} feedback=${feedbackExamples.length}`);
 
     const { model, evalResult } = trainAndEvaluate(allExamples);
 
     const modelPath = path.join(MODELS_DIR, `${centro}.json`);
     fs.writeFileSync(modelPath, JSON.stringify(model.toJSON()));
 
-    console.log(`Cobertura (% que ousou responder): ${(evalResult.cobertura * 100).toFixed(1)}%`);
-    console.log(`Precisão quando responde: ${(evalResult.precisaoQuandoResponde * 100).toFixed(1)}% (${evalResult.acertos}/${evalResult.respondeu})`);
+    log(
+      `[treino] Centro ${centro}: cobertura=${(evalResult.cobertura * 100).toFixed(1)}% ` +
+      `precisão=${(evalResult.precisaoQuandoResponde * 100).toFixed(1)}% (${evalResult.acertos}/${evalResult.respondeu})`
+    );
 
     report.push({
       centro,
@@ -82,13 +83,22 @@ async function main() {
   }
 
   fs.writeFileSync(path.join(MODELS_DIR, "_report.json"), JSON.stringify(report, null, 2));
+  log(`[treino] Concluído. ${report.length} centro(s) retreinado(s).`);
 
-  console.log("\n=== Resumo geral ===");
-  console.table(report);
-  process.exit(0);
+  return report;
 }
 
-main().catch((err) => {
-  console.error("Erro no treino:", err);
-  process.exit(1);
-});
+module.exports = { runTraining };
+
+// Permite continuar rodando via terminal: node scripts/train-classifier.js
+if (require.main === module) {
+  runTraining()
+    .then((report) => {
+      console.table(report);
+      process.exit(0);
+    })
+    .catch((err) => {
+      console.error("Erro no treino:", err);
+      process.exit(1);
+    });
+}

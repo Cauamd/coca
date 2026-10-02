@@ -9,6 +9,7 @@ interface UploadResult {
   status: string;
   linhas_processadas: number;
   linhas_inseridas: number;
+  linhas_ignoradas: number;
 }
 
 export default function UploadApontamentos() {
@@ -48,12 +49,22 @@ export default function UploadApontamentos() {
         body: formData,
       });
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.detail || "Erro ao enviar arquivo");
+      const responseText = await res.text();
+      let data: { detail?: string };
+      try {
+        data = JSON.parse(responseText);
+      } catch {
+        const isHtml = responseText.trimStart().startsWith("<");
+        throw new Error(
+          isHtml
+            ? "O servidor retornou uma página HTML em vez da API. Verifique se o backend está rodando e se NEXT_PUBLIC_API_URL aponta para ele."
+            : "O servidor retornou uma resposta inválida ao enviar a planilha."
+        );
       }
 
+      if (!res.ok) {
+        throw new Error(data.detail || `Erro ao enviar arquivo (HTTP ${res.status})`);
+      }
       setResult(data);
     } catch (err: any) {
       setError(err.message || "Erro inesperado ao enviar o arquivo");
@@ -74,9 +85,8 @@ export default function UploadApontamentos() {
           <p className="card-eyebrow">Entrada de dados</p>
           <h2>Importar apontamentos</h2>
           <p className="description">
-            Envie a planilha de paradas de linha em formato .xlsx ou .xlsm. As
-            colunas abaixo são obrigatórias e devem estar no cabeçalho da aba
-            "Apontamentos de Falha KOFBR".
+            Envie a planilha em formato .xlsx ou .xlsm. Serão importadas apenas as linhas do centro selecionado no login; as demais serão ignoradas.
+            As colunas abaixo devem estar na aba "Apontamentos de Falha KOFBR".
           </p>
           <p className="required-cols">
             Centro · Data Inicio Real · Linha · Ordem · Material · Minutos de paradas
@@ -101,12 +111,17 @@ export default function UploadApontamentos() {
             <div className="status-message success">
               Importação concluída.
               <div className="stat-row">
-                <span>Linhas processadas</span>
+                <span>Linhas na planilha</span>
                 <strong>{result.linhas_processadas}</strong>
               </div>
               <div className="stat-row">
                 <span>Linhas inseridas</span>
                 <strong>{result.linhas_inseridas}</strong>
+              </div>
+
+              <div className="stat-row">
+                <span>Linhas ignoradas (outros centros)</span>
+                <strong>{result.linhas_ignoradas}</strong>
               </div>
 
               <button className="btn-primary btn-view-data" onClick={handleGoToData}>

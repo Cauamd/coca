@@ -64,7 +64,7 @@ function AnimatedDot(props: any) {
         r={radius}
         fill={fill}
         fillOpacity={0.92}
-        stroke={isHovered ? "#F5F5F7" : "#0E0E10"}
+        stroke={isHovered ? "var(--chart-dot-hover)" : "var(--chart-dot-outline)"}
         strokeWidth={isHovered ? 1.5 : 1}
         style={{ transition: "r 0.18s cubic-bezier(0.22,1,0.36,1), stroke-width 0.18s ease" }}
       />
@@ -89,7 +89,7 @@ export default function JackKnifeChart({ data, limiteQ, limiteMttr, onPointClick
   return (
     <ResponsiveContainer width="100%" height={460}>
       <ScatterChart margin={{ top: 20, right: 40, left: 10, bottom: 20 }}>
-        <CartesianGrid stroke="#3A3A44" strokeDasharray="3 3" />
+        <CartesianGrid stroke="var(--chart-grid)" strokeDasharray="3 3" />
 
         <XAxis
           type="number"
@@ -97,9 +97,9 @@ export default function JackKnifeChart({ data, limiteQ, limiteMttr, onPointClick
           name="Nº de falhas"
           scale="log"
           domain={["auto", "auto"]}
-          tick={{ fill: "#F5F5F7", fontSize: 11 }}
-          stroke="#3A3A44"
-          label={{ value: "Nº de falhas (frequência)", position: "insideBottom", offset: -10, fill: "#9898A0", fontSize: 11 }}
+          tick={{ fill: "var(--chart-text)", fontSize: 11 }}
+          stroke="var(--chart-grid)"
+          label={{ value: "Nº de falhas (frequência)", position: "insideBottom", offset: -10, fill: "var(--chart-label)", fontSize: 11 }}
         />
 
         <YAxis
@@ -108,14 +108,14 @@ export default function JackKnifeChart({ data, limiteQ, limiteMttr, onPointClick
           name="MTTR"
           scale="log"
           domain={["auto", "auto"]}
-          tick={{ fill: "#F5F5F7", fontSize: 11 }}
-          stroke="#3A3A44"
-          label={{ value: "MTTR (min)", angle: -90, position: "insideLeft", fill: "#9898A0", fontSize: 11 }}
+          tick={{ fill: "var(--chart-text)", fontSize: 11 }}
+          stroke="var(--chart-grid)"
+          label={{ value: "MTTR (min)", angle: -90, position: "insideLeft", fill: "var(--chart-label)", fontSize: 11 }}
         />
 
         <ZAxis range={[60, 60]} />
 
-        <Tooltip content={<CustomTooltip />} cursor={{ strokeDasharray: "3 3", stroke: "#3A3A44" }} />
+        <Tooltip content={<CustomTooltip />} cursor={{ strokeDasharray: "3 3", stroke: "var(--chart-grid)" }} />
 
         {/* Linhas de corte (limites de frequência/MTTR): âmbar — a cor de
             "atenção" que separa os quadrantes, precisa ser fácil de achar */}

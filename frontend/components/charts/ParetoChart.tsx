@@ -54,27 +54,27 @@ export default function ParetoChart({ data }: Props) {
     <ResponsiveContainer width="100%" height={420}>
       <ComposedChart data={data} margin={{ top: 20, right: 40, left: 10, bottom: 60 }}>
         {/* Grid: cinza claro sutil, visível sobre o fundo escuro sem competir com os dados */}
-        <CartesianGrid stroke="#3A3A44" strokeDasharray="3 3" vertical={false} />
+        <CartesianGrid stroke="var(--chart-grid)" strokeDasharray="3 3" vertical={false} />
 
         <XAxis
           dataKey="modo_falha"
-          tick={{ fill: "#F5F5F7", fontSize: 11 }}
+          tick={{ fill: "var(--chart-text)", fontSize: 11 }}
           angle={-30}
           textAnchor="end"
           interval={0}
           height={80}
-          stroke="#3A3A44"
+          stroke="var(--chart-grid)"
         />
 
         <YAxis
           yAxisId="left"
-          tick={{ fill: "#F5F5F7", fontSize: 11 }}
-          stroke="#3A3A44"
+          tick={{ fill: "var(--chart-text)", fontSize: 11 }}
+          stroke="var(--chart-grid)"
           label={{
             value: "Minutos de parada",
             angle: -90,
             position: "insideLeft",
-            fill: "#9898A0",
+            fill: "var(--chart-label)",
             fontSize: 11,
           }}
         />
@@ -83,8 +83,8 @@ export default function ParetoChart({ data }: Props) {
           yAxisId="right"
           orientation="right"
           domain={[0, 100]}
-          tick={{ fill: "#F5F5F7", fontSize: 11 }}
-          stroke="#3A3A44"
+          tick={{ fill: "var(--chart-text)", fontSize: 11 }}
+          stroke="var(--chart-grid)"
           tickFormatter={(v) => `${v}%`}
         />
 
@@ -110,9 +110,9 @@ export default function ParetoChart({ data }: Props) {
           yAxisId="right"
           type="monotone"
           dataKey="percentual_acumulado"
-          stroke="#F5F5F7"
+          stroke="var(--chart-line)"
           strokeWidth={2.5}
-          dot={{ fill: "#F5F5F7", r: 3.5, strokeWidth: 0 }}
+          dot={{ fill: "var(--chart-text)", r: 3.5, strokeWidth: 0 }}
           activeDot={{ fill: "#F0A030", r: 5, strokeWidth: 0 }}
         />
       </ComposedChart>
