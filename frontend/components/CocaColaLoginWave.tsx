@@ -18,7 +18,10 @@ export default function CocaColaLoginWave() {
   const [centrosLoading, setCentrosLoading] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const { resolvedTheme } = useTheme();
-  const dark = resolvedTheme === "dark";
+  const [mounted, setMounted] = useState(false);
+  const dark = mounted && resolvedTheme === "dark";
+
+  useEffect(() => setMounted(true), []);
   const waveRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -87,6 +90,7 @@ export default function CocaColaLoginWave() {
     setLoading(true);
     try {
       await loginAdmin(usuario, senha, centro);
+      sessionStorage.setItem("coca-cola-entry-transition", "1");
       router.replace("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Não foi possível entrar.");

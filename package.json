@@ -4,10 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node backend/server.js",
-    "dev": "node backend/server.js",
-    "build": "vite build",
-  "preview": "vite preview"
+"dev": "next dev",
+  "build": "next build",
+  "start": "next start"
   },
   "keywords": [],
   "author": "",

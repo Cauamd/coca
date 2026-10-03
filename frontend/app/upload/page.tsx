@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_URL = "/api";
 
 interface UploadResult {
   status: string;
@@ -50,14 +50,14 @@ export default function UploadApontamentos() {
       });
 
       const responseText = await res.text();
-      let data: { detail?: string };
+      let data: UploadResult & { detail?: string };
       try {
         data = JSON.parse(responseText);
       } catch {
         const isHtml = responseText.trimStart().startsWith("<");
         throw new Error(
           isHtml
-            ? "O servidor retornou uma página HTML em vez da API. Verifique se o backend está rodando e se NEXT_PUBLIC_API_URL aponta para ele."
+            ? "O servidor retornou uma página HTML em vez da API. Verifique se o backend está rodando e se BACKEND_URL aponta para ele."
             : "O servidor retornou uma resposta inválida ao enviar a planilha."
         );
       }

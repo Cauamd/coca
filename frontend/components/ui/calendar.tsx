@@ -3,7 +3,9 @@
 import { DayPicker, type DayPickerProps } from "react-day-picker";
 import { ptBR } from "react-day-picker/locale";
 
-export type CalendarProps = Omit<DayPickerProps, "locale">;
+type WithoutLocale<T> = T extends unknown ? Omit<T, "locale"> : never;
+
+export type CalendarProps = WithoutLocale<DayPickerProps>;
 
 export function Calendar(props: CalendarProps) {
   return (
