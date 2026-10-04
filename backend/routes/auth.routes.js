@@ -3,7 +3,7 @@ const { listCentros, login, me, logout } = require("../controllers/auth.controll
 const { requireAdmin } = require("../middleware/auth");
 
 const router = express.Router();
-router.get("/centros", listCentros);
+router.get("/centros-disponiveis", listCentros);
 router.post("/login", login);
 router.get("/me", requireAdmin, me);
 router.post("/logout", requireAdmin, logout);
