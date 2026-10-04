@@ -218,8 +218,8 @@ function CocaColaLoginWave() {
                                         disabled: centrosLoading || !centros.length || loading,
                                         onValueChange: setCentro,
                                         options: centros.map((item)=>({
-                                                value: item,
-                                                label: item
+                                                value: item.codigo,
+                                                label: item.nome
                                             })),
                                         className: "login-center-select"
                                     }, void 0, false, {

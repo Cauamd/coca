@@ -529,7 +529,7 @@ __turbopack_context__.s([
 ]);
 const API_URL = "/api";
 async function fetchCentros() {
-    const res = await fetch(`${API_URL}/auth/centros`, {
+    const res = await fetch(`${API_URL}/auth/centros-disponiveis`, {
         credentials: "include"
     });
     if (!res.ok) {

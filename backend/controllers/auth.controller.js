@@ -12,9 +12,14 @@ function sameSecret(value, expected) {
 async function listCentros(req, res) {
   try {
     const [rows] = await pool.query(
-      "SELECT cod_centro, unidade FROM centros ORDER BY unidade"
+      `SELECT DISTINCT a.centro AS codigo,
+              COALESCE(NULLIF(c.unidade, ''), a.centro) AS nome
+       FROM apontamentos a
+       LEFT JOIN centros c ON c.cod_centro = a.centro
+       WHERE a.centro IS NOT NULL AND a.centro <> ''
+       ORDER BY nome`
     );
-    res.json({ centros: rows.map((r) => ({ codigo: r.cod_centro, nome: r.unidade })) });
+    res.json({ centros: rows.map((r) => ({ codigo: r.codigo.trim(), nome: r.nome.trim() })) });
   } catch (err) {
     console.error("Falha ao consultar centros:", err);
     res.status(500).json({ detail: `Falha ao consultar os centros no banco de dados (${err.code || "erro de consulta"}).` });

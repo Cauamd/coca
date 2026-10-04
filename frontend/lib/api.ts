@@ -1,7 +1,12 @@
 const API_URL = "/api";
 
-export async function fetchCentros(): Promise<string[]> {
-  const res = await fetch(`${API_URL}/auth/centros`, { credentials: "include" });
+export interface Centro {
+  codigo: string;
+  nome: string;
+}
+
+export async function fetchCentros(): Promise<Centro[]> {
+  const res = await fetch(`${API_URL}/auth/centros-disponiveis`, { credentials: "include" });
   if (!res.ok) {
     const data = await res.json().catch(() => ({}));
     throw new Error(data.detail || `Não foi possível carregar os centros (HTTP ${res.status}).`);

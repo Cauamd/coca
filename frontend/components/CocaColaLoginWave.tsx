@@ -4,7 +4,7 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { ToggleTheme } from "./ui/toggle-theme";
-import { fetchCentros, loginAdmin } from "../lib/api";
+import { fetchCentros, loginAdmin, type Centro } from "../lib/api";
 import MorphSelect from "./ui/select-morph";
 
 export default function CocaColaLoginWave() {
@@ -12,7 +12,7 @@ export default function CocaColaLoginWave() {
   const [usuario, setUsuario] = useState("");
   const [senha, setSenha] = useState("");
   const [centro, setCentro] = useState("");
-  const [centros, setCentros] = useState<string[]>([]);
+  const [centros, setCentros] = useState<Centro[]>([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [centrosLoading, setCentrosLoading] = useState(true);
@@ -115,7 +115,7 @@ export default function CocaColaLoginWave() {
               placeholder={centrosLoading ? "Carregando centros..." : centros.length ? "Selecione seu centro" : "Centros indisponíveis"}
               disabled={centrosLoading || !centros.length || loading}
               onValueChange={setCentro}
-              options={centros.map((item) => ({ value: item, label: item }))}
+              options={centros.map((item) => ({ value: item.codigo, label: item.nome }))}
               className="login-center-select"
             />
           </div>
