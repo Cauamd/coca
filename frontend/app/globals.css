@@ -859,7 +859,7 @@ a {
 .apontamentos-table .material-cell,
 .apontamentos-table .col-obs { min-width: 0; }
 .apontamentos-table .material-cell > span,
-.apontamentos-table .col-obs { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.apontamentos-table tbody td.col-obs { white-space: normal; overflow: visible; overflow-wrap: anywhere; text-overflow: clip; }
 .apontamentos-table .material-cell > span:first-child { color: #F5F5F7; font-weight: 600; }
 .apontamentos-table .material-desc { max-width: 100%; }
 .apontamentos-table .material-cell .material-desc { color: #A0A0A0; font-size: 10.5px; font-weight: 400; }

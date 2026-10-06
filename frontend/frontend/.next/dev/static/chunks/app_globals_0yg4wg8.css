@@ -1364,10 +1364,11 @@ a {
   min-width: 0;
 }
 
-.apontamentos-table .material-cell > span, .apontamentos-table .col-obs {
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+.apontamentos-table .material-cell > span, .apontamentos-table tbody td.col-obs {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-overflow: clip;
+  overflow: visible;
 }
 
 .apontamentos-table .material-cell > span:first-child {
