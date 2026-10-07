@@ -76,7 +76,7 @@ async function uploadApontamentos(req, res) {
 function buildWhereClause(query, centroSessao) {
   const {
     centro, linha, tipo_parada, equipamento, turno,
-    data_inicio, data_fim, busca,
+    data_inicio, data_fim, busca, apenas_ia,
     apenas_validos = "true",
   } = query;
 
@@ -108,6 +108,7 @@ function buildWhereClause(query, centroSessao) {
     where.push("(a.observacoes LIKE ? OR a.descricao_material LIKE ?)");
     params.push(`%${busca}%`, `%${busca}%`);
   }
+  if (apenas_ia === "true") where.push("a.origem_classificacao = 'ia'");
 
   const whereClause = where.length ? `WHERE ${where.join(" AND ")}` : "";
   return { whereClause, params };
@@ -141,7 +142,8 @@ async function listApontamentos(req, res) {
       `SELECT a.id, a.centro, a.linha, a.ordem, a.material, a.descricao_material,
               a.data_inicio, a.turno, a.intervalo, a.tipo_parada, a.chave_parada,
               a.subchave_parada, a.observacoes, a.tempo_parada, a.total_minutos,
-              mf.nome_padrao AS modo_falha_padrao
+              mf.nome_padrao AS modo_falha_padrao,
+              a.origem_classificacao
        FROM apontamentos a
        LEFT JOIN modos_falha_padrao mf ON mf.id = a.modo_falha_id
        ${whereClause}

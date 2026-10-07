@@ -20,3 +20,8 @@ O agendador de reclassificação é iniciado junto com o servidor Express. Por i
 ## Banco de dados
 
 Prepare o MySQL e aplique `backend/sql/schema.sql` antes do primeiro uso. Os dados de conexão e as credenciais administrativas devem ser configurados como variáveis de ambiente no provedor da API. Não envie arquivos `.env` ao Git.
+
+
+## Teste da ia
+
+node scripts/train-classifier.js

@@ -521,6 +521,8 @@ __turbopack_context__.s([
     ()=>addKeyword,
     "buildExportUrl",
     ()=>buildExportUrl,
+    "classifyPendingApontamentos",
+    ()=>classifyPendingApontamentos,
     "createUser",
     ()=>createUser,
     "downloadExport",
@@ -682,6 +684,17 @@ async function fetchSuggestions(minOccurrences = 5) {
         credentials: "include"
     });
     if (!res.ok) throw new Error("Erro ao buscar sugestões");
+    return res.json();
+}
+async function classifyPendingApontamentos() {
+    const res = await fetch(`${API_URL}/classificacao/reclassificar`, {
+        method: "POST",
+        credentials: "include"
+    });
+    if (!res.ok) {
+        const data = await res.json().catch(()=>({}));
+        throw new Error(data.detail || "Erro ao classificar apontamentos pendentes");
+    }
     return res.json();
 }
 async function addKeyword(modoFalhaId, palavraChave, prioridade = 5) {

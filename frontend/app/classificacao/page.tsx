@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { fetchSuggestions, fetchModosFalha, addKeyword, SuggestionsResponse, ModoFalha } from "../../lib/api";
+import { fetchSuggestions, fetchModosFalha, addKeyword, classifyPendingApontamentos, SuggestionsResponse, ModoFalha } from "../../lib/api";
 import MorphSelect from "../../components/ui/select-morph";
 
 export default function ClassificacaoPage() {
@@ -10,6 +10,9 @@ export default function ClassificacaoPage() {
   const [loading, setLoading] = useState(true);
   const [savingTerm, setSavingTerm] = useState<string | null>(null);
   const [selectedModo, setSelectedModo] = useState<Record<string, number>>({});
+  const [classifying, setClassifying] = useState(false);
+  const [classificationMessage, setClassificationMessage] = useState<string | null>(null);
+  const [classificationError, setClassificationError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -38,6 +41,23 @@ export default function ClassificacaoPage() {
     }
   }
 
+  async function handleClassifyPending() {
+    setClassifying(true);
+    setClassificationMessage(null);
+    setClassificationError(null);
+    try {
+      const result = await classifyPendingApontamentos();
+      await load();
+      setClassificationMessage(
+        `${result.totalClassificado} apontamento(s) classificado(s), sendo ${result.totalClassificadoIA} pela IA.`
+      );
+    } catch (err: any) {
+      setClassificationError(err.message || "Erro ao classificar apontamentos pendentes.");
+    } finally {
+      setClassifying(false);
+    }
+  }
+
   const allSuggestions = [
     ...(suggestions?.sugestoes_expressoes || []),
     ...(suggestions?.sugestoes_palavras || []),
@@ -60,7 +80,13 @@ export default function ClassificacaoPage() {
                 <strong className="warn">{suggestions.total_nao_classificados}</strong>
               </div>
             )}
+            <button className="btn-secondary" onClick={handleClassifyPending} disabled={classifying}>
+              {classifying ? "Classificando..." : "Classificar pendentes com IA"}
+            </button>
           </div>
+
+          {classificationMessage && <div className="status-message">{classificationMessage}</div>}
+          {classificationError && <div className="status-message error">{classificationError}</div>}
 
           {loading ? (
             <div className="chart-empty">Analisando observações...</div>

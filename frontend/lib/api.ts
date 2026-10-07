@@ -56,7 +56,8 @@ export interface Apontamento {
   observacoes: string | null;
   tempo_parada: number;
   total_minutos: number;
-modo_falha_padrao: string | null; 
+  modo_falha_padrao: string | null;
+  origem_classificacao: "historico_exato" | "palavra_chave" | "ia" | "manual" | null;
 }
 
 export interface ListResponse {
@@ -85,6 +86,7 @@ export interface ListParams {
   data_fim?: string;
   busca?: string;
   apenas_validos?: boolean;
+  apenas_ia?: boolean;
   page?: number;
   pageSize?: number;
   orderBy?: string;
@@ -221,6 +223,22 @@ export interface SuggestionsResponse {
 export async function fetchSuggestions(minOccurrences = 5): Promise<SuggestionsResponse> {
   const res = await fetch(`${API_URL}/classificacao/sugestoes?min=${minOccurrences}`, { credentials: "include" });
   if (!res.ok) throw new Error("Erro ao buscar sugestões");
+  return res.json();
+}
+
+export async function classifyPendingApontamentos(): Promise<{
+  totalAnalisado: number;
+  totalClassificado: number;
+  totalClassificadoIA: number;
+}> {
+  const res = await fetch(`${API_URL}/classificacao/reclassificar`, {
+    method: "POST",
+    credentials: "include",
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.detail || "Erro ao classificar apontamentos pendentes");
+  }
   return res.json();
 }
 

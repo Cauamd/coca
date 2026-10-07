@@ -866,8 +866,10 @@ a {
 .apontamentos-table .classification-picker,
 .apontamentos-table .classification-current { min-width: 0; max-width: 100%; }
 .apontamentos-table .classification-picker { display: block; width: 100%; }
-.apontamentos-table .classification-current { flex-wrap: wrap; gap: 4px; }
-.apontamentos-table .classification-current .tag { flex: 1 1 0; min-width: 0; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-left: 6px; padding-right: 6px; }
+.apontamentos-table .classification-current { flex-direction: column; align-items: flex-start; gap: 4px; }
+.apontamentos-table .classification-labels { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; width: 100%; min-width: 0; }
+.apontamentos-table .classification-current .tag { display: block; flex: 0 1 auto; min-width: 0; max-width: 100%; overflow: visible; overflow-wrap: anywhere; text-overflow: clip; white-space: normal; line-height: 1.35; padding-left: 6px; padding-right: 6px; }
+.apontamentos-table .classification-current .btn-classify { align-self: flex-start; }
 .apontamentos-table .btn-classify { padding: 4px 6px; font-size: 10px; }
 
 .data-table thead th {

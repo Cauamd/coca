@@ -81,6 +81,18 @@ export default function HomePage() {
     loadData();
   }, [loadData]);
 
+  useEffect(() => {
+    function refreshOnReturn() {
+      if (document.visibilityState === "visible") loadData();
+    }
+    window.addEventListener("focus", refreshOnReturn);
+    document.addEventListener("visibilitychange", refreshOnReturn);
+    return () => {
+      window.removeEventListener("focus", refreshOnReturn);
+      document.removeEventListener("visibilitychange", refreshOnReturn);
+    };
+  }, [loadData]);
+
   function updateFilter(key: keyof typeof params, value: string) {
     setSelectedCategoria(null); // fecha a tabela aberta ao trocar filtro, evita mostrar dado desatualizado
     setParams((prev) => ({ ...prev, [key]: value }));

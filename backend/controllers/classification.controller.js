@@ -7,7 +7,7 @@ const { executarRetreinoNoturno } = require("../jobs/retrainScheduler");
 
 async function reclassifyAll(req, res) {
   try {
-    const result = await classifyAllPending({ forceAll: true });
+    const result = await classifyAllPending({ forceAll: false, centro: req.user?.centro });
     res.json({ status: "sucesso", ...result });
   } catch (err) {
     res.status(500).json({ detail: err.message });

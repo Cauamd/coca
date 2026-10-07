@@ -45,7 +45,8 @@ export default function DadosApontamentos() {
         equipamento: searchParams.get("equipamento") || undefined,
         data_inicio: searchParams.get("data_inicio") || undefined,
         data_fim: searchParams.get("data_fim") || undefined,
-        apenas_validos: searchParams.get("apenas_validos") !== "false",
+        apenas_validos: true,
+        apenas_ia: searchParams.get("apenas_ia") === "true",
         page: 1,
         pageSize: 50,
         orderBy: "data_inicio",
@@ -86,9 +87,14 @@ export default function DadosApontamentos() {
     }
 
     function handleClassified(rowId: number, novoModo: string | null) {
+        if (params.apenas_ia) {
+            setData((prev) => prev.filter((row) => row.id !== rowId));
+            loadData();
+            return;
+        }
         setData((prev) =>
             prev.map((row) =>
-                row.id === rowId ? { ...row, modo_falha_padrao: novoModo } : row
+                row.id === rowId ? { ...row, modo_falha_padrao: novoModo, origem_classificacao: novoModo ? "manual" : null } : row
             )
         );
     }
@@ -170,6 +176,14 @@ export default function DadosApontamentos() {
                             onChange={(e) => updateFilter("busca", e.target.value)}
                         />
                     </div>
+                    <label className="filter-field" style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <input
+                            type="checkbox"
+                            checked={Boolean(params.apenas_ia)}
+                            onChange={(e) => updateFilter("apenas_ia", e.target.checked)}
+                        />
+                        Apenas classificações feitas pela IA
+                    </label>
                 </div>
 
                 {/* --- Toggle de qualidade de dado --- */}
@@ -179,12 +193,6 @@ export default function DadosApontamentos() {
                         onClick={() => updateFilter("apenas_validos", true)}
                     >
                         Registros válidos
-                    </button>
-                    <button
-                        className={!params.apenas_validos ? "toggle-btn active critical" : "toggle-btn"}
-                        onClick={() => updateFilter("apenas_validos", false)}
-                    >
-                        Com inconsistência
                     </button>
                     <span className="result-count">
                         {loading ? "Carregando..." : `${pagination.total.toLocaleString("pt-BR")} registros`}
@@ -248,6 +256,7 @@ export default function DadosApontamentos() {
                                             <ClassificationPicker
                                                 apontamentoId={row.id}
                                                 currentModoFalha={row.modo_falha_padrao}
+                                                origemClassificacao={row.origem_classificacao}
                                                 onClassified={(novoModo) => handleClassified(row.id, novoModo)}
                                             />
                                         </td>

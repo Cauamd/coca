@@ -59,7 +59,8 @@ function DadosApontamentos() {
         equipamento: searchParams.get("equipamento") || undefined,
         data_inicio: searchParams.get("data_inicio") || undefined,
         data_fim: searchParams.get("data_fim") || undefined,
-        apenas_validos: searchParams.get("apenas_validos") !== "false",
+        apenas_validos: true,
+        apenas_ia: searchParams.get("apenas_ia") === "true",
         page: 1,
         pageSize: 50,
         orderBy: "data_inicio",
@@ -120,9 +121,15 @@ function DadosApontamentos() {
             }));
     }
     function handleClassified(rowId, novoModo) {
+        if (params.apenas_ia) {
+            setData((prev)=>prev.filter((row)=>row.id !== rowId));
+            loadData();
+            return;
+        }
         setData((prev)=>prev.map((row)=>row.id === rowId ? {
                     ...row,
-                    modo_falha_padrao: novoModo
+                    modo_falha_padrao: novoModo,
+                    origem_classificacao: novoModo ? "manual" : null
                 } : row));
     }
     function clearEquipamentoFilter() {
@@ -153,7 +160,7 @@ function DadosApontamentos() {
                 children: "Apontamentos"
             }, void 0, false, {
                 fileName: "[project]/app/dados/page.tsx",
-                lineNumber: 116,
+                lineNumber: 122,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -169,7 +176,7 @@ function DadosApontamentos() {
                                         children: params.equipamento
                                     }, void 0, false, {
                                         fileName: "[project]/app/dados/page.tsx",
-                                        lineNumber: 123,
+                                        lineNumber: 129,
                                         columnNumber: 56
                                     }, this),
                                     params.linha && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -179,19 +186,19 @@ function DadosApontamentos() {
                                                 children: params.linha
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dados/page.tsx",
-                                                lineNumber: 124,
+                                                lineNumber: 130,
                                                 columnNumber: 58
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/dados/page.tsx",
-                                        lineNumber: 124,
+                                        lineNumber: 130,
                                         columnNumber: 46
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/dados/page.tsx",
-                                lineNumber: 122,
+                                lineNumber: 128,
                                 columnNumber: 25
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -200,13 +207,13 @@ function DadosApontamentos() {
                                 children: "Limpar"
                             }, void 0, false, {
                                 fileName: "[project]/app/dados/page.tsx",
-                                lineNumber: 126,
+                                lineNumber: 132,
                                 columnNumber: 25
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/dados/page.tsx",
-                        lineNumber: 121,
+                        lineNumber: 127,
                         columnNumber: 21
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -219,7 +226,7 @@ function DadosApontamentos() {
                                         children: "Centro"
                                     }, void 0, false, {
                                         fileName: "[project]/app/dados/page.tsx",
-                                        lineNumber: 135,
+                                        lineNumber: 141,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$select$2d$morph$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -238,13 +245,13 @@ function DadosApontamentos() {
                                         ]
                                     }, void 0, false, {
                                         fileName: "[project]/app/dados/page.tsx",
-                                        lineNumber: 136,
+                                        lineNumber: 142,
                                         columnNumber: 25
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/dados/page.tsx",
-                                lineNumber: 134,
+                                lineNumber: 140,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -254,7 +261,7 @@ function DadosApontamentos() {
                                         children: "Linha"
                                     }, void 0, false, {
                                         fileName: "[project]/app/dados/page.tsx",
-                                        lineNumber: 140,
+                                        lineNumber: 146,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$select$2d$morph$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -273,13 +280,13 @@ function DadosApontamentos() {
                                         ]
                                     }, void 0, false, {
                                         fileName: "[project]/app/dados/page.tsx",
-                                        lineNumber: 141,
+                                        lineNumber: 147,
                                         columnNumber: 25
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/dados/page.tsx",
-                                lineNumber: 139,
+                                lineNumber: 145,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -289,7 +296,7 @@ function DadosApontamentos() {
                                         children: "Tipo de parada"
                                     }, void 0, false, {
                                         fileName: "[project]/app/dados/page.tsx",
-                                        lineNumber: 145,
+                                        lineNumber: 151,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$select$2d$morph$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -308,13 +315,13 @@ function DadosApontamentos() {
                                         ]
                                     }, void 0, false, {
                                         fileName: "[project]/app/dados/page.tsx",
-                                        lineNumber: 146,
+                                        lineNumber: 152,
                                         columnNumber: 25
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/dados/page.tsx",
-                                lineNumber: 144,
+                                lineNumber: 150,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -324,7 +331,7 @@ function DadosApontamentos() {
                                         children: "Turno"
                                     }, void 0, false, {
                                         fileName: "[project]/app/dados/page.tsx",
-                                        lineNumber: 150,
+                                        lineNumber: 156,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$select$2d$morph$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -351,13 +358,13 @@ function DadosApontamentos() {
                                         ]
                                     }, void 0, false, {
                                         fileName: "[project]/app/dados/page.tsx",
-                                        lineNumber: 151,
+                                        lineNumber: 157,
                                         columnNumber: 25
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/dados/page.tsx",
-                                lineNumber: 149,
+                                lineNumber: 155,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -367,7 +374,7 @@ function DadosApontamentos() {
                                         children: "De"
                                     }, void 0, false, {
                                         fileName: "[project]/app/dados/page.tsx",
-                                        lineNumber: 155,
+                                        lineNumber: 161,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$date$2d$picker$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -376,13 +383,13 @@ function DadosApontamentos() {
                                         onValueChange: (value)=>updateFilter("data_inicio", value)
                                     }, void 0, false, {
                                         fileName: "[project]/app/dados/page.tsx",
-                                        lineNumber: 156,
+                                        lineNumber: 162,
                                         columnNumber: 25
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/dados/page.tsx",
-                                lineNumber: 154,
+                                lineNumber: 160,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -392,7 +399,7 @@ function DadosApontamentos() {
                                         children: "Até"
                                     }, void 0, false, {
                                         fileName: "[project]/app/dados/page.tsx",
-                                        lineNumber: 160,
+                                        lineNumber: 166,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$date$2d$picker$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -401,13 +408,13 @@ function DadosApontamentos() {
                                         onValueChange: (value)=>updateFilter("data_fim", value)
                                     }, void 0, false, {
                                         fileName: "[project]/app/dados/page.tsx",
-                                        lineNumber: 161,
+                                        lineNumber: 167,
                                         columnNumber: 25
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/dados/page.tsx",
-                                lineNumber: 159,
+                                lineNumber: 165,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -417,7 +424,7 @@ function DadosApontamentos() {
                                         children: "Buscar"
                                     }, void 0, false, {
                                         fileName: "[project]/app/dados/page.tsx",
-                                        lineNumber: 165,
+                                        lineNumber: 171,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -427,19 +434,43 @@ function DadosApontamentos() {
                                         onChange: (e)=>updateFilter("busca", e.target.value)
                                     }, void 0, false, {
                                         fileName: "[project]/app/dados/page.tsx",
-                                        lineNumber: 166,
+                                        lineNumber: 172,
                                         columnNumber: 25
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/dados/page.tsx",
-                                lineNumber: 164,
+                                lineNumber: 170,
+                                columnNumber: 21
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                className: "filter-field",
+                                style: {
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 8
+                                },
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                        type: "checkbox",
+                                        checked: Boolean(params.apenas_ia),
+                                        onChange: (e)=>updateFilter("apenas_ia", e.target.checked)
+                                    }, void 0, false, {
+                                        fileName: "[project]/app/dados/page.tsx",
+                                        lineNumber: 180,
+                                        columnNumber: 25
+                                    }, this),
+                                    "Apenas classificações feitas pela IA"
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/app/dados/page.tsx",
+                                lineNumber: 179,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/dados/page.tsx",
-                        lineNumber: 133,
+                        lineNumber: 139,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -451,16 +482,7 @@ function DadosApontamentos() {
                                 children: "Registros válidos"
                             }, void 0, false, {
                                 fileName: "[project]/app/dados/page.tsx",
-                                lineNumber: 177,
-                                columnNumber: 21
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                className: !params.apenas_validos ? "toggle-btn active critical" : "toggle-btn",
-                                onClick: ()=>updateFilter("apenas_validos", false),
-                                children: "Com inconsistência"
-                            }, void 0, false, {
-                                fileName: "[project]/app/dados/page.tsx",
-                                lineNumber: 183,
+                                lineNumber: 191,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -468,7 +490,7 @@ function DadosApontamentos() {
                                 children: loading ? "Carregando..." : `${pagination.total.toLocaleString("pt-BR")} registros`
                             }, void 0, false, {
                                 fileName: "[project]/app/dados/page.tsx",
-                                lineNumber: 189,
+                                lineNumber: 197,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -490,33 +512,33 @@ function DadosApontamentos() {
                                                 d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dados/page.tsx",
-                                                lineNumber: 196,
+                                                lineNumber: 204,
                                                 columnNumber: 33
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
                                                 d: "m7 10 5 5 5-5M12 15V3"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dados/page.tsx",
-                                                lineNumber: 197,
+                                                lineNumber: 205,
                                                 columnNumber: 33
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/dados/page.tsx",
-                                        lineNumber: 195,
+                                        lineNumber: 203,
                                         columnNumber: 29
                                     }, this),
                                     exporting ? "Exportando..." : "Exportar Excel"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/dados/page.tsx",
-                                lineNumber: 193,
+                                lineNumber: 201,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/dados/page.tsx",
-                        lineNumber: 176,
+                        lineNumber: 190,
                         columnNumber: 17
                     }, this),
                     exportError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -524,7 +546,7 @@ function DadosApontamentos() {
                         children: exportError
                     }, void 0, false, {
                         fileName: "[project]/app/dados/page.tsx",
-                        lineNumber: 203,
+                        lineNumber: 211,
                         columnNumber: 29
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -535,7 +557,7 @@ function DadosApontamentos() {
                                 children: error
                             }, void 0, false, {
                                 fileName: "[project]/app/dados/page.tsx",
-                                lineNumber: 206,
+                                lineNumber: 214,
                                 columnNumber: 31
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("table", {
@@ -548,63 +570,63 @@ function DadosApontamentos() {
                                                     children: "Data"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dados/page.tsx",
-                                                    lineNumber: 211,
+                                                    lineNumber: 219,
                                                     columnNumber: 33
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                                     children: "Centro"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dados/page.tsx",
-                                                    lineNumber: 212,
+                                                    lineNumber: 220,
                                                     columnNumber: 33
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                                     children: "Linha"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dados/page.tsx",
-                                                    lineNumber: 213,
+                                                    lineNumber: 221,
                                                     columnNumber: 33
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                                     children: "Ordem"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dados/page.tsx",
-                                                    lineNumber: 214,
+                                                    lineNumber: 222,
                                                     columnNumber: 33
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                                     children: "Material"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dados/page.tsx",
-                                                    lineNumber: 215,
+                                                    lineNumber: 223,
                                                     columnNumber: 33
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                                     children: "Tipo de parada"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dados/page.tsx",
-                                                    lineNumber: 216,
+                                                    lineNumber: 224,
                                                     columnNumber: 33
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                                     children: "Equipamento"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dados/page.tsx",
-                                                    lineNumber: 217,
+                                                    lineNumber: 225,
                                                     columnNumber: 33
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                                     children: "Observações"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dados/page.tsx",
-                                                    lineNumber: 218,
+                                                    lineNumber: 226,
                                                     columnNumber: 33
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                                     children: "Modo de Falha"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dados/page.tsx",
-                                                    lineNumber: 219,
+                                                    lineNumber: 227,
                                                     columnNumber: 33
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -612,7 +634,7 @@ function DadosApontamentos() {
                                                     children: "Turno"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dados/page.tsx",
-                                                    lineNumber: 220,
+                                                    lineNumber: 228,
                                                     columnNumber: 33
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -620,18 +642,18 @@ function DadosApontamentos() {
                                                     children: "Parada"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dados/page.tsx",
-                                                    lineNumber: 221,
+                                                    lineNumber: 229,
                                                     columnNumber: 33
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/dados/page.tsx",
-                                            lineNumber: 210,
+                                            lineNumber: 218,
                                             columnNumber: 29
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/dados/page.tsx",
-                                        lineNumber: 209,
+                                        lineNumber: 217,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -642,12 +664,12 @@ function DadosApontamentos() {
                                                 children: "Carregando registros..."
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dados/page.tsx",
-                                                lineNumber: 226,
+                                                lineNumber: 234,
                                                 columnNumber: 37
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/app/dados/page.tsx",
-                                            lineNumber: 226,
+                                            lineNumber: 234,
                                             columnNumber: 33
                                         }, this) : data.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
                                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -656,12 +678,12 @@ function DadosApontamentos() {
                                                 children: "Nenhum registro encontrado para esses filtros."
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dados/page.tsx",
-                                                lineNumber: 228,
+                                                lineNumber: 236,
                                                 columnNumber: 37
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/app/dados/page.tsx",
-                                            lineNumber: 228,
+                                            lineNumber: 236,
                                             columnNumber: 33
                                         }, this) : data.map((row)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
                                                 children: [
@@ -669,7 +691,7 @@ function DadosApontamentos() {
                                                         children: formatDate(row.data_inicio)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dados/page.tsx",
-                                                        lineNumber: 232,
+                                                        lineNumber: 240,
                                                         columnNumber: 41
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -678,26 +700,26 @@ function DadosApontamentos() {
                                                             children: row.centro
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/dados/page.tsx",
-                                                            lineNumber: 233,
+                                                            lineNumber: 241,
                                                             columnNumber: 45
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dados/page.tsx",
-                                                        lineNumber: 233,
+                                                        lineNumber: 241,
                                                         columnNumber: 41
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                                                         children: row.linha
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dados/page.tsx",
-                                                        lineNumber: 234,
+                                                        lineNumber: 242,
                                                         columnNumber: 41
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                                                         children: row.ordem
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dados/page.tsx",
-                                                        lineNumber: 235,
+                                                        lineNumber: 243,
                                                         columnNumber: 41
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -708,7 +730,7 @@ function DadosApontamentos() {
                                                                     children: row.material
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/dados/page.tsx",
-                                                                    lineNumber: 238,
+                                                                    lineNumber: 246,
                                                                     columnNumber: 49
                                                                 }, this),
                                                                 row.descricao_material && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -716,32 +738,32 @@ function DadosApontamentos() {
                                                                     children: row.descricao_material
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/dados/page.tsx",
-                                                                    lineNumber: 240,
+                                                                    lineNumber: 248,
                                                                     columnNumber: 53
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/dados/page.tsx",
-                                                            lineNumber: 237,
+                                                            lineNumber: 245,
                                                             columnNumber: 45
                                                         }, this)
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/dados/page.tsx",
-                                                        lineNumber: 236,
-                                                        columnNumber: 41
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                        children: row.tipo_parada || "—"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dados/page.tsx",
                                                         lineNumber: 244,
                                                         columnNumber: 41
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                                        children: row.tipo_parada || "—"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/dados/page.tsx",
+                                                        lineNumber: 252,
+                                                        columnNumber: 41
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                                                         children: row.chave_parada || "—"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dados/page.tsx",
-                                                        lineNumber: 245,
+                                                        lineNumber: 253,
                                                         columnNumber: 41
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -749,22 +771,23 @@ function DadosApontamentos() {
                                                         children: row.observacoes || "—"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dados/page.tsx",
-                                                        lineNumber: 246,
+                                                        lineNumber: 254,
                                                         columnNumber: 41
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ClassificationPicker$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                                             apontamentoId: row.id,
                                                             currentModoFalha: row.modo_falha_padrao,
+                                                            origemClassificacao: row.origem_classificacao,
                                                             onClassified: (novoModo)=>handleClassified(row.id, novoModo)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/dados/page.tsx",
-                                                            lineNumber: 248,
+                                                            lineNumber: 256,
                                                             columnNumber: 45
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dados/page.tsx",
-                                                        lineNumber: 247,
+                                                        lineNumber: 255,
                                                         columnNumber: 41
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -772,7 +795,7 @@ function DadosApontamentos() {
                                                         children: row.turno ?? "—"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dados/page.tsx",
-                                                        lineNumber: 254,
+                                                        lineNumber: 263,
                                                         columnNumber: 41
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -780,30 +803,30 @@ function DadosApontamentos() {
                                                         children: formatMinutos(row.tempo_parada)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dados/page.tsx",
-                                                        lineNumber: 255,
+                                                        lineNumber: 264,
                                                         columnNumber: 41
                                                     }, this)
                                                 ]
                                             }, row.id, true, {
                                                 fileName: "[project]/app/dados/page.tsx",
-                                                lineNumber: 231,
+                                                lineNumber: 239,
                                                 columnNumber: 37
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/app/dados/page.tsx",
-                                        lineNumber: 224,
+                                        lineNumber: 232,
                                         columnNumber: 25
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/dados/page.tsx",
-                                lineNumber: 208,
+                                lineNumber: 216,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/dados/page.tsx",
-                        lineNumber: 205,
+                        lineNumber: 213,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -816,7 +839,7 @@ function DadosApontamentos() {
                                 children: "Anterior"
                             }, void 0, false, {
                                 fileName: "[project]/app/dados/page.tsx",
-                                lineNumber: 265,
+                                lineNumber: 274,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -829,7 +852,7 @@ function DadosApontamentos() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/dados/page.tsx",
-                                lineNumber: 272,
+                                lineNumber: 281,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -839,29 +862,29 @@ function DadosApontamentos() {
                                 children: "Próxima"
                             }, void 0, false, {
                                 fileName: "[project]/app/dados/page.tsx",
-                                lineNumber: 275,
+                                lineNumber: 284,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/dados/page.tsx",
-                        lineNumber: 264,
+                        lineNumber: 273,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/dados/page.tsx",
-                lineNumber: 118,
+                lineNumber: 124,
                 columnNumber: 13
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/dados/page.tsx",
-        lineNumber: 115,
+        lineNumber: 121,
         columnNumber: 9
     }, this);
 }
-_s(DadosApontamentos, "J5XynpFPoyc0tRJ/30ums0BvlfY=", false, function() {
+_s(DadosApontamentos, "SYX8QCfm9DZCLOcsDKjaDLcYyLw=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSearchParams"]
     ];
@@ -890,7 +913,7 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
-function ClassificationPicker({ apontamentoId, currentModoFalha, onClassified }) {
+function ClassificationPicker({ apontamentoId, currentModoFalha, origemClassificacao, onClassified }) {
     _s();
     const [open, setOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [modos, setModos] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
@@ -959,19 +982,36 @@ function ClassificationPicker({ apontamentoId, currentModoFalha, onClassified })
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "classification-current",
                 children: [
-                    currentModoFalha ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                        className: "tag tag-classified",
-                        children: currentModoFalha
-                    }, void 0, false, {
+                    currentModoFalha ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "classification-labels",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                className: "tag tag-classified",
+                                children: currentModoFalha
+                            }, void 0, false, {
+                                fileName: "[project]/components/ClassificationPicker.tsx",
+                                lineNumber: 85,
+                                columnNumber: 13
+                            }, this),
+                            origemClassificacao === "ia" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                className: "tag",
+                                children: "Classificado pela IA"
+                            }, void 0, false, {
+                                fileName: "[project]/components/ClassificationPicker.tsx",
+                                lineNumber: 86,
+                                columnNumber: 46
+                            }, this)
+                        ]
+                    }, void 0, true, {
                         fileName: "[project]/components/ClassificationPicker.tsx",
-                        lineNumber: 82,
+                        lineNumber: 84,
                         columnNumber: 11
                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                         className: "tag tag-unclassified",
                         children: "Não classificado"
                     }, void 0, false, {
                         fileName: "[project]/components/ClassificationPicker.tsx",
-                        lineNumber: 84,
+                        lineNumber: 89,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -981,13 +1021,13 @@ function ClassificationPicker({ apontamentoId, currentModoFalha, onClassified })
                         children: saving ? "Salvando..." : "Classificar"
                     }, void 0, false, {
                         fileName: "[project]/components/ClassificationPicker.tsx",
-                        lineNumber: 86,
+                        lineNumber: 91,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/ClassificationPicker.tsx",
-                lineNumber: 80,
+                lineNumber: 82,
                 columnNumber: 7
             }, this),
             open && typeof document !== "undefined" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2d$dom$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createPortal"])(/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1006,14 +1046,14 @@ function ClassificationPicker({ apontamentoId, currentModoFalha, onClassified })
                     children: "Carregando..."
                 }, void 0, false, {
                     fileName: "[project]/components/ClassificationPicker.tsx",
-                    lineNumber: 102,
+                    lineNumber: 107,
                     columnNumber: 13
                 }, this) : error ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "classification-dropdown-state error",
                     children: error
                 }, void 0, false, {
                     fileName: "[project]/components/ClassificationPicker.tsx",
-                    lineNumber: 104,
+                    lineNumber: 109,
                     columnNumber: 13
                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
                     children: [
@@ -1023,14 +1063,14 @@ function ClassificationPicker({ apontamentoId, currentModoFalha, onClassified })
                             children: "Remover classificação"
                         }, void 0, false, {
                             fileName: "[project]/components/ClassificationPicker.tsx",
-                            lineNumber: 107,
+                            lineNumber: 112,
                             columnNumber: 15
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "classification-divider"
                         }, void 0, false, {
                             fileName: "[project]/components/ClassificationPicker.tsx",
-                            lineNumber: 113,
+                            lineNumber: 118,
                             columnNumber: 15
                         }, this),
                         modos.map((modo)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1041,7 +1081,7 @@ function ClassificationPicker({ apontamentoId, currentModoFalha, onClassified })
                                         children: modo.nome_padrao
                                     }, void 0, false, {
                                         fileName: "[project]/components/ClassificationPicker.tsx",
-                                        lineNumber: 120,
+                                        lineNumber: 125,
                                         columnNumber: 19
                                     }, this),
                                     modo.categoria && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1049,30 +1089,30 @@ function ClassificationPicker({ apontamentoId, currentModoFalha, onClassified })
                                         children: modo.categoria
                                     }, void 0, false, {
                                         fileName: "[project]/components/ClassificationPicker.tsx",
-                                        lineNumber: 121,
+                                        lineNumber: 126,
                                         columnNumber: 38
                                     }, this)
                                 ]
                             }, modo.id, true, {
                                 fileName: "[project]/components/ClassificationPicker.tsx",
-                                lineNumber: 115,
+                                lineNumber: 120,
                                 columnNumber: 17
                             }, this))
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/ClassificationPicker.tsx",
-                    lineNumber: 106,
+                    lineNumber: 111,
                     columnNumber: 13
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/ClassificationPicker.tsx",
-                lineNumber: 92,
+                lineNumber: 97,
                 columnNumber: 9
             }, this), document.body)
         ]
     }, void 0, true, {
         fileName: "[project]/components/ClassificationPicker.tsx",
-        lineNumber: 79,
+        lineNumber: 81,
         columnNumber: 5
     }, this);
 }

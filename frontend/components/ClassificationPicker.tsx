@@ -7,12 +7,14 @@ import { ModoFalha, fetchModosFalha, updateClassificacao } from "../lib/api";
 interface Props {
   apontamentoId: number;
   currentModoFalha: string | null;
+  origemClassificacao: "historico_exato" | "palavra_chave" | "ia" | "manual" | null;
   onClassified: (novoModo: string | null) => void;
 }
 
 export default function ClassificationPicker({
   apontamentoId,
   currentModoFalha,
+  origemClassificacao,
   onClassified,
 }: Props) {
   const [open, setOpen] = useState(false);
@@ -79,7 +81,10 @@ export default function ClassificationPicker({
     <div className="classification-picker" ref={wrapperRef}>
       <div className="classification-current">
         {currentModoFalha ? (
-          <span className="tag tag-classified">{currentModoFalha}</span>
+          <div className="classification-labels">
+            <span className="tag tag-classified">{currentModoFalha}</span>
+            {origemClassificacao === "ia" && <span className="tag">Classificado pela IA</span>}
+          </div>
         ) : (
           <span className="tag tag-unclassified">Não classificado</span>
         )}
