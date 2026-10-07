@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 
 const NAV_ITEMS = [
@@ -17,6 +17,12 @@ const NAV_ITEMS = [
 export default function Nav({ role }: { role?: "admin" | "gerente" } = {}) {
   const pathname = usePathname();
   const navRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (pathname === "/") {
+      window.dispatchEvent(new Event("apontamentos-atualizados"));
+    }
+  }, [pathname]);
 
   // Atualiza --mx/--my do link sob o cursor, para o gradiente radial "seguir a Ã¡gua"
   function handlePointerMove(e: React.PointerEvent<HTMLElement>) {

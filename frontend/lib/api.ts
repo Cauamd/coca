@@ -167,7 +167,10 @@ export async function fetchPareto(params: ParetoParams): Promise<ParetoResponse>
     if (value) query.set(key, value);
   });
 
-  const res = await fetch(`${API_URL}/dashboard/pareto-modo-falha?${query.toString()}`, { credentials: "include" });
+  const res = await fetch(`${API_URL}/dashboard/pareto-modo-falha?${query.toString()}`, {
+    credentials: "include",
+    cache: "no-store",
+  });
   if (!res.ok) throw new Error("Erro ao buscar Pareto");
   return res.json();
 }

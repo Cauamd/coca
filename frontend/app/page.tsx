@@ -82,6 +82,11 @@ export default function HomePage() {
   }, [loadData]);
 
   useEffect(() => {
+    window.addEventListener("apontamentos-atualizados", loadData);
+    return () => window.removeEventListener("apontamentos-atualizados", loadData);
+  }, [loadData]);
+
+  useEffect(() => {
     function refreshOnReturn() {
       if (document.visibilityState === "visible") loadData();
     }
