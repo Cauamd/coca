@@ -13,9 +13,8 @@ const NAV_ITEMS = [
   { href: "/dashboard/jack-knife", label: "Crítico-Crônico" },
   { href: "/comparacao", label: "Evolução" },
   { href: "/alertas", label: "Alertas" },
-  { href: "/classificacao", label: "Dicionário" },
 ];
-export default function Nav() {
+export default function Nav({ role }: { role?: "admin" | "gerente" } = {}) {
   const pathname = usePathname();
   const navRef = useRef<HTMLElement>(null);
 
@@ -32,7 +31,7 @@ export default function Nav() {
 
   return (
     <nav className="main-nav" ref={navRef} onPointerMove={handlePointerMove}>
-      {NAV_ITEMS.map((item) => {
+      {(role === "admin" ? [...NAV_ITEMS, { href: "/usuarios", label: "Usu\u00e1rios" }] : NAV_ITEMS).map((item) => {
         const isActive = pathname === item.href;
         return (
           <Link

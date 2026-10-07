@@ -9,8 +9,8 @@ function sign(value) {
   return crypto.createHmac("sha256", secret).update(value).digest("base64url");
 }
 
-function createSession(centro) {
-  const payload = Buffer.from(JSON.stringify({ centro, exp: Date.now() + SESSION_SECONDS * 1000 })).toString("base64url");
+function createSession(centro, role = "admin", usuario = "admin") {
+  const payload = Buffer.from(JSON.stringify({ centro, role, usuario, exp: Date.now() + SESSION_SECONDS * 1000 })).toString("base64url");
   return `${payload}.${sign(payload)}`;
 }
 
@@ -38,8 +38,13 @@ function requireAdmin(req, res, next) {
   const token = req.headers.cookie?.split(";").map((part) => part.trim()).find((part) => part.startsWith(`${COOKIE_NAME}=`))?.slice(COOKIE_NAME.length + 1);
   const session = readSession(token);
   if (!session) return res.status(401).json({ detail: "Acesso restrito a administradores. Faça login." });
-  req.user = { role: "admin", centro: session.centro };
+  req.user = { role: session.role || "admin", usuario: session.usuario || process.env.ADMIN_USERNAME, centro: session.centro };
   next();
 }
 
-module.exports = { COOKIE_NAME, SESSION_SECONDS, createSession, cookieOptions, requireAdmin };
+function requireWriteAccess(req, res, next) {
+  if (req.user?.role !== "admin") return res.status(403).json({ detail: "Seu perfil tem acesso somente para visualiza\u00e7\u00e3o." });
+  next();
+}
+
+module.exports = { COOKIE_NAME, SESSION_SECONDS, createSession, cookieOptions, requireAdmin, requireWriteAccess };

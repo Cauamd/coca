@@ -90,6 +90,12 @@
   gap: .75rem;
 }
 
+.space-y-5 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(1.25rem * var(--tw-space-y-reverse));
+}
+
 .whitespace-nowrap {
   white-space: nowrap;
 }
@@ -106,6 +112,16 @@
 .text-sm {
   font-size: .875rem;
   line-height: 1.25rem;
+}
+
+.text-green-700 {
+  --tw-text-opacity: 1;
+  color: rgb(21 128 61 / var(--tw-text-opacity, 1));
+}
+
+.text-red-700 {
+  --tw-text-opacity: 1;
+  color: rgb(185 28 28 / var(--tw-text-opacity, 1));
 }
 
 .drop-shadow {
@@ -2402,6 +2418,72 @@ a {
 .previsao-card-indisponivel {
   color: var(--text-muted);
   font-size: 12.5px;
+}
+
+.read-only-notice {
+  border: 1px solid var(--border-steel);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  border-radius: 10px;
+  margin: 0 24px 18px;
+  padding: 10px 14px;
+  font-size: 13px;
+}
+
+.read-only-view button:not([aria-label="Sair"]), .read-only-view input, .read-only-view select, .read-only-view textarea, .read-only-view [role="button"] {
+  opacity: .65;
+  pointer-events: none !important;
+}
+
+.page-shell {
+  width: min(1100px, 100% - 40px);
+  margin: 36px auto;
+}
+
+.page-heading {
+  margin-bottom: 24px;
+}
+
+.page-heading h1 {
+  margin: 4px 0 8px;
+  font-size: clamp(28px, 4vw, 40px);
+}
+
+.page-heading p {
+  color: var(--text-secondary);
+}
+
+.page-heading .eyebrow {
+  color: var(--accent-red-bright);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.page-shell .panel {
+  border: 1px solid var(--border-steel);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+}
+
+.page-shell .field {
+  color: var(--text-secondary);
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  display: grid;
+}
+
+.page-shell .field input, .page-shell .field select {
+  border: 1px solid var(--border-steel);
+  border-radius: var(--radius-sm);
+  background: var(--bg-base);
+  width: 100%;
+  min-height: 46px;
+  color: var(--text-primary);
+  font: inherit;
+  padding: 10px 12px;
 }
 
 @media (max-width: 1100px) {

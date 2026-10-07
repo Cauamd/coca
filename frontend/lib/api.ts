@@ -33,7 +33,7 @@ export async function logoutAdmin(): Promise<void> {
   await fetch(`${API_URL}/auth/logout`, { method: "POST", credentials: "include" });
 }
 
-export async function fetchSession(): Promise<{ usuario: string; centro: string; role: "admin" }> {
+export async function fetchSession(): Promise<{ usuario: string; centro: string; role: "admin" | "gerente" }> {
   const res = await fetch(`${API_URL}/auth/me`, { credentials: "include" });
   if (!res.ok) throw new Error("Sessão inválida");
   return res.json();
@@ -405,4 +405,15 @@ export async function fetchEvolucao(equipamentos: string[], meses = 12): Promise
     throw new Error(data.detail || "Erro ao buscar evolução");
   }
   return res.json();
+}
+
+export async function createUser(email: string, senha: string, cargo: "admin" | "gerente"): Promise<void> {
+  const res = await fetch(`${API_URL}/auth/usuarios`, {
+    method: "POST", credentials: "include", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, senha, cargo }),
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.detail || "N\u00e3o foi poss\u00edvel cadastrar o usu\u00e1rio.");
+  }
 }

@@ -13,6 +13,7 @@ export default function AuthShell({ children }: { children: React.ReactNode }) {
   const [authorized, setAuthorized] = useState(false);
   const [checking, setChecking] = useState(true);
   const [centro, setCentro] = useState("");
+  const [role, setRole] = useState<"admin" | "gerente">("admin");
   const [showEntryTransition, setShowEntryTransition] = useState(false);
 
   useEffect(() => {
@@ -26,6 +27,13 @@ export default function AuthShell({ children }: { children: React.ReactNode }) {
     fetchSession().then((session) => {
       if (!active) return;
       setCentro(session.centro);
+      setRole(session.role);
+      if (session.role !== "admin" && pathname === "/usuarios") {
+        router.replace("/");
+        setAuthorized(false);
+        setChecking(false);
+        return;
+      }
       if (sessionStorage.getItem("coca-cola-entry-transition") === "1") {
         sessionStorage.removeItem("coca-cola-entry-transition");
         setShowEntryTransition(true);
@@ -57,7 +65,7 @@ export default function AuthShell({ children }: { children: React.ReactNode }) {
       <header className="global-header">
         <div className="global-header-inner">
           <Link href="/" className="brand" aria-label="Página inicial"><img src="https://coca-cola-femsa.com.br/wp-content/uploads/2023/01/logo-femsa.png" alt="Coca-Cola FEMSA" className="brand-logo" /></Link>
-          <Nav />
+          <Nav role={role} />
           <div className="flex items-center gap-3 px-2 text-sm">
             <span className="whitespace-nowrap">Centro: <strong>{centro}</strong></span>
             <ToggleTheme />
@@ -65,7 +73,10 @@ export default function AuthShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </header>
-      <div className="app-content">{children}</div>
+      <div className={role === "gerente" ? "app-content read-only-view" : "app-content"} inert={role === "gerente"}>
+        {role === "gerente" && <div className="read-only-notice">Acesso de gerente: somente visualização</div>}
+        {children}
+      </div>
       </div>
       {showEntryTransition && (
         <div className="entry-transition" role="status" aria-label="Bem-vindo">

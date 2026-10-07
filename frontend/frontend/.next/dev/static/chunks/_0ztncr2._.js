@@ -31,6 +31,7 @@ function AuthShell({ children }) {
     const [authorized, setAuthorized] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [checking, setChecking] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
     const [centro, setCentro] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
+    const [role, setRole] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("admin");
     const [showEntryTransition, setShowEntryTransition] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "AuthShell.useEffect": ()=>{
@@ -45,6 +46,13 @@ function AuthShell({ children }) {
                 "AuthShell.useEffect": (session)=>{
                     if (!active) return;
                     setCentro(session.centro);
+                    setRole(session.role);
+                    if (session.role !== "admin" && pathname === "/usuarios") {
+                        router.replace("/");
+                        setAuthorized(false);
+                        setChecking(false);
+                        return;
+                    }
                     if (sessionStorage.getItem("coca-cola-entry-transition") === "1") {
                         sessionStorage.removeItem("coca-cola-entry-transition");
                         setShowEntryTransition(true);
@@ -77,14 +85,14 @@ function AuthShell({ children }) {
         children: children
     }, void 0, false, {
         fileName: "[project]/components/AuthShell.tsx",
-        lineNumber: 45,
+        lineNumber: 53,
         columnNumber: 37
     }, this);
     if (checking || !authorized) return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
         "aria-label": "Verificando acesso"
     }, void 0, false, {
         fileName: "[project]/components/AuthShell.tsx",
-        lineNumber: 46,
+        lineNumber: 54,
         columnNumber: 39
     }, this);
     async function handleLogout() {
@@ -95,12 +103,12 @@ function AuthShell({ children }) {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "jsx-654c3d41c0705240" + " " + ((showEntryTransition ? "entry-page entry-page-moving" : "entry-page") || ""),
+                className: "jsx-dee13a4fb49d0523" + " " + ((showEntryTransition ? "entry-page entry-page-moving" : "entry-page") || ""),
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("header", {
-                        className: "jsx-654c3d41c0705240" + " " + "global-header",
+                        className: "jsx-dee13a4fb49d0523" + " " + "global-header",
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "jsx-654c3d41c0705240" + " " + "global-header-inner",
+                            className: "jsx-dee13a4fb49d0523" + " " + "global-header-inner",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                     href: "/",
@@ -109,118 +117,131 @@ function AuthShell({ children }) {
                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
                                         src: "https://coca-cola-femsa.com.br/wp-content/uploads/2023/01/logo-femsa.png",
                                         alt: "Coca-Cola FEMSA",
-                                        className: "jsx-654c3d41c0705240" + " " + "brand-logo"
+                                        className: "jsx-dee13a4fb49d0523" + " " + "brand-logo"
                                     }, void 0, false, {
                                         fileName: "[project]/components/AuthShell.tsx",
-                                        lineNumber: 59,
+                                        lineNumber: 67,
                                         columnNumber: 72
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/AuthShell.tsx",
-                                    lineNumber: 59,
+                                    lineNumber: 67,
                                     columnNumber: 11
                                 }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Nav$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Nav$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                    role: role
+                                }, void 0, false, {
                                     fileName: "[project]/components/AuthShell.tsx",
-                                    lineNumber: 60,
+                                    lineNumber: 68,
                                     columnNumber: 11
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "jsx-654c3d41c0705240" + " " + "flex items-center gap-3 px-2 text-sm",
+                                    className: "jsx-dee13a4fb49d0523" + " " + "flex items-center gap-3 px-2 text-sm",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            className: "jsx-654c3d41c0705240" + " " + "whitespace-nowrap",
+                                            className: "jsx-dee13a4fb49d0523" + " " + "whitespace-nowrap",
                                             children: [
                                                 "Centro: ",
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
-                                                    className: "jsx-654c3d41c0705240",
+                                                    className: "jsx-dee13a4fb49d0523",
                                                     children: centro
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/AuthShell.tsx",
-                                                    lineNumber: 62,
+                                                    lineNumber: 70,
                                                     columnNumber: 57
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/AuthShell.tsx",
-                                            lineNumber: 62,
+                                            lineNumber: 70,
                                             columnNumber: 13
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$toggle$2d$theme$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ToggleTheme"], {}, void 0, false, {
                                             fileName: "[project]/components/AuthShell.tsx",
-                                            lineNumber: 63,
+                                            lineNumber: 71,
                                             columnNumber: 13
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                             onClick: ()=>void handleLogout(),
-                                            className: "jsx-654c3d41c0705240" + " " + "btn-secondary",
+                                            className: "jsx-dee13a4fb49d0523" + " " + "btn-secondary",
                                             children: "Sair"
                                         }, void 0, false, {
                                             fileName: "[project]/components/AuthShell.tsx",
-                                            lineNumber: 64,
+                                            lineNumber: 72,
                                             columnNumber: 13
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/AuthShell.tsx",
-                                    lineNumber: 61,
+                                    lineNumber: 69,
                                     columnNumber: 11
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/AuthShell.tsx",
-                            lineNumber: 58,
+                            lineNumber: 66,
                             columnNumber: 9
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/AuthShell.tsx",
-                        lineNumber: 57,
+                        lineNumber: 65,
                         columnNumber: 7
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "jsx-654c3d41c0705240" + " " + "app-content",
-                        children: children
-                    }, void 0, false, {
+                        inert: role === "gerente",
+                        className: "jsx-dee13a4fb49d0523" + " " + ((role === "gerente" ? "app-content read-only-view" : "app-content") || ""),
+                        children: [
+                            role === "gerente" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "jsx-dee13a4fb49d0523" + " " + "read-only-notice",
+                                children: "Acesso de gerente: somente visualização"
+                            }, void 0, false, {
+                                fileName: "[project]/components/AuthShell.tsx",
+                                lineNumber: 77,
+                                columnNumber: 32
+                            }, this),
+                            children
+                        ]
+                    }, void 0, true, {
                         fileName: "[project]/components/AuthShell.tsx",
-                        lineNumber: 68,
+                        lineNumber: 76,
                         columnNumber: 7
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/AuthShell.tsx",
-                lineNumber: 56,
+                lineNumber: 64,
                 columnNumber: 7
             }, this),
             showEntryTransition && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 role: "status",
                 "aria-label": "Bem-vindo",
-                className: "jsx-654c3d41c0705240" + " " + "entry-transition",
+                className: "jsx-dee13a4fb49d0523" + " " + "entry-transition",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
                     src: "https://coca-cola-femsa.com.br/wp-content/uploads/2023/01/logo-femsa.png",
                     alt: "Coca-Cola FEMSA",
-                    className: "jsx-654c3d41c0705240"
+                    className: "jsx-dee13a4fb49d0523"
                 }, void 0, false, {
                     fileName: "[project]/components/AuthShell.tsx",
-                    lineNumber: 72,
+                    lineNumber: 83,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/AuthShell.tsx",
-                lineNumber: 71,
+                lineNumber: 82,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                id: "654c3d41c0705240",
-                children: ".entry-page-moving.jsx-654c3d41c0705240{will-change:transform;animation:3s cubic-bezier(.35,.05,.25,1) both page-push-in}.entry-transition.jsx-654c3d41c0705240{z-index:1000;pointer-events:none;will-change:transform, opacity;background:radial-gradient(circle,#f40009 0%,#c90008 56%,#8f0005 100%);place-items:center;animation:3s cubic-bezier(.35,.05,.25,1) both entry-wipe;display:grid;position:fixed;inset:0}.entry-transition.jsx-654c3d41c0705240 img.jsx-654c3d41c0705240{object-fit:contain;filter:drop-shadow(0 10px 26px #32000047);width:min(250px,64vw);height:82px;animation:3s cubic-bezier(.35,.05,.25,1) both entry-logo}@keyframes entry-wipe{0%{opacity:1;transform:translate(-100%)}24%{opacity:1;transform:translate(0)}70%{opacity:1;transform:translate(0)}to{opacity:0;transform:translate(100%)}}@keyframes page-push-in{0%,24%{transform:translate(0)}70%{transform:translate(-14px)}to{transform:translate(0)}}@keyframes entry-logo{0%{opacity:0;transform:translate(-48px)scale(.9)}24%{opacity:1;transform:translate(0)scale(1)}72%{opacity:1;transform:translate(0)scale(1)}to{opacity:0;transform:translate(48px)scale(.98)}}@media (prefers-reduced-motion:reduce){.entry-transition.jsx-654c3d41c0705240,.entry-transition.jsx-654c3d41c0705240 img.jsx-654c3d41c0705240{animation-duration:1ms}}"
+                id: "dee13a4fb49d0523",
+                children: ".entry-page-moving.jsx-dee13a4fb49d0523{will-change:transform;animation:3s cubic-bezier(.35,.05,.25,1) both page-push-in}.entry-transition.jsx-dee13a4fb49d0523{z-index:1000;pointer-events:none;will-change:transform, opacity;background:radial-gradient(circle,#f40009 0%,#c90008 56%,#8f0005 100%);place-items:center;animation:3s cubic-bezier(.35,.05,.25,1) both entry-wipe;display:grid;position:fixed;inset:0}.entry-transition.jsx-dee13a4fb49d0523 img.jsx-dee13a4fb49d0523{object-fit:contain;filter:drop-shadow(0 10px 26px #32000047);width:min(250px,64vw);height:82px;animation:3s cubic-bezier(.35,.05,.25,1) both entry-logo}@keyframes entry-wipe{0%{opacity:1;transform:translate(-100%)}24%{opacity:1;transform:translate(0)}70%{opacity:1;transform:translate(0)}to{opacity:0;transform:translate(100%)}}@keyframes page-push-in{0%,24%{transform:translate(0)}70%{transform:translate(-14px)}to{transform:translate(0)}}@keyframes entry-logo{0%{opacity:0;transform:translate(-48px)scale(.9)}24%{opacity:1;transform:translate(0)scale(1)}72%{opacity:1;transform:translate(0)scale(1)}to{opacity:0;transform:translate(48px)scale(.98)}}@media (prefers-reduced-motion:reduce){.entry-transition.jsx-dee13a4fb49d0523,.entry-transition.jsx-dee13a4fb49d0523 img.jsx-dee13a4fb49d0523{animation-duration:1ms}}"
             }, void 0, false, void 0, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/AuthShell.tsx",
-        lineNumber: 55,
+        lineNumber: 63,
         columnNumber: 5
     }, this);
 }
-_s(AuthShell, "9MbUUz2RWHoANtlDruhgWBNmcJ4=", false, function() {
+_s(AuthShell, "/BlVx/WBZ81OroaGtRplry5lzao=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePathname"],
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"]
@@ -278,13 +299,9 @@ const NAV_ITEMS = [
     {
         href: "/alertas",
         label: "Alertas"
-    },
-    {
-        href: "/classificacao",
-        label: "Dicionário"
     }
 ];
-function Nav() {
+function Nav({ role } = {}) {
     _s();
     const pathname = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePathname"])();
     const navRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
@@ -302,7 +319,13 @@ function Nav() {
         className: "main-nav",
         ref: navRef,
         onPointerMove: handlePointerMove,
-        children: NAV_ITEMS.map((item)=>{
+        children: (role === "admin" ? [
+            ...NAV_ITEMS,
+            {
+                href: "/usuarios",
+                label: "Usu\u00e1rios"
+            }
+        ] : NAV_ITEMS).map((item)=>{
             const isActive = pathname === item.href;
             return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                 href: item.href,
@@ -310,13 +333,13 @@ function Nav() {
                 children: item.label
             }, item.href, false, {
                 fileName: "[project]/components/Nav.tsx",
-                lineNumber: 38,
+                lineNumber: 37,
                 columnNumber: 11
             }, this);
         })
     }, void 0, false, {
         fileName: "[project]/components/Nav.tsx",
-        lineNumber: 34,
+        lineNumber: 33,
         columnNumber: 5
     }, this);
 }
@@ -498,6 +521,8 @@ __turbopack_context__.s([
     ()=>addKeyword,
     "buildExportUrl",
     ()=>buildExportUrl,
+    "createUser",
+    ()=>createUser,
     "downloadExport",
     ()=>downloadExport,
     "fetchAlertas",
@@ -753,6 +778,24 @@ async function fetchEvolucao(equipamentos, meses = 12) {
         throw new Error(data.detail || "Erro ao buscar evolução");
     }
     return res.json();
+}
+async function createUser(email, senha, cargo) {
+    const res = await fetch(`${API_URL}/auth/usuarios`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            email,
+            senha,
+            cargo
+        })
+    });
+    if (!res.ok) {
+        const data = await res.json().catch(()=>({}));
+        throw new Error(data.detail || "N\u00e3o foi poss\u00edvel cadastrar o usu\u00e1rio.");
+    }
 }
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import JSZip from "jszip";
 import {
   fetchAlertas, fetchPlano, savePlano,
   Alerta, PlanoAcao, Sugestao, Ishikawa, CincoW2HItem,
@@ -31,6 +32,7 @@ export default function AlertasPage() {
   const [sugestao, setSugestao] = useState<Sugestao | null>(null);
   const [loadingPlano, setLoadingPlano] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [exporting, setExporting] = useState(false);
 
   const [status, setStatus] = useState<PlanoAcao["status"]>("aberto");
   const [descricao, setDescricao] = useState("");
@@ -104,6 +106,54 @@ export default function AlertasPage() {
       setError(err.message || "Erro ao salvar");
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function exportWord() {
+    if (!selected) return;
+    setExporting(true);
+    try {
+      const xmlEntities: Record<string, string> = {
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;",
+      };
+      const escapeXml = (value: unknown) => String(value ?? "").replace(/[&<>"']/g, (char) => xmlEntities[char]);
+      const textRun = (value: unknown) => {
+        const lines = String(value ?? "").trim() || "—";
+        return lines.split(/\r?\n/).map((line, i) => `${i ? "<w:br/>" : ""}<w:t xml:space="preserve">${escapeXml(line)}</w:t>`).join("");
+      };
+      const paragraph = (value: unknown, style = "Normal") => `<w:p><w:pPr><w:pStyle w:val="${style}"/></w:pPr><w:r>${textRun(value)}</w:r></w:p>`;
+      const heading = (value: string) => paragraph(value, "Heading1");
+      const table = (headers: string[], rows: string[][]) => {
+        const allRows = [headers, ...(rows.length ? rows : [headers.map(() => "—")])];
+        const columnWidth = Math.floor(9000 / headers.length);
+        const grid = headers.map(() => `<w:gridCol w:w="${columnWidth}"/>`).join("");
+        const body = allRows.map((row, rowIndex) => `<w:tr>${row.map((value) => `<w:tc><w:tcPr><w:tcW w:w=\"${columnWidth}\" w:type=\"dxa\"/>${rowIndex === 0 ? "<w:shd w:fill=\"C50008\"/>" : ""}</w:tcPr><w:p><w:r>${rowIndex === 0 ? "<w:rPr><w:b/><w:color w:val=\"FFFFFF\"/></w:rPr>" : ""}${textRun(value)}</w:r></w:p></w:tc>`).join("")}</w:tr>`).join("");
+        return `<w:tbl><w:tblPr><w:tblStyle w:val="TableGrid"/><w:tblW w:w="0" w:type="auto"/><w:tblBorders><w:top w:val="single" w:sz="4" w:color="B7B7B7"/><w:left w:val="single" w:sz="4" w:color="B7B7B7"/><w:bottom w:val="single" w:sz="4" w:color="B7B7B7"/><w:right w:val="single" w:sz="4" w:color="B7B7B7"/><w:insideH w:val="single" w:sz="4" w:color="B7B7B7"/><w:insideV w:val="single" w:sz="4" w:color="B7B7B7"/></w:tblBorders></w:tblPr><w:tblGrid>${grid}</w:tblGrid>${body}</w:tbl>`;
+      };
+      const field = (label: string, value: unknown) => `<w:p><w:r><w:rPr><w:b/></w:rPr><w:t>${escapeXml(label)}: </w:t></w:r><w:r>${textRun(value)}</w:r></w:p>`;
+      const suggestions = sugestao?.modos_falha_predominantes || [];
+      const statusLabel = { aberto: "Aberto", em_andamento: "Em andamento", concluido: "Concluído" }[status];
+      const documentXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${paragraph("Plano de Ação — MASP", "Title")}${paragraph(`Gerado em ${new Date().toLocaleDateString("pt-BR")}`)}${heading("Identificação do equipamento")}${field("Equipamento", selected.equipamento)}${field("Linha", selected.linha)}${field("Falhas", selected.qtd_falhas)}${field("Tempo parado", `${selected.tempo_total.toFixed(0)} min`)}${field("Status", statusLabel)}${heading("1. Descrição do problema")}${paragraph(descricao)}${heading("2. Diagrama de Ishikawa (6M)")}${table(["Categoria", "Causa identificada"], [["Método", ishikawa.metodo], ["Máquina", ishikawa.maquina], ["Mão de obra", ishikawa.mao_de_obra], ["Material", ishikawa.material], ["Meio ambiente", ishikawa.meio_ambiente], ["Medida", ishikawa.medida]])}${heading("3. Brainstorming")}${table(["Ideias"], brainstorming.filter((idea) => idea.trim()).map((idea) => [idea]))}${heading("4. Cinco Porquês")}${table(["Nº", "Causa"], cincoPorques.map((why, index) => [String(index + 1), why]))}${heading("5. Plano de ação (5W2H)")}${table(["O quê", "Por quê", "Onde", "Quando", "Quem", "Como", "Quanto custa"], cincoW2H.map((row) => [row.what, row.why, row.where, row.when, row.who, row.how, row.how_much]))}${suggestions.length ? `${heading("Sugestões do histórico")}${table(["Modo de falha", "Ocorrências", "Tempo total (min)"], suggestions.map((item) => [item.nome, String(item.ocorrencias), item.tempo_total.toFixed(0)]))}` : ""}<w:sectPr><w:pgSz w:w="12240" w:h="15840"/><w:pgMar w:top="1080" w:right="1080" w:bottom="1080" w:left="1080"/></w:sectPr></w:body></w:document>`;
+      const zip = new JSZip();
+      zip.file("[Content_Types].xml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/></Types>`);
+      zip.file("_rels/.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`);
+      zip.file("word/document.xml", documentXml);
+      zip.file("word/_rels/document.xml.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`);
+      zip.file("word/styles.xml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:sz w:val="22"/></w:rPr></w:style><w:style w:type="paragraph" w:styleId="Title"><w:name w:val="Title"/><w:rPr><w:b/><w:color w:val="C50008"/><w:sz w:val="36"/></w:rPr></w:style><w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:pPr><w:keepNext/><w:spacing w:before="320" w:after="120"/></w:pPr><w:rPr><w:b/><w:color w:val="C50008"/><w:sz w:val="28"/></w:rPr></w:style><w:style w:type="table" w:styleId="TableGrid"><w:name w:val="Table Grid"/></w:style></w:styles>`);
+      const blob = await zip.generateAsync({ type: "blob", mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document", compression: "DEFLATE" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      const filename = selected.equipamento.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9_-]+/g, "_");
+      link.href = url;
+      link.download = `plano_de_acao_${filename || "equipamento"}.docx`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "N\u00e3o foi poss\u00edvel gerar o documento.");
+    } finally {
+      setExporting(false);
     }
   }
 
@@ -341,6 +391,9 @@ export default function AlertasPage() {
 
               <button className="btn-primary" onClick={handleSave} disabled={saving}>
                 {saving ? "Salvando..." : "Salvar plano de ação"}
+              </button>
+              <button className="btn-secondary" onClick={exportWord} disabled={exporting} style={{ width: "100%", marginTop: 10 }}>
+                {exporting ? "Gerando documento..." : "Baixar para Word / Google Docs"}
               </button>
             </div>
           )}
