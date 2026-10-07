@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import JSZip from "jszip";
+import MorphSelect from "../../components/ui/select-morph";
 import {
   fetchAlertas, fetchPlano, savePlano,
   Alerta, PlanoAcao, Sugestao, Ishikawa, CincoW2HItem,
@@ -237,15 +238,7 @@ export default function AlertasPage() {
                       {selected.linha} · {selected.qtd_falhas} falhas · {selected.tempo_total.toFixed(0)} min parados
                     </p>
                   </div>
-                  <select
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value as PlanoAcao["status"])}
-                    style={{ height: "fit-content" }}
-                  >
-                    <option value="aberto">Aberto</option>
-                    <option value="em_andamento">Em andamento</option>
-                    <option value="concluido">Concluído</option>
-                  </select>
+                  <MorphSelect ariaLabel="Status do plano" value={status} onValueChange={(value) => setStatus(value as PlanoAcao["status"])} options={[{ value: "aberto", label: "Aberto" }, { value: "em_andamento", label: "Em andamento" }, { value: "concluido", label: "Conclu\u00eddo" }]} />
                 </div>
 
                 {/* --- Sugestão automática --- */}

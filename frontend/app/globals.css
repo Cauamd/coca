@@ -902,6 +902,8 @@ a {
 .clickable-row:hover td { background: var(--bg-surface-hover); }
 
 .col-num { text-align: right; white-space: nowrap; }
+.category-equipment-table thead th.col-num,
+.category-equipment-table tbody td.col-num { text-align: center; }
 .col-obs { max-width: 280px; color: var(--text-secondary); }
 .table-state { text-align: center; padding: 40px 20px !important; color: var(--text-muted); }
 
@@ -965,6 +967,18 @@ a {
   border-color: var(--accent-red);
   color: #FFFFFF;
   background: #3A2527;
+}
+
+:root[data-theme="light"] .btn-classify {
+  background: #C50008;
+  border-color: #C50008;
+  color: #FFFFFF;
+}
+
+:root[data-theme="light"] .btn-classify:hover:not(:disabled) {
+  background: #A30006;
+  border-color: #A30006;
+  color: #FFFFFF;
 }
 
 .btn-classify:disabled { opacity: 0.5; cursor: wait; }

@@ -216,7 +216,7 @@ export default function HomePage() {
               </button>
             </div>
 
-            <table className="data-table">
+            <table className="data-table category-equipment-table">
               <thead>
                 <tr>
                   <th>Linha</th>

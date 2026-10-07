@@ -1486,6 +1486,10 @@ a {
   white-space: nowrap;
 }
 
+.category-equipment-table thead th.col-num, .category-equipment-table tbody td.col-num {
+  text-align: center;
+}
+
 .col-obs {
   max-width: 280px;
   color: var(--text-secondary);
@@ -1585,6 +1589,18 @@ a {
   border-color: var(--accent-red);
   color: #fff;
   background: #3a2527;
+}
+
+:root[data-theme="light"] .btn-classify {
+  color: #fff;
+  background: #c50008;
+  border-color: #c50008;
+}
+
+:root[data-theme="light"] .btn-classify:hover:not(:disabled) {
+  color: #fff;
+  background: #a30006;
+  border-color: #a30006;
 }
 
 .btn-classify:disabled {

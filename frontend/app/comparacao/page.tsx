@@ -6,6 +6,7 @@ import {
   EquipamentoResumo, EvolucaoResponse, SerieEvolucao,
 } from "../../lib/api";
 import EvolutionChart from "../../components/charts/EvolutionChart";
+import MorphSelect from "../../components/ui/select-morph";
 
 const TENDENCIA_CONFIG: Record<string, { label: string; color: string; icone: string }> = {
   piorando: { label: "Piorando", color: "#FF3B3B", icone: "▲" },
@@ -137,19 +138,11 @@ export default function ComparacaoPage() {
             <div className="filter-bar">
               <div className="filter-field">
                 <label>Métrica</label>
-                <select value={metrica} onChange={(e) => setMetrica(e.target.value as any)}>
-                  <option value="tempo_total">Tempo parado (min)</option>
-                  <option value="qtd_falhas">Nº de falhas</option>
-                  <option value="mttr">MTTR (min)</option>
-                </select>
+                <MorphSelect ariaLabel="M\u00e9trica" value={metrica} onValueChange={(value) => setMetrica(value as typeof metrica)} options={[{ value: "tempo_total", label: "Tempo parado (min)" }, { value: "qtd_falhas", label: "N\u00ba de falhas" }, { value: "mttr", label: "MTTR (min)" }]} />
               </div>
               <div className="filter-field">
                 <label>Período</label>
-                <select value={meses} onChange={(e) => setMeses(Number(e.target.value))}>
-                  <option value={6}>Últimos 6 meses</option>
-                  <option value={12}>Últimos 12 meses</option>
-                  <option value={24}>Últimos 24 meses</option>
-                </select>
+                <MorphSelect ariaLabel="Per\u00edodo" value={String(meses)} onValueChange={(value) => setMeses(Number(value))} options={[{ value: "6", label: "\u00daltimos 6 meses" }, { value: "12", label: "\u00daltimos 12 meses" }, { value: "24", label: "\u00daltimos 24 meses" }]} />
               </div>
             </div>
 
