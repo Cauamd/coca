@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { fetchSuggestions, fetchModosFalha, addKeyword, classifyPendingApontamentos, SuggestionsResponse, ModoFalha } from "../../lib/api";
+import { fetchSuggestions, fetchModosFalha, addKeyword, createModoFalha, classifyPendingApontamentos, SuggestionsResponse, ModoFalha } from "../../lib/api";
 import MorphSelect from "../../components/ui/select-morph";
 
 export default function ClassificacaoPage() {
@@ -13,6 +13,11 @@ export default function ClassificacaoPage() {
   const [classifying, setClassifying] = useState(false);
   const [classificationMessage, setClassificationMessage] = useState<string | null>(null);
   const [classificationError, setClassificationError] = useState<string | null>(null);
+  const [newModoName, setNewModoName] = useState("");
+  const [newModoCategory, setNewModoCategory] = useState("");
+  const [savingModo, setSavingModo] = useState(false);
+  const [modoMessage, setModoMessage] = useState<string | null>(null);
+  const [modoError, setModoError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -58,6 +63,24 @@ export default function ClassificacaoPage() {
     }
   }
 
+  async function handleCreateModo(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSavingModo(true);
+    setModoMessage(null);
+    setModoError(null);
+    try {
+      const modo = await createModoFalha(newModoName, newModoCategory);
+      setModos((prev) => [...prev, modo].sort((a, b) => a.nome_padrao.localeCompare(b.nome_padrao, "pt-BR")));
+      setNewModoName("");
+      setNewModoCategory("");
+      setModoMessage(`Modo “${modo.nome_padrao}” criado e disponível para classificação manual.`);
+    } catch (err: any) {
+      setModoError(err.message || "Erro ao criar modo de falha.");
+    } finally {
+      setSavingModo(false);
+    }
+  }
+
   const allSuggestions = [
     ...(suggestions?.sugestoes_expressoes || []),
     ...(suggestions?.sugestoes_palavras || []),
@@ -68,6 +91,42 @@ export default function ClassificacaoPage() {
       <div className="page-subtitle">Dicionário de classificação</div>
 
       <div className="data-container">
+        <div className="chart-card classification-create-card">
+          <div>
+            <p className="card-eyebrow">Expandir classificações</p>
+            <h2>Novo modo de falha</h2>
+            <p className="description">
+              Depois de criar o modo, classifique apontamentos manualmente com ele para que essas correções também sirvam de exemplo no retreino da IA.
+            </p>
+          </div>
+          <form className="classification-create-form" onSubmit={handleCreateModo}>
+            <label>
+              Nome do modo de falha
+              <input
+                value={newModoName}
+                onChange={(event) => setNewModoName(event.target.value)}
+                maxLength={80}
+                placeholder="Ex.: FALHA DE ROLAMENTO"
+                required
+              />
+            </label>
+            <label>
+              Categoria (opcional)
+              <input
+                value={newModoCategory}
+                onChange={(event) => setNewModoCategory(event.target.value)}
+                maxLength={50}
+                placeholder="Ex.: MECÂNICA"
+              />
+            </label>
+            <button className="btn-primary" type="submit" disabled={savingModo || !newModoName.trim()}>
+              {savingModo ? "Criando..." : "Adicionar modo"}
+            </button>
+          </form>
+          {modoMessage && <div className="status-message">{modoMessage}</div>}
+          {modoError && <div className="status-message error">{modoError}</div>}
+        </div>
+
         <div className="chart-card" style={{ marginBottom: 16 }}>
           <div className="chart-card-header">
             <div>

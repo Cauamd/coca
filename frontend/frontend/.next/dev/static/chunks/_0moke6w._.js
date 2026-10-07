@@ -966,6 +966,10 @@ function ClassificationPicker({ apontamentoId, currentModoFalha, origemClassific
     const [loadingModos, setLoadingModos] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [saving, setSaving] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [newModoName, setNewModoName] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
+    const [savingNewModo, setSavingNewModo] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [newModoError, setNewModoError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [newModoMessage, setNewModoMessage] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [dropdownPosition, setDropdownPosition] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({
         top: 0,
         left: 0
@@ -982,6 +986,28 @@ function ClassificationPicker({ apontamentoId, currentModoFalha, origemClassific
             document.addEventListener("mousedown", handleClickOutside);
             return ({
                 "ClassificationPicker.useEffect": ()=>document.removeEventListener("mousedown", handleClickOutside)
+            })["ClassificationPicker.useEffect"];
+        }
+    }["ClassificationPicker.useEffect"], []);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "ClassificationPicker.useEffect": ()=>{
+            function handleModoCreated(event) {
+                const modo = event.detail;
+                if (!modo) return;
+                setModos({
+                    "ClassificationPicker.useEffect.handleModoCreated": (prev)=>prev.some({
+                            "ClassificationPicker.useEffect.handleModoCreated": (item)=>item.id === modo.id
+                        }["ClassificationPicker.useEffect.handleModoCreated"]) ? prev : [
+                            ...prev,
+                            modo
+                        ].sort({
+                            "ClassificationPicker.useEffect.handleModoCreated": (a, b)=>a.nome_padrao.localeCompare(b.nome_padrao, "pt-BR")
+                        }["ClassificationPicker.useEffect.handleModoCreated"])
+                }["ClassificationPicker.useEffect.handleModoCreated"]);
+            }
+            window.addEventListener("modo-falha-criado", handleModoCreated);
+            return ({
+                "ClassificationPicker.useEffect": ()=>window.removeEventListener("modo-falha-criado", handleModoCreated)
             })["ClassificationPicker.useEffect"];
         }
     }["ClassificationPicker.useEffect"], []);
@@ -1021,6 +1047,26 @@ function ClassificationPicker({ apontamentoId, currentModoFalha, origemClassific
             setSaving(false);
         }
     }
+    async function handleCreateModo(event) {
+        event.preventDefault();
+        const nome = newModoName.trim();
+        if (!nome) return;
+        setSavingNewModo(true);
+        setNewModoError(null);
+        setNewModoMessage(null);
+        try {
+            const modo = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createModoFalha"])(nome);
+            window.dispatchEvent(new CustomEvent("modo-falha-criado", {
+                detail: modo
+            }));
+            setNewModoName("");
+            setNewModoMessage("Modo salvo. Selecione-o na lista para classificar este apontamento.");
+        } catch (err) {
+            setNewModoError(err.message || "Erro ao salvar o novo modo de falha.");
+        } finally{
+            setSavingNewModo(false);
+        }
+    }
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "classification-picker",
         ref: wrapperRef,
@@ -1036,7 +1082,7 @@ function ClassificationPicker({ apontamentoId, currentModoFalha, origemClassific
                                 children: currentModoFalha
                             }, void 0, false, {
                                 fileName: "[project]/components/ClassificationPicker.tsx",
-                                lineNumber: 88,
+                                lineNumber: 124,
                                 columnNumber: 13
                             }, this),
                             origemClassificacao === "ia" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1044,7 +1090,7 @@ function ClassificationPicker({ apontamentoId, currentModoFalha, origemClassific
                                 children: "Classificado pela IA"
                             }, void 0, false, {
                                 fileName: "[project]/components/ClassificationPicker.tsx",
-                                lineNumber: 89,
+                                lineNumber: 125,
                                 columnNumber: 46
                             }, this),
                             origemClassificacao === "ia" && explicacaoIA && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("details", {
@@ -1054,7 +1100,7 @@ function ClassificationPicker({ apontamentoId, currentModoFalha, origemClassific
                                         children: "Como a IA chegou a esta classificação"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ClassificationPicker.tsx",
-                                        lineNumber: 92,
+                                        lineNumber: 128,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1064,7 +1110,7 @@ function ClassificationPicker({ apontamentoId, currentModoFalha, origemClassific
                                                 children: explicacaoIA.modoSugerido
                                             }, void 0, false, {
                                                 fileName: "[project]/components/ClassificationPicker.tsx",
-                                                lineNumber: 94,
+                                                lineNumber: 130,
                                                 columnNumber: 33
                                             }, this),
                                             " com confiança de",
@@ -1075,7 +1121,7 @@ function ClassificationPicker({ apontamentoId, currentModoFalha, origemClassific
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/ClassificationPicker.tsx",
-                                        lineNumber: 93,
+                                        lineNumber: 129,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1083,7 +1129,7 @@ function ClassificationPicker({ apontamentoId, currentModoFalha, origemClassific
                                         children: "Históricos usados como referência"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ClassificationPicker.tsx",
-                                        lineNumber: 98,
+                                        lineNumber: 134,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -1098,7 +1144,7 @@ function ClassificationPicker({ apontamentoId, currentModoFalha, origemClassific
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/ClassificationPicker.tsx",
-                                                        lineNumber: 102,
+                                                        lineNumber: 138,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1112,37 +1158,37 @@ function ClassificationPicker({ apontamentoId, currentModoFalha, origemClassific
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/ClassificationPicker.tsx",
-                                                        lineNumber: 103,
+                                                        lineNumber: 139,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, `${index}-${referencia.text}`, true, {
                                                 fileName: "[project]/components/ClassificationPicker.tsx",
-                                                lineNumber: 101,
+                                                lineNumber: 137,
                                                 columnNumber: 21
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/components/ClassificationPicker.tsx",
-                                        lineNumber: 99,
+                                        lineNumber: 135,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ClassificationPicker.tsx",
-                                lineNumber: 91,
+                                lineNumber: 127,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/ClassificationPicker.tsx",
-                        lineNumber: 87,
+                        lineNumber: 123,
                         columnNumber: 11
                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                         className: "tag tag-unclassified",
                         children: "Não classificado"
                     }, void 0, false, {
                         fileName: "[project]/components/ClassificationPicker.tsx",
-                        lineNumber: 114,
+                        lineNumber: 150,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1152,13 +1198,13 @@ function ClassificationPicker({ apontamentoId, currentModoFalha, origemClassific
                         children: saving ? "Salvando..." : "Classificar"
                     }, void 0, false, {
                         fileName: "[project]/components/ClassificationPicker.tsx",
-                        lineNumber: 116,
+                        lineNumber: 152,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/ClassificationPicker.tsx",
-                lineNumber: 85,
+                lineNumber: 121,
                 columnNumber: 7
             }, this),
             open && typeof document !== "undefined" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2d$dom$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createPortal"])(/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1177,42 +1223,100 @@ function ClassificationPicker({ apontamentoId, currentModoFalha, origemClassific
                     children: "Carregando..."
                 }, void 0, false, {
                     fileName: "[project]/components/ClassificationPicker.tsx",
-                    lineNumber: 132,
+                    lineNumber: 168,
                     columnNumber: 13
                 }, this) : error ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "classification-dropdown-state error",
                     children: error
                 }, void 0, false, {
                     fileName: "[project]/components/ClassificationPicker.tsx",
-                    lineNumber: 134,
+                    lineNumber: 170,
                     columnNumber: 13
                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                             className: "classification-option classification-option-clear",
                             onClick: ()=>handleSelect(null, null),
+                            type: "button",
                             children: "Remover classificação"
                         }, void 0, false, {
                             fileName: "[project]/components/ClassificationPicker.tsx",
-                            lineNumber: 137,
+                            lineNumber: 173,
+                            columnNumber: 15
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
+                            className: "classification-create-inline",
+                            onSubmit: handleCreateModo,
+                            onClick: (event)=>event.stopPropagation(),
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                    htmlFor: `novo-modo-${apontamentoId}`,
+                                    children: "Novo modo de falha"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/ClassificationPicker.tsx",
+                                    lineNumber: 185,
+                                    columnNumber: 17
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                    id: `novo-modo-${apontamentoId}`,
+                                    value: newModoName,
+                                    onChange: (event)=>setNewModoName(event.target.value),
+                                    maxLength: 80,
+                                    placeholder: "Escreva um modo...",
+                                    disabled: savingNewModo
+                                }, void 0, false, {
+                                    fileName: "[project]/components/ClassificationPicker.tsx",
+                                    lineNumber: 186,
+                                    columnNumber: 17
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    type: "submit",
+                                    disabled: savingNewModo || !newModoName.trim(),
+                                    children: savingNewModo ? "Salvando..." : "Salvar modo"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/ClassificationPicker.tsx",
+                                    lineNumber: 194,
+                                    columnNumber: 17
+                                }, this),
+                                newModoError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "classification-create-inline-error",
+                                    children: newModoError
+                                }, void 0, false, {
+                                    fileName: "[project]/components/ClassificationPicker.tsx",
+                                    lineNumber: 197,
+                                    columnNumber: 34
+                                }, this),
+                                newModoMessage && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "classification-create-inline-success",
+                                    children: newModoMessage
+                                }, void 0, false, {
+                                    fileName: "[project]/components/ClassificationPicker.tsx",
+                                    lineNumber: 198,
+                                    columnNumber: 36
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/ClassificationPicker.tsx",
+                            lineNumber: 180,
                             columnNumber: 15
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "classification-divider"
                         }, void 0, false, {
                             fileName: "[project]/components/ClassificationPicker.tsx",
-                            lineNumber: 143,
+                            lineNumber: 200,
                             columnNumber: 15
                         }, this),
                         modos.map((modo)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 className: "classification-option",
                                 onClick: ()=>handleSelect(modo.id, modo.nome_padrao),
+                                type: "button",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         children: modo.nome_padrao
                                     }, void 0, false, {
                                         fileName: "[project]/components/ClassificationPicker.tsx",
-                                        lineNumber: 150,
+                                        lineNumber: 208,
                                         columnNumber: 19
                                     }, this),
                                     modo.categoria && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1220,34 +1324,34 @@ function ClassificationPicker({ apontamentoId, currentModoFalha, origemClassific
                                         children: modo.categoria
                                     }, void 0, false, {
                                         fileName: "[project]/components/ClassificationPicker.tsx",
-                                        lineNumber: 151,
+                                        lineNumber: 209,
                                         columnNumber: 38
                                     }, this)
                                 ]
                             }, modo.id, true, {
                                 fileName: "[project]/components/ClassificationPicker.tsx",
-                                lineNumber: 145,
+                                lineNumber: 202,
                                 columnNumber: 17
                             }, this))
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/ClassificationPicker.tsx",
-                    lineNumber: 136,
+                    lineNumber: 172,
                     columnNumber: 13
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/ClassificationPicker.tsx",
-                lineNumber: 122,
+                lineNumber: 158,
                 columnNumber: 9
             }, this), document.body)
         ]
     }, void 0, true, {
         fileName: "[project]/components/ClassificationPicker.tsx",
-        lineNumber: 84,
+        lineNumber: 120,
         columnNumber: 5
     }, this);
 }
-_s(ClassificationPicker, "EzWu3Jy70UUbHeYvGshhYNwybN0=");
+_s(ClassificationPicker, "eDBNN0RGCBPlgvYR3Z4c5Xx6ed4=");
 _c = ClassificationPicker;
 var _c;
 __turbopack_context__.k.register(_c, "ClassificationPicker");

@@ -1106,6 +1106,17 @@ a {
 .classification-option-clear { color: var(--accent-red-bright); }
 .classification-category { font-size: 10.5px; color: var(--text-muted); border: 1px solid var(--border-steel); padding: 1px 8px; border-radius: var(--radius-pill); }
 .classification-divider { height: 1px; background: var(--border-steel); margin: 4px 0; }
+.classification-create-inline { display: grid; gap: 6px; padding: 8px 12px; }
+.classification-create-inline label { color: var(--text-secondary); font-size: 11px; font-weight: 600; }
+.classification-create-inline input { width: 100%; min-width: 0; padding: 7px 8px; color: var(--text-primary); background: var(--bg-surface); border: 1px solid var(--border-steel); border-radius: var(--radius-sm); font-size: 12px; }
+.classification-create-inline input:focus { outline: none; border-color: var(--accent-red); }
+.classification-create-inline button { padding: 7px 10px; color: #FFFFFF; background: var(--accent-red); border: 1px solid var(--accent-red); border-radius: var(--radius-sm); font-size: 11px; font-weight: 600; cursor: pointer; }
+.classification-create-inline button:hover:not(:disabled) { background: var(--accent-red-bright); border-color: var(--accent-red-bright); }
+.classification-create-inline button:disabled { opacity: 0.5; cursor: not-allowed; }
+.classification-create-inline-error,
+.classification-create-inline-success { font-size: 10px; line-height: 1.35; white-space: normal; overflow-wrap: anywhere; }
+.classification-create-inline-error { color: var(--accent-red-bright); }
+.classification-create-inline-success { color: var(--status-ok); }
 
 /* ---------- Cards de gráfico ---------- */
 
@@ -1291,6 +1302,17 @@ a {
 .filter-bar .morph-select-trigger { border-color: var(--border-steel); }
 .filter-bar .morph-select-trigger:hover,
 .filter-bar .morph-select-trigger:focus-visible { border-color: var(--accent-red); }
+
+.classification-create-card { display: grid; gap: 14px; margin-bottom: 16px; }
+.classification-create-card h2 { margin: 0 0 6px; }
+.classification-create-card .description { margin: 0; max-width: 760px; }
+.classification-create-form { display: grid; grid-template-columns: minmax(220px, 1fr) minmax(180px, 0.7fr) auto; align-items: end; gap: 12px; }
+.classification-create-form label { display: grid; gap: 6px; color: var(--text-secondary); font-size: 12px; }
+.classification-create-form input { width: 100%; min-width: 0; }
+.classification-create-form .btn-primary { min-height: 40px; white-space: nowrap; }
+@media (max-width: 700px) {
+  .classification-create-form { grid-template-columns: 1fr; }
+}
 
 .empty-hint-icon { display: block; width: 24px; height: 24px; margin: 0 auto 10px; color: var(--text-muted); }
 

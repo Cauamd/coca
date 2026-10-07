@@ -237,6 +237,21 @@ export async function fetchSuggestions(minOccurrences = 5): Promise<SuggestionsR
   return res.json();
 }
 
+export async function createModoFalha(nomePadrao: string, categoria?: string): Promise<ModoFalha> {
+  const res = await fetch(`${API_URL}/classificacao/modos-falha`, {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ nome_padrao: nomePadrao, categoria: categoria || null }),
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.detail || "Erro ao criar modo de falha");
+  }
+  const data = await res.json();
+  return data.modo;
+}
+
 export async function classifyPendingApontamentos(): Promise<{
   totalAnalisado: number;
   totalClassificado: number;

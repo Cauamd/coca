@@ -2763,6 +2763,70 @@ a {
   margin: 4px 0;
 }
 
+.classification-create-inline {
+  gap: 6px;
+  padding: 8px 12px;
+  display: grid;
+}
+
+.classification-create-inline label {
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.classification-create-inline input {
+  width: 100%;
+  min-width: 0;
+  color: var(--text-primary);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-steel);
+  border-radius: var(--radius-sm);
+  padding: 7px 8px;
+  font-size: 12px;
+}
+
+.classification-create-inline input:focus {
+  border-color: var(--accent-red);
+  outline: none;
+}
+
+.classification-create-inline button {
+  color: #fff;
+  background: var(--accent-red);
+  border: 1px solid var(--accent-red);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  padding: 7px 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.classification-create-inline button:hover:not(:disabled) {
+  background: var(--accent-red-bright);
+  border-color: var(--accent-red-bright);
+}
+
+.classification-create-inline button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.classification-create-inline-error, .classification-create-inline-success {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.classification-create-inline-error {
+  color: var(--accent-red-bright);
+}
+
+.classification-create-inline-success {
+  color: var(--status-ok);
+}
+
 .chart-card {
   background: var(--bg-surface);
   border: 1px solid var(--border-steel);
@@ -3092,6 +3156,51 @@ a {
 
 .filter-bar .morph-select-trigger:hover, .filter-bar .morph-select-trigger:focus-visible {
   border-color: var(--accent-red);
+}
+
+.classification-create-card {
+  gap: 14px;
+  margin-bottom: 16px;
+  display: grid;
+}
+
+.classification-create-card h2 {
+  margin: 0 0 6px;
+}
+
+.classification-create-card .description {
+  max-width: 760px;
+  margin: 0;
+}
+
+.classification-create-form {
+  grid-template-columns: minmax(220px, 1fr) minmax(180px, .7fr) auto;
+  align-items: end;
+  gap: 12px;
+  display: grid;
+}
+
+.classification-create-form label {
+  color: var(--text-secondary);
+  gap: 6px;
+  font-size: 12px;
+  display: grid;
+}
+
+.classification-create-form input {
+  width: 100%;
+  min-width: 0;
+}
+
+.classification-create-form .btn-primary {
+  white-space: nowrap;
+  min-height: 40px;
+}
+
+@media (max-width: 700px) {
+  .classification-create-form {
+    grid-template-columns: 1fr;
+  }
 }
 
 .empty-hint-icon {

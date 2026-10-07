@@ -82,6 +82,36 @@ async function getModosFalha(req, res) {
   }
 }
 
+async function createModoFalha(req, res) {
+  const nomePadrao = typeof req.body.nome_padrao === "string"
+    ? req.body.nome_padrao.trim().replace(/\s+/g, " ")
+    : "";
+  const categoria = typeof req.body.categoria === "string"
+    ? req.body.categoria.trim().replace(/\s+/g, " ")
+    : "";
+
+  if (!nomePadrao) return res.status(400).json({ detail: "Informe o nome do modo de falha." });
+  if (nomePadrao.length > 80) return res.status(400).json({ detail: "O nome deve ter no máximo 80 caracteres." });
+  if (categoria.length > 50) return res.status(400).json({ detail: "A categoria deve ter no máximo 50 caracteres." });
+
+  try {
+    const [result] = await pool.query(
+      "INSERT INTO modos_falha_padrao (nome_padrao, categoria, ativo) VALUES (?, ?, TRUE)",
+      [nomePadrao, categoria || null]
+    );
+    const [rows] = await pool.query(
+      "SELECT id, nome_padrao, categoria FROM modos_falha_padrao WHERE id = ?",
+      [result.insertId]
+    );
+    res.status(201).json({ modo: rows[0] });
+  } catch (err) {
+    if (err.code === "ER_DUP_ENTRY") {
+      return res.status(409).json({ detail: "Já existe um modo de falha com esse nome." });
+    }
+    res.status(500).json({ detail: `Erro ao criar modo de falha: ${err.message}` });
+  }
+}
+
 async function addPalavraChave(req, res) {
   const { modo_falha_id, palavra_chave, prioridade = 0 } = req.body;
 
@@ -210,6 +240,7 @@ module.exports = {
   retestAI,
   getRetestStatus,
   getModosFalha,
+  createModoFalha,
   addPalavraChave,
   updateClassificacaoManual,
   getSuggestions,

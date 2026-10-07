@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { ModoFalha, fetchModosFalha, updateClassificacao } from "../lib/api";
+import { ModoFalha, createModoFalha, fetchModosFalha, updateClassificacao } from "../lib/api";
 import type { Apontamento } from "../lib/api";
 
 interface Props {
@@ -25,6 +25,10 @@ export default function ClassificationPicker({
   const [loadingModos, setLoadingModos] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [newModoName, setNewModoName] = useState("");
+  const [savingNewModo, setSavingNewModo] = useState(false);
+  const [newModoError, setNewModoError] = useState<string | null>(null);
+  const [newModoMessage, setNewModoMessage] = useState<string | null>(null);
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
   const wrapperRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -40,6 +44,18 @@ export default function ClassificationPicker({
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    function handleModoCreated(event: Event) {
+      const modo = (event as CustomEvent<ModoFalha>).detail;
+      if (!modo) return;
+      setModos((prev) => prev.some((item) => item.id === modo.id)
+        ? prev
+        : [...prev, modo].sort((a, b) => a.nome_padrao.localeCompare(b.nome_padrao, "pt-BR")));
+    }
+    window.addEventListener("modo-falha-criado", handleModoCreated);
+    return () => window.removeEventListener("modo-falha-criado", handleModoCreated);
   }, []);
 
   async function openPicker() {
@@ -77,6 +93,26 @@ export default function ClassificationPicker({
       setError(err.message || "Erro ao salvar classificação");
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function handleCreateModo(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const nome = newModoName.trim();
+    if (!nome) return;
+
+    setSavingNewModo(true);
+    setNewModoError(null);
+    setNewModoMessage(null);
+    try {
+      const modo = await createModoFalha(nome);
+      window.dispatchEvent(new CustomEvent("modo-falha-criado", { detail: modo }));
+      setNewModoName("");
+      setNewModoMessage("Modo salvo. Selecione-o na lista para classificar este apontamento.");
+    } catch (err: any) {
+      setNewModoError(err.message || "Erro ao salvar o novo modo de falha.");
+    } finally {
+      setSavingNewModo(false);
     }
   }
 
@@ -137,15 +173,37 @@ export default function ClassificationPicker({
               <button
                 className="classification-option classification-option-clear"
                 onClick={() => handleSelect(null, null)}
+                type="button"
               >
                 Remover classificação
               </button>
+              <form
+                className="classification-create-inline"
+                onSubmit={handleCreateModo}
+                onClick={(event) => event.stopPropagation()}
+              >
+                <label htmlFor={`novo-modo-${apontamentoId}`}>Novo modo de falha</label>
+                <input
+                  id={`novo-modo-${apontamentoId}`}
+                  value={newModoName}
+                  onChange={(event) => setNewModoName(event.target.value)}
+                  maxLength={80}
+                  placeholder="Escreva um modo..."
+                  disabled={savingNewModo}
+                />
+                <button type="submit" disabled={savingNewModo || !newModoName.trim()}>
+                  {savingNewModo ? "Salvando..." : "Salvar modo"}
+                </button>
+                {newModoError && <span className="classification-create-inline-error">{newModoError}</span>}
+                {newModoMessage && <span className="classification-create-inline-success">{newModoMessage}</span>}
+              </form>
               <div className="classification-divider" />
               {modos.map((modo) => (
                 <button
                   key={modo.id}
                   className="classification-option"
                   onClick={() => handleSelect(modo.id, modo.nome_padrao)}
+                  type="button"
                 >
                   <span>{modo.nome_padrao}</span>
                   {modo.categoria && <span className="classification-category">{modo.categoria}</span>}
