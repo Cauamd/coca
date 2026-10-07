@@ -632,13 +632,13 @@ function ParetoChart({ data }) {
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$cartesian$2f$ReferenceLine$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ReferenceLine"], {
                     yAxisId: "right",
                     y: 80,
-                    stroke: "#FFB74D",
+                    stroke: "var(--chart-reference)",
                     strokeWidth: 1.5,
                     strokeDasharray: "4 4",
                     label: {
                         value: "80%",
                         position: "right",
-                        fill: "#FFB74D",
+                        fill: "var(--chart-reference)",
                         fontSize: 11,
                         fontWeight: 600
                     }
@@ -650,7 +650,7 @@ function ParetoChart({ data }) {
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$cartesian$2f$Bar$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Bar"], {
                     yAxisId: "left",
                     dataKey: "tempo_total",
-                    fill: "#F40009",
+                    fill: "var(--accent-red)",
                     radius: [
                         3,
                         3,
@@ -675,7 +675,7 @@ function ParetoChart({ data }) {
                         strokeWidth: 0
                     },
                     activeDot: {
-                        fill: "#FFB74D",
+                        fill: "var(--chart-reference)",
                         r: 5,
                         strokeWidth: 0
                     }

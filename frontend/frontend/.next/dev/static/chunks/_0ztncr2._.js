@@ -305,6 +305,15 @@ function Nav({ role } = {}) {
     _s();
     const pathname = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePathname"])();
     const navRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "Nav.useEffect": ()=>{
+            if (pathname === "/") {
+                window.dispatchEvent(new Event("apontamentos-atualizados"));
+            }
+        }
+    }["Nav.useEffect"], [
+        pathname
+    ]);
     // Atualiza --mx/--my do link sob o cursor, para o gradiente radial "seguir a Ã¡gua"
     function handlePointerMove(e) {
         const target = e.target.closest(".nav-link");
@@ -333,17 +342,17 @@ function Nav({ role } = {}) {
                 children: item.label
             }, item.href, false, {
                 fileName: "[project]/components/Nav.tsx",
-                lineNumber: 37,
+                lineNumber: 43,
                 columnNumber: 11
             }, this);
         })
     }, void 0, false, {
         fileName: "[project]/components/Nav.tsx",
-        lineNumber: 33,
+        lineNumber: 39,
         columnNumber: 5
     }, this);
 }
-_s(Nav, "NenurArdrEIaJybbpxuOSMhKp3E=", false, function() {
+_s(Nav, "/6ViaA1wNy6pYJaskJBwtExIIYA=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePathname"]
     ];
@@ -655,7 +664,8 @@ async function fetchPareto(params) {
         if (value) query.set(key, value);
     });
     const res = await fetch(`${API_URL}/dashboard/pareto-modo-falha?${query.toString()}`, {
-        credentials: "include"
+        credentials: "include",
+        cache: "no-store"
     });
     if (!res.ok) throw new Error("Erro ao buscar Pareto");
     return res.json();

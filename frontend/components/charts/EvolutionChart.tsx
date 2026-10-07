@@ -1,12 +1,12 @@
 "use client";
 
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+  Area, ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   ResponsiveContainer, ReferenceDot,
 } from "recharts";
 import { SerieEvolucao } from "../../lib/api";
 
-const CORES = ["#F40009", "#4C9A6A", "#F0A030", "#3B82F6"];
+const CORES = ["var(--accent-red)", "var(--chart-series-2)", "#F0A030", "#3B82F6"];
 
 interface Props {
   series: SerieEvolucao[];
@@ -34,15 +34,29 @@ export default function EvolutionChart({ series, metrica }: Props) {
 
   return (
     <ResponsiveContainer width="100%" height={360}>
-      <LineChart data={data} margin={{ top: 20, right: 30, left: 10, bottom: 10 }}>
-        <CartesianGrid stroke="#2D2D35" strokeDasharray="3 3" />
-        <XAxis dataKey="periodo" tick={{ fill: "#F5F5F7", fontSize: 11 }} stroke="#3A3A44" />
-        <YAxis tick={{ fill: "#F5F5F7", fontSize: 11 }} stroke="#3A3A44" />
+      <ComposedChart data={data} margin={{ top: 20, right: 30, left: 10, bottom: 10 }}>
+        <defs>
+          <linearGradient id="evolution-primary-area" x1="0" y1="0" x2="0" y2="1">
+            <stop className="evolution-gradient-top" offset="0%" stopColor="#F40009" stopOpacity={0.15} />
+            <stop offset="100%" stopColor="#F40009" stopOpacity={0} />
+          </linearGradient>
+        </defs>
+        <CartesianGrid stroke="var(--chart-grid)" strokeDasharray="3 3" />
+        <XAxis dataKey="periodo" tick={{ fill: "var(--chart-text)", fontSize: 11 }} stroke="var(--chart-grid)" />
+        <YAxis tick={{ fill: "var(--chart-text)", fontSize: 11 }} stroke="var(--chart-grid)" />
         <Tooltip
-          contentStyle={{ background: "#131316", border: "1px solid #F40009", borderRadius: 6 }}
-          labelStyle={{ color: "#fff", fontWeight: 700 }}
+          contentStyle={{ background: "var(--bg-surface)", border: "1px solid var(--border-steel)", borderRadius: 6, color: "var(--text-primary)" }}
+          labelStyle={{ color: "var(--text-primary)", fontWeight: 700 }}
         />
-        <Legend wrapperStyle={{ fontSize: 12, color: "#9898A0" }} />
+        <Legend wrapperStyle={{ fontSize: 12, color: "var(--chart-label)" }} />
+        <Area
+          type="monotone"
+          dataKey={series[0].equipamento}
+          stroke="none"
+          fill="url(#evolution-primary-area)"
+          connectNulls
+          isAnimationActive={false}
+        />
         {series.map((s, i) => (
           <Line
             key={s.equipamento}
@@ -54,7 +68,7 @@ export default function EvolutionChart({ series, metrica }: Props) {
             connectNulls
           />
         ))}
-      </LineChart>
+      </ComposedChart>
     </ResponsiveContainer>
   );
 }

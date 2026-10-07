@@ -95,14 +95,14 @@ export default function ParetoChart({ data }: Props) {
         <ReferenceLine
           yAxisId="right"
           y={80}
-          stroke="#FFB74D"
+          stroke="var(--chart-reference)"
           strokeWidth={1.5}
           strokeDasharray="4 4"
-          label={{ value: "80%", position: "right", fill: "#FFB74D", fontSize: 11, fontWeight: 600 }}
+          label={{ value: "80%", position: "right", fill: "var(--chart-reference)", fontSize: 11, fontWeight: 600 }}
         />
 
         {/* Barra: vermelho Coca-Cola, alto contraste sobre o fundo escuro */}
-        <Bar yAxisId="left" dataKey="tempo_total" fill="#F40009" radius={[3, 3, 0, 0]} barSize={36} />
+        <Bar yAxisId="left" dataKey="tempo_total" fill="var(--accent-red)" radius={[3, 3, 0, 0]} barSize={36} />
 
         {/* Linha de % acumulado: branco puro, a linha mais importante do
             gráfico — precisa se destacar de tudo, inclusive das barras */}
@@ -113,7 +113,7 @@ export default function ParetoChart({ data }: Props) {
           stroke="var(--chart-line)"
           strokeWidth={2.5}
           dot={{ fill: "var(--chart-text)", r: 3.5, strokeWidth: 0 }}
-          activeDot={{ fill: "#FFB74D", r: 5, strokeWidth: 0 }}
+          activeDot={{ fill: "var(--chart-reference)", r: 5, strokeWidth: 0 }}
         />
       </ComposedChart>
     </ResponsiveContainer>

@@ -18,10 +18,10 @@ import DatePicker from "../components/ui/date-picker";
 type Categoria = "CRÍTICO-CRÔNICO" | "CRÍTICO" | "CRÔNICO" | "CONFORTO";
 
 const CATEGORY_CONFIG: { key: Categoria; label: string; desc: string; color: string }[] = [
-  { key: "CRÍTICO-CRÔNICO", label: "Crítico-Crônico", desc: "Alta frequência e alto impacto — prioridade máxima", color: "#FFB74D" },
-  { key: "CRÍTICO", label: "Crítico", desc: "Baixa frequência, alto impacto — risco elevado", color: "#EF5350" },
-  { key: "CRÔNICO", label: "Crônico", desc: "Alta frequência, baixo impacto — foco na causa raiz", color: "#81C784" },
-  { key: "CONFORTO", label: "Conforto", desc: "Baixa frequência e baixo impacto", color: "#5C6577" },
+  { key: "CRÍTICO-CRÔNICO", label: "Crítico-Crônico", desc: "Alta frequência e alto impacto — prioridade máxima", color: "var(--cat-critical-chronic)" },
+  { key: "CRÍTICO", label: "Crítico", desc: "Baixa frequência, alto impacto — risco elevado", color: "var(--cat-critical)" },
+  { key: "CRÔNICO", label: "Crônico", desc: "Alta frequência, baixo impacto — foco na causa raiz", color: "var(--cat-chronic)" },
+  { key: "CONFORTO", label: "Conforto", desc: "Baixa frequência e baixo impacto", color: "var(--cat-comfort)" },
 ];
 
 export default function HomePage() {

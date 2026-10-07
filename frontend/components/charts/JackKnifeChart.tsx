@@ -22,10 +22,10 @@ interface Props {
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  "CRÍTICO-CRÔNICO": "#FFB74D",
-  "CRÍTICO": "#EF5350",
-  "CRÔNICO": "#81C784",
-  "CONFORTO": "#5C6577",
+  "CRÍTICO-CRÔNICO": "var(--cat-critical-chronic)",
+  "CRÍTICO": "var(--cat-critical)",
+  "CRÔNICO": "var(--cat-chronic)",
+  "CONFORTO": "var(--cat-comfort)",
 };
 
 function CustomTooltip({ active, payload }: any) {
@@ -63,7 +63,7 @@ function AnimatedDot(props: any) {
         cy={cy}
         r={radius}
         fill={fill}
-        fillOpacity={0.92}
+        fillOpacity="var(--scatter-opacity)"
         stroke={isHovered ? "var(--chart-dot-hover)" : "var(--chart-dot-outline)"}
         strokeWidth={isHovered ? 1.5 : 1}
         style={{ transition: "r 0.18s cubic-bezier(0.22,1,0.36,1), stroke-width 0.18s ease" }}
@@ -121,17 +121,17 @@ export default function JackKnifeChart({ data, limiteQ, limiteMttr, onPointClick
             "atenção" que separa os quadrantes, precisa ser fácil de achar */}
         <ReferenceLine
           x={limiteQ}
-          stroke="#FFB74D"
+          stroke="var(--chart-reference)"
           strokeWidth={1.5}
           strokeDasharray="4 4"
-          label={{ value: `${limiteQ}`, position: "top", fill: "#FFB74D", fontSize: 10, fontWeight: 600 }}
+          label={{ value: `${limiteQ}`, position: "top", fill: "var(--chart-reference)", fontSize: 10, fontWeight: 600 }}
         />
         <ReferenceLine
           y={limiteMttr}
-          stroke="#FFB74D"
+          stroke="var(--chart-reference)"
           strokeWidth={1.5}
           strokeDasharray="4 4"
-          label={{ value: `${limiteMttr}`, position: "right", fill: "#FFB74D", fontSize: 10, fontWeight: 600 }}
+          label={{ value: `${limiteMttr}`, position: "right", fill: "var(--chart-reference)", fontSize: 10, fontWeight: 600 }}
         />
 
         <Scatter

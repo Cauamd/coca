@@ -575,10 +575,10 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 const CATEGORY_COLORS = {
-    "CRÍTICO-CRÔNICO": "#FFB74D",
-    "CRÍTICO": "#EF5350",
-    "CRÔNICO": "#81C784",
-    "CONFORTO": "#5C6577"
+    "CRÍTICO-CRÔNICO": "var(--cat-critical-chronic)",
+    "CRÍTICO": "var(--cat-critical)",
+    "CRÔNICO": "var(--cat-chronic)",
+    "CONFORTO": "var(--cat-comfort)"
 };
 function CustomTooltip({ active, payload }) {
     if (!active || !payload || !payload.length) return null;
@@ -755,7 +755,7 @@ function AnimatedDot(props) {
                 cy: cy,
                 r: radius,
                 fill: fill,
-                fillOpacity: 0.92,
+                fillOpacity: "var(--scatter-opacity)",
                 stroke: isHovered ? "var(--chart-dot-hover)" : "var(--chart-dot-outline)",
                 strokeWidth: isHovered ? 1.5 : 1,
                 style: {
@@ -891,13 +891,13 @@ function JackKnifeChart({ data, limiteQ, limiteMttr, onPointClick }) {
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$cartesian$2f$ReferenceLine$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ReferenceLine"], {
                     x: limiteQ,
-                    stroke: "#FFB74D",
+                    stroke: "var(--chart-reference)",
                     strokeWidth: 1.5,
                     strokeDasharray: "4 4",
                     label: {
                         value: `${limiteQ}`,
                         position: "top",
-                        fill: "#FFB74D",
+                        fill: "var(--chart-reference)",
                         fontSize: 10,
                         fontWeight: 600
                     }
@@ -908,13 +908,13 @@ function JackKnifeChart({ data, limiteQ, limiteMttr, onPointClick }) {
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$cartesian$2f$ReferenceLine$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ReferenceLine"], {
                     y: limiteMttr,
-                    stroke: "#FFB74D",
+                    stroke: "var(--chart-reference)",
                     strokeWidth: 1.5,
                     strokeDasharray: "4 4",
                     label: {
                         value: `${limiteMttr}`,
                         position: "right",
-                        fill: "#FFB74D",
+                        fill: "var(--chart-reference)",
                         fontSize: 10,
                         fontWeight: 600
                     }

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import HaloDropzone from "../../components/ui/halo-dropzone";
 
 const API_URL = "/api";
 
@@ -20,16 +21,17 @@ export default function UploadApontamentos() {
   const [result, setResult] = useState<UploadResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const selected = e.target.files?.[0] ?? null;
+  function handleFiles(files: File[]): boolean {
+    const selected = files[0] ?? null;
     if (selected && !selected.name.match(/\.xlsx$|\.xlsm$/)) {
       setError("Selecione um arquivo .xlsx ou .xlsm");
       setFile(null);
-      return;
+      return false;
     }
     setError(null);
     setResult(null);
     setFile(selected);
+    return true;
   }
 
   async function handleUpload() {
@@ -78,10 +80,9 @@ export default function UploadApontamentos() {
   }
 
   return (
-  <main className="panel-main">
+  <main className="panel-main upload-main">
     <div className="page-subtitle">Importação de apontamentos</div>
-      <main className="panel-main">
-        <div className="upload-card">
+      <div className="upload-card">
           <p className="card-eyebrow">Entrada de dados</p>
           <h2>Importar apontamentos</h2>
           <p className="description">
@@ -92,14 +93,32 @@ export default function UploadApontamentos() {
             Centro · Data Inicio Real · Linha · Ordem · Material · Minutos de paradas
           </p>
 
-          <div className={`file-drop ${file ? "has-file" : ""}`} style={{ marginTop: 20 }}>
-            <input
-              type="file"
-              accept=".xlsx,.xlsm"
-              onChange={handleFileChange}
-              disabled={loading}
-            />
-          </div>
+          <HaloDropzone
+            key={file ? `${file.name}-${file.size}-${file.lastModified}` : "sem-planilha"}
+            accept=".xlsx,.xlsm"
+            className="upload-halo-dropzone"
+            disabled={loading}
+            emptyLabel="Arraste sua planilha até aqui ou clique para procurar"
+            formatHint="Formatos aceitos: .xlsx e .xlsm"
+            onFiles={handleFiles}
+            successLabel="Planilha selecionada e pronta para envio"
+            successResetMs={0}
+            translucent
+          />
+
+          {file && (
+            <button
+              className="btn-secondary upload-remove-file"
+              onClick={() => {
+                setFile(null);
+                setError(null);
+                setResult(null);
+              }}
+              type="button"
+            >
+              Remover planilha
+            </button>
+          )}
 
           <button className="btn-primary" onClick={handleUpload} disabled={!file || loading}>
             {loading ? "Enviando..." : "Enviar planilha"}
@@ -129,8 +148,7 @@ export default function UploadApontamentos() {
               </button>
             </div>
           )}
-        </div>
-      </main>
+      </div>
     </main>
   );
 }
