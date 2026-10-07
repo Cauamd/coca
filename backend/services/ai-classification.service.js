@@ -31,8 +31,14 @@ function classifyWithAI(observacaoTexto, centro) {
   return {
     label: result.label,
     confidence: result.confidence,
-    matches: result.matches.slice(0, 3), // top-3 exemplos usados na decisão
+    agreement: result.agreement,
+    motivo: result.motivo,
+    matches: result.matches, // todos os exemplos que participaram da votação
   };
+}
+
+function invalidateModel(centro) {
+  modelCache.delete(centro);
 }
 
 function getReport() {
@@ -41,4 +47,4 @@ function getReport() {
   return JSON.parse(fs.readFileSync(reportPath, "utf-8"));
 }
 
-module.exports = { classifyWithAI, getReport };
+module.exports = { classifyWithAI, getReport, invalidateModel };

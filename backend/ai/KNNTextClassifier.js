@@ -166,7 +166,12 @@ class KNNTextClassifier {
     return {
       label: melhorLabel,
       confidence: Math.round(confidence * 1000) / 1000,
-      matches: neighbors, // transparência total: mostra os exemplos reais comparados
+      matches: neighbors.map((neighbor) => ({
+        ...neighbor,
+        votos: neighbor.label === melhorLabel,
+        similarity: Math.round(neighbor.similarity * 1000) / 1000,
+      })), // exemplos reais usados na decisão, com similaridade e voto
+      agreement: Math.round(agreement * 1000) / 1000,
       motivo: "ok",
     };
   }

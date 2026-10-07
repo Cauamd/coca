@@ -132,3 +132,6 @@ CREATE TABLE feedback_classificacoes_manuais (
 ALTER TABLE apontamentos
   ADD COLUMN origem_classificacao ENUM('historico_exato', 'palavra_chave', 'ia', 'manual') NULL
   AFTER modo_falha_id;
+ALTER TABLE apontamentos
+  ADD COLUMN explicacao_classificacao_ia JSON NULL
+  AFTER origem_classificacao;

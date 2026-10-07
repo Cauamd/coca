@@ -259,15 +259,45 @@ export async function retestAIClassifications(): Promise<{
   totalSemConclusao: number;
   totalExemplosFeedback: number;
 }> {
-  const res = await fetch(`${API_URL}/classificacao/ia/retestar`, {
+  async function responseError(res: Response, fallback: string) {
+    const body = await res.text().catch(() => "");
+    try {
+      const data = JSON.parse(body);
+      if (data.detail) return data.detail;
+    } catch {
+      // Respostas HTML do proxy (por exemplo 404/502) também devem mostrar o status.
+    }
+    const summary = body.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 180);
+    return `${fallback} (HTTP ${res.status})${summary ? `: ${summary}` : ""}`;
+  }
+
+  const startResponse = await fetch(`${API_URL}/classificacao/ia/retestar`, {
     method: "POST",
     credentials: "include",
   });
-  if (!res.ok) {
-    const data = await res.json().catch(() => ({}));
-    throw new Error(data.detail || "Erro ao retestar classificações com IA");
+  if (!startResponse.ok) {
+    throw new Error(await responseError(startResponse, "Não foi possível iniciar o reteste"));
   }
-  return res.json();
+
+  const { jobId } = await startResponse.json();
+  if (!jobId) throw new Error("O servidor não retornou o identificador do reteste.");
+
+  const startedAt = Date.now();
+  while (Date.now() - startedAt < 30 * 60 * 1000) {
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    const statusResponse = await fetch(`${API_URL}/classificacao/ia/retestar/${encodeURIComponent(jobId)}`, {
+      credentials: "include",
+    });
+    if (!statusResponse.ok) {
+      throw new Error(await responseError(statusResponse, "Não foi possível consultar o reteste"));
+    }
+
+    const job = await statusResponse.json();
+    if (job.status === "completed") return job;
+    if (job.status === "failed") throw new Error(job.detail || "O reteste falhou no servidor.");
+  }
+
+  throw new Error("O reteste ainda está em andamento. Atualize a página daqui a pouco para ver as classificações.");
 }
 
 export async function addKeyword(modoFalhaId: number, palavraChave: string, prioridade = 5) {

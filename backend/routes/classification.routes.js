@@ -1,6 +1,8 @@
 const express = require("express");
 const {
   reclassifyAll,
+  retestAI,
+  getRetestStatus,
   getModosFalha,
   addPalavraChave,
   updateClassificacaoManual,
@@ -14,6 +16,8 @@ const router = express.Router();
 const { requireWriteAccess } = require("../middleware/auth");
 
 router.post("/reclassificar", requireWriteAccess, reclassifyAll);
+router.post("/ia/retestar", requireWriteAccess, retestAI);
+router.get("/ia/retestar/:jobId", requireWriteAccess, getRetestStatus);
 router.get("/modos-falha", getModosFalha);
 router.post("/palavras-chave", requireWriteAccess, addPalavraChave);
 router.patch("/apontamentos/:id", requireWriteAccess, updateClassificacaoManual);

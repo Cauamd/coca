@@ -96,7 +96,19 @@ async function classifyAllPending({ forceAll = false, centro = null } = {}) {
             ? modesByName.get(normalizeText(prediction.label))
             : null;
           return predictedModeId
-            ? { id: row.id, modoFalhaId: predictedModeId, origem: "ia" }
+            ? {
+                id: row.id,
+                modoFalhaId: predictedModeId,
+                origem: "ia",
+                explicacao: JSON.stringify({
+                  textoAnalisado: row.observacoes,
+                  modoSugerido: prediction.label,
+                  confianca: prediction.confidence,
+                  concordancia: prediction.agreement,
+                  motivo: prediction.motivo,
+                  referencias: prediction.matches,
+                }),
+              }
             : null;
         } catch (error) {
           console.error(`Erro ao classificar apontamento ${row.id} com IA:`, error.message);
@@ -114,11 +126,15 @@ async function classifyAllPending({ forceAll = false, centro = null } = {}) {
     const originCaseSql = updates
       .map((u) => `WHEN ${u.id} THEN '${u.origem}'`)
       .join(" ");
+    const explanationCaseSql = updates
+      .map((u) => `WHEN ${u.id} THEN ${u.explicacao ? pool.escape(u.explicacao) : "NULL"}`)
+      .join(" ");
 
     await pool.query(
       `UPDATE apontamentos
        SET modo_falha_id = CASE id ${caseSql} END,
-           origem_classificacao = CASE id ${originCaseSql} END
+           origem_classificacao = CASE id ${originCaseSql} END,
+           explicacao_classificacao_ia = CASE id ${explanationCaseSql} END
        WHERE id IN (${ids.join(",")})${centro ? " AND centro = ?" : ""}`,
       centro ? [centro] : []
     );
@@ -134,4 +150,88 @@ async function classifyAllPending({ forceAll = false, centro = null } = {}) {
   };
 }
 
-module.exports = { classify, loadDictionary, classifyAllPending, normalizeText };
+async function retestAllWithAI({ centro }) {
+  if (!centro) throw new Error("Centro da sessão não encontrado.");
+
+  const [modeRows] = await pool.query(`
+    SELECT id, nome_padrao
+    FROM modos_falha_padrao
+    WHERE ativo = TRUE
+  `);
+  const modesByName = new Map(modeRows.map((row) => [normalizeText(row.nome_padrao), row.id]));
+  const [rows] = await pool.query(
+    `SELECT id, centro, observacoes
+     FROM apontamentos
+     WHERE centro = ? AND (origem_classificacao IS NULL OR origem_classificacao <> 'manual')`,
+    [centro]
+  );
+
+  let totalClassificadoIA = 0;
+  let totalSemConclusao = 0;
+  const BATCH_SIZE = 250;
+
+  for (let i = 0; i < rows.length; i += BATCH_SIZE) {
+    const updates = rows.slice(i, i + BATCH_SIZE).map((row) => {
+      try {
+        const prediction = classifyWithAI(row.observacoes, row.centro);
+        const modoFalhaId = prediction?.label
+          ? modesByName.get(normalizeText(prediction.label))
+          : null;
+
+        if (!modoFalhaId) {
+          totalSemConclusao++;
+          return { id: row.id, modoFalhaId: null, origem: null, explicacao: null };
+        }
+
+        totalClassificadoIA++;
+        return {
+          id: row.id,
+          modoFalhaId,
+          origem: "ia",
+          explicacao: JSON.stringify({
+            textoAnalisado: row.observacoes,
+            modoSugerido: prediction.label,
+            confianca: prediction.confidence,
+            concordancia: prediction.agreement,
+            motivo: prediction.motivo,
+            referencias: prediction.matches,
+          }),
+        };
+      } catch (error) {
+        console.error(`Erro ao retestar apontamento ${row.id} com IA:`, error.message);
+        totalSemConclusao++;
+        return { id: row.id, modoFalhaId: null, origem: null, explicacao: null };
+      }
+    });
+
+    if (updates.length === 0) continue;
+    const ids = updates.map((update) => update.id);
+    const modeCaseSql = updates
+      .map((update) => `WHEN ${update.id} THEN ${update.modoFalhaId ?? "NULL"}`)
+      .join(" ");
+    const originCaseSql = updates
+      .map((update) => `WHEN ${update.id} THEN ${update.origem ? `'${update.origem}'` : "NULL"}`)
+      .join(" ");
+    const explanationCaseSql = updates
+      .map((update) => `WHEN ${update.id} THEN ${update.explicacao ? pool.escape(update.explicacao) : "NULL"}`)
+      .join(" ");
+
+    await pool.query(
+      `UPDATE apontamentos
+       SET modo_falha_id = CASE id ${modeCaseSql} END,
+           origem_classificacao = CASE id ${originCaseSql} END,
+           explicacao_classificacao_ia = CASE id ${explanationCaseSql} END
+       WHERE id IN (${ids.join(",")}) AND centro = ?
+         AND (origem_classificacao IS NULL OR origem_classificacao <> 'manual')`,
+      [centro]
+    );
+  }
+
+  return {
+    totalAnalisado: rows.length,
+    totalClassificadoIA,
+    totalSemConclusao,
+  };
+}
+
+module.exports = { classify, loadDictionary, classifyAllPending, retestAllWithAI, normalizeText };

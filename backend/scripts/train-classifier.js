@@ -43,10 +43,12 @@ function trainAndEvaluate(examples) {
 }
 
 // Função principal, reutilizável tanto pelo CLI quanto pelo agendador noturno.
-async function runTraining({ log = console.log } = {}) {
+async function runTraining({ log = console.log, centros = null, evaluate = true } = {}) {
   if (!fs.existsSync(MODELS_DIR)) fs.mkdirSync(MODELS_DIR, { recursive: true });
 
-  const files = fs.readdirSync(TRAINING_DIR).filter((f) => f.endsWith(".json"));
+  const files = fs.readdirSync(TRAINING_DIR).filter((f) =>
+    f.endsWith(".json") && (!centros || centros.includes(f.replace(/^training-/, "").replace(/\.json$/, "")))
+  );
   const report = [];
 
   for (const file of files) {
@@ -58,15 +60,27 @@ async function runTraining({ log = console.log } = {}) {
 
     log(`[treino] Centro ${centro}: histórico=${staticExamples.length} feedback=${feedbackExamples.length}`);
 
-    const { model, evalResult } = trainAndEvaluate(allExamples);
+    let model;
+    let evalResult;
+    if (evaluate) {
+      ({ model, evalResult } = trainAndEvaluate(allExamples));
+    } else {
+      model = new KNNTextClassifier({ k: 5, minSimilarity: 0.3, minAgreement: 0.6 });
+      model.train(allExamples);
+      evalResult = { cobertura: 0, precisaoQuandoResponde: 0, acertos: 0, respondeu: 0, total: 0 };
+    }
 
     const modelPath = path.join(MODELS_DIR, `${centro}.json`);
     fs.writeFileSync(modelPath, JSON.stringify(model.toJSON()));
 
-    log(
-      `[treino] Centro ${centro}: cobertura=${(evalResult.cobertura * 100).toFixed(1)}% ` +
-      `precisão=${(evalResult.precisaoQuandoResponde * 100).toFixed(1)}% (${evalResult.acertos}/${evalResult.respondeu})`
-    );
+    if (evaluate) {
+      log(
+        `[treino] Centro ${centro}: cobertura=${(evalResult.cobertura * 100).toFixed(1)}% ` +
+        `precisão=${(evalResult.precisaoQuandoResponde * 100).toFixed(1)}% (${evalResult.acertos}/${evalResult.respondeu})`
+      );
+    } else {
+      log(`[treino] Centro ${centro}: modelo atualizado sem avaliação comparativa.`);
+    }
 
     report.push({
       centro,
@@ -82,7 +96,9 @@ async function runTraining({ log = console.log } = {}) {
     });
   }
 
-  fs.writeFileSync(path.join(MODELS_DIR, "_report.json"), JSON.stringify(report, null, 2));
+  if (evaluate) {
+    fs.writeFileSync(path.join(MODELS_DIR, "_report.json"), JSON.stringify(report, null, 2));
+  }
   log(`[treino] Concluído. ${report.length} centro(s) retreinado(s).`);
 
   return report;

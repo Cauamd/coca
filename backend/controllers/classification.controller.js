@@ -1,9 +1,14 @@
 const pool = require("../config/db");
-const { classifyAllPending } = require("../services/classification.service");
+const { randomUUID } = require("crypto");
+const { classifyAllPending, retestAllWithAI } = require("../services/classification.service");
 const { normalizeText } = require("../services/classification.service");
 const { suggestKeywords } = require("../services/suggestion.service");
-const { getReport } = require("../services/ai-classification.service");
+const { getReport, invalidateModel } = require("../services/ai-classification.service");
 const { executarRetreinoNoturno } = require("../jobs/retrainScheduler");
+const { runTraining } = require("../scripts/train-classifier");
+
+const retestJobs = new Map();
+const activeRetestByCenter = new Map();
 
 async function reclassifyAll(req, res) {
   try {
@@ -12,6 +17,58 @@ async function reclassifyAll(req, res) {
   } catch (err) {
     res.status(500).json({ detail: err.message });
   }
+}
+
+async function retestAI(req, res) {
+  const centro = req.user?.centro;
+  if (!centro) return res.status(400).json({ detail: "Centro da sessão não encontrado." });
+
+  const activeJobId = activeRetestByCenter.get(centro);
+  if (activeJobId) {
+    return res.status(202).json({ jobId: activeJobId, status: retestJobs.get(activeJobId)?.status || "running" });
+  }
+
+  const jobId = randomUUID();
+  retestJobs.set(jobId, { jobId, centro, status: "queued", createdAt: Date.now() });
+  activeRetestByCenter.set(centro, jobId);
+  res.status(202).json({ jobId, status: "queued" });
+
+  setImmediate(async () => {
+    const job = retestJobs.get(jobId);
+    if (!job) return;
+    job.status = "running";
+    try {
+      const relatorios = await runTraining({ centros: [centro], evaluate: false });
+      const relatorioCentro = relatorios.find((relatorio) => relatorio.centro === centro);
+      if (!relatorioCentro) {
+        throw new Error(`Não há dados de treinamento configurados para o centro ${centro}.`);
+      }
+
+      invalidateModel(centro);
+      const result = await retestAllWithAI({ centro });
+      Object.assign(job, {
+        status: "completed",
+        ...result,
+        totalExemplosFeedback: relatorioCentro.totalExemplosFeedback,
+        completedAt: Date.now(),
+      });
+    } catch (err) {
+      job.status = "failed";
+      job.detail = `Erro ao retestar classificações com IA: ${err.message}`;
+      job.completedAt = Date.now();
+      console.error(`[reteste-ia] Centro ${centro}:`, err);
+    } finally {
+      if (activeRetestByCenter.get(centro) === jobId) activeRetestByCenter.delete(centro);
+    }
+  });
+}
+
+function getRetestStatus(req, res) {
+  const job = retestJobs.get(req.params.jobId);
+  if (!job || job.centro !== req.user?.centro) {
+    return res.status(404).json({ detail: "Reteste não encontrado ou expirado." });
+  }
+  res.json(job);
 }
 
 async function getModosFalha(req, res) {
@@ -150,6 +207,8 @@ async function forcarRetreino(req, res) {
 
 module.exports = {
   reclassifyAll,
+  retestAI,
+  getRetestStatus,
   getModosFalha,
   addPalavraChave,
   updateClassificacaoManual,

@@ -143,7 +143,8 @@ async function listApontamentos(req, res) {
               a.data_inicio, a.turno, a.intervalo, a.tipo_parada, a.chave_parada,
               a.subchave_parada, a.observacoes, a.tempo_parada, a.total_minutos,
               mf.nome_padrao AS modo_falha_padrao,
-              a.origem_classificacao
+              a.origem_classificacao,
+              a.explicacao_classificacao_ia
        FROM apontamentos a
        LEFT JOIN modos_falha_padrao mf ON mf.id = a.modo_falha_id
        ${whereClause}
