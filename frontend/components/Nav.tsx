@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { href: "/dados", label: "Apontamentos" },
   { href: "/dashboard", label: "Pareto" },
   { href: "/dashboard/jack-knife", label: "Crítico-Crônico" },
+  { href: "/comparacao", label: "Evolução" },
   { href: "/alertas", label: "Alertas" },
   { href: "/classificacao", label: "Dicionário" },
 ];

@@ -272,6 +272,10 @@ const NAV_ITEMS = [
         label: "Crítico-Crônico"
     },
     {
+        href: "/comparacao",
+        label: "Evolução"
+    },
+    {
         href: "/alertas",
         label: "Alertas"
     },
@@ -306,13 +310,13 @@ function Nav() {
                 children: item.label
             }, item.href, false, {
                 fileName: "[project]/components/Nav.tsx",
-                lineNumber: 37,
+                lineNumber: 38,
                 columnNumber: 11
             }, this);
         })
     }, void 0, false, {
         fileName: "[project]/components/Nav.tsx",
-        lineNumber: 33,
+        lineNumber: 34,
         columnNumber: 5
     }, this);
 }
@@ -504,6 +508,10 @@ __turbopack_context__.s([
     ()=>fetchApontamentosCount,
     "fetchCentros",
     ()=>fetchCentros,
+    "fetchEquipamentosDisponiveis",
+    ()=>fetchEquipamentosDisponiveis,
+    "fetchEvolucao",
+    ()=>fetchEvolucao,
     "fetchFiltros",
     ()=>fetchFiltros,
     "fetchJackKnife",
@@ -724,6 +732,27 @@ async function savePlano(linha, equipamento, plano) {
         const data = await res.json().catch(()=>({}));
         throw new Error(data.detail || "Erro ao salvar plano de ação");
     }
+}
+async function fetchEquipamentosDisponiveis() {
+    const res = await fetch(`${API_URL}/dashboard/equipamentos`, {
+        credentials: "include"
+    });
+    if (!res.ok) throw new Error("Erro ao buscar equipamentos");
+    return res.json();
+}
+async function fetchEvolucao(equipamentos, meses = 12) {
+    const query = new URLSearchParams({
+        equipamentos: equipamentos.join(","),
+        meses: String(meses)
+    });
+    const res = await fetch(`${API_URL}/dashboard/evolucao?${query}`, {
+        credentials: "include"
+    });
+    if (!res.ok) {
+        const data = await res.json().catch(()=>({}));
+        throw new Error(data.detail || "Erro ao buscar evolução");
+    }
+    return res.json();
 }
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);

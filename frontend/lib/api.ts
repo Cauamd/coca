@@ -350,3 +350,59 @@ export async function savePlano(linha: string, equipamento: string, plano: Plano
     throw new Error(data.detail || "Erro ao salvar plano de ação");
   }
 }
+export interface EquipamentoResumo {
+  linha: string;
+  equipamento: string;
+  qtd_falhas: number;
+  tempo_total: number;
+}
+
+export interface PontoEvolucao {
+  periodo: string;
+  qtd_falhas: number;
+  tempo_total: number;
+  mttr: number;
+}
+
+export interface Previsao {
+  previsaoDisponivel: boolean;
+  motivo?: string;
+  tendencia?: string;
+  risco?: string;
+  confianca?: number;
+  r2?: number;
+  valorAtual?: number;
+  valorPrevistoProximoPeriodo?: number;
+  variacaoPercentual?: number;
+}
+
+export interface SerieEvolucao {
+  equipamento: string;
+  linha: string | null;
+  pontos: PontoEvolucao[];
+  previsao: { tempoParado: Previsao; qtdFalhas: Previsao };
+}
+
+export interface EvolucaoResponse {
+  series: SerieEvolucao[];
+  periodoMeses: number;
+}
+
+export async function fetchEquipamentosDisponiveis(): Promise<EquipamentoResumo[]> {
+  const res = await fetch(`${API_URL}/dashboard/equipamentos`, { credentials: "include" });
+  if (!res.ok) throw new Error("Erro ao buscar equipamentos");
+  return res.json();
+}
+
+export async function fetchEvolucao(equipamentos: string[], meses = 12): Promise<EvolucaoResponse> {
+  const query = new URLSearchParams({
+    equipamentos: equipamentos.join(","),
+    meses: String(meses),
+  });
+  const res = await fetch(`${API_URL}/dashboard/evolucao?${query}`, { credentials: "include" });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.detail || "Erro ao buscar evolução");
+  }
+  return res.json();
+}
