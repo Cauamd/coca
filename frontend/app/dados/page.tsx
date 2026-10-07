@@ -9,6 +9,7 @@ import {
     Filtros,
     ListParams,
     downloadExport,
+    retestAIClassifications,
 } from "../../lib/api";
 import ClassificationPicker from "../../components/ClassificationPicker";
 import MorphSelect from "../../components/ui/select-morph";
@@ -104,6 +105,29 @@ export default function DadosApontamentos() {
     }
     const [exporting, setExporting] = useState(false);
     const [exportError, setExportError] = useState<string | null>(null);
+    const [retesting, setRetesting] = useState(false);
+    const [retestMessage, setRetestMessage] = useState<string | null>(null);
+    const [retestError, setRetestError] = useState<string | null>(null);
+
+    async function handleRetestAI() {
+        setRetesting(true);
+        setRetestMessage(null);
+        setRetestError(null);
+        try {
+            const result = await retestAIClassifications();
+            await loadData();
+            window.dispatchEvent(new Event("apontamentos-atualizados"));
+            setRetestMessage(
+                `Reteste concluído: ${result.totalClassificadoIA.toLocaleString("pt-BR")} classificação(ões) pela IA, ` +
+                `${result.totalSemConclusao.toLocaleString("pt-BR")} sem conclusão. ` +
+                `O modelo foi treinado com ${result.totalExemplosFeedback.toLocaleString("pt-BR")} correção(ões) manual(is).`
+            );
+        } catch (err: any) {
+            setRetestError(err.message || "Erro ao retestar classificações com IA.");
+        } finally {
+            setRetesting(false);
+        }
+    }
 
     async function handleExport() {
         setExporting(true);
@@ -207,7 +231,17 @@ export default function DadosApontamentos() {
                         )}
                         {exporting ? "Exportando..." : "Exportar Excel"}
                     </button>
+                    <button
+                        className="btn-secondary"
+                        onClick={handleRetestAI}
+                        disabled={retesting || loading}
+                        title="Treina novamente com correções manuais e reavalia todos os apontamentos não classificados manualmente do seu centro."
+                    >
+                        {retesting ? "Retestando IA..." : "Retestar classificações com IA"}
+                    </button>
                 </div>
+            {retestMessage && <div className="status-message">{retestMessage}</div>}
+            {retestError && <div className="status-message error">{retestError}</div>}
             {exportError && <div className="status-message error">{exportError}</div>}
                 {/* --- Tabela --- */}
                 <div className="table-wrapper">
@@ -257,6 +291,7 @@ export default function DadosApontamentos() {
                                                 apontamentoId={row.id}
                                                 currentModoFalha={row.modo_falha_padrao}
                                                 origemClassificacao={row.origem_classificacao}
+                                                explicacaoIA={row.explicacao_classificacao_ia}
                                                 onClassified={(novoModo) => handleClassified(row.id, novoModo)}
                                             />
                                         </td>

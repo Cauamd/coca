@@ -2452,6 +2452,61 @@ a {
   align-self: flex-start;
 }
 
+.apontamentos-table tbody td:nth-child(9) {
+  overflow: visible;
+}
+
+.ai-explanation {
+  width: 100%;
+  min-width: 0;
+  color: var(--text-secondary);
+  font-size: 10px;
+}
+
+.ai-explanation summary {
+  cursor: pointer;
+  color: var(--accent-red);
+  line-height: 1.35;
+}
+
+.ai-explanation p {
+  white-space: normal;
+  margin: 5px 0;
+  line-height: 1.4;
+}
+
+.ai-reference-heading {
+  color: var(--text-primary);
+  margin: 5px 0 3px;
+  font-weight: 600;
+  display: block;
+}
+
+.ai-explanation ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ai-explanation li {
+  border-top: 1px solid var(--border-steel);
+  padding: 4px 0;
+  line-height: 1.35;
+}
+
+.ai-reference-text {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  color: var(--text-primary);
+  display: block;
+}
+
+.ai-reference-meta {
+  margin-top: 2px;
+  font-size: 9px;
+  display: block;
+}
+
 .apontamentos-table .btn-classify {
   padding: 4px 6px;
   font-size: 10px;

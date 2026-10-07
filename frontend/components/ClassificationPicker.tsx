@@ -3,11 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ModoFalha, fetchModosFalha, updateClassificacao } from "../lib/api";
+import type { Apontamento } from "../lib/api";
 
 interface Props {
   apontamentoId: number;
   currentModoFalha: string | null;
   origemClassificacao: "historico_exato" | "palavra_chave" | "ia" | "manual" | null;
+  explicacaoIA: Apontamento["explicacao_classificacao_ia"];
   onClassified: (novoModo: string | null) => void;
 }
 
@@ -15,6 +17,7 @@ export default function ClassificationPicker({
   apontamentoId,
   currentModoFalha,
   origemClassificacao,
+  explicacaoIA,
   onClassified,
 }: Props) {
   const [open, setOpen] = useState(false);
@@ -84,6 +87,28 @@ export default function ClassificationPicker({
           <div className="classification-labels">
             <span className="tag tag-classified">{currentModoFalha}</span>
             {origemClassificacao === "ia" && <span className="tag">Classificado pela IA</span>}
+            {origemClassificacao === "ia" && explicacaoIA && (
+              <details className="ai-explanation">
+                <summary>Como a IA chegou a esta classificação</summary>
+                <p>
+                  A IA escolheu <strong>{explicacaoIA.modoSugerido}</strong> com confiança de{" "}
+                  {(explicacaoIA.confianca * 100).toFixed(1)}%.
+                  {` ${Math.round(explicacaoIA.concordancia * 100)}% dos exemplos próximos concordaram.`}
+                </p>
+                <span className="ai-reference-heading">Históricos usados como referência</span>
+                <ul>
+                  {explicacaoIA.referencias.map((referencia, index) => (
+                    <li key={`${index}-${referencia.text}`}>
+                      <span className="ai-reference-text">“{referencia.text}”</span>
+                      <span className="ai-reference-meta">
+                        {referencia.label} · similaridade {(referencia.similarity * 100).toFixed(1)}%
+                        {referencia.votos ? " · votou nesta classificação" : " · voto divergente"}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            )}
           </div>
         ) : (
           <span className="tag tag-unclassified">Não classificado</span>

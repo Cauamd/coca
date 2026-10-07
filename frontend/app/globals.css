@@ -936,6 +936,15 @@ a {
 .apontamentos-table .classification-labels { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; width: 100%; min-width: 0; }
 .apontamentos-table .classification-current .tag { display: block; flex: 0 1 auto; min-width: 0; max-width: 100%; overflow: visible; overflow-wrap: anywhere; text-overflow: clip; white-space: normal; line-height: 1.35; padding-left: 6px; padding-right: 6px; }
 .apontamentos-table .classification-current .btn-classify { align-self: flex-start; }
+.apontamentos-table tbody td:nth-child(9) { overflow: visible; }
+.ai-explanation { width: 100%; min-width: 0; font-size: 10px; color: var(--text-secondary); }
+.ai-explanation summary { cursor: pointer; color: var(--accent-red); line-height: 1.35; }
+.ai-explanation p { margin: 5px 0; line-height: 1.4; white-space: normal; }
+.ai-reference-heading { display: block; margin: 5px 0 3px; color: var(--text-primary); font-weight: 600; }
+.ai-explanation ul { list-style: none; margin: 0; padding: 0; }
+.ai-explanation li { padding: 4px 0; border-top: 1px solid var(--border-steel); line-height: 1.35; }
+.ai-reference-text { display: block; white-space: normal; overflow-wrap: anywhere; color: var(--text-primary); }
+.ai-reference-meta { display: block; margin-top: 2px; font-size: 9px; }
 .apontamentos-table .btn-classify { padding: 4px 6px; font-size: 10px; }
 
 .data-table thead th {

@@ -58,6 +58,14 @@ export interface Apontamento {
   total_minutos: number;
   modo_falha_padrao: string | null;
   origem_classificacao: "historico_exato" | "palavra_chave" | "ia" | "manual" | null;
+  explicacao_classificacao_ia: {
+    textoAnalisado: string | null;
+    modoSugerido: string;
+    confianca: number;
+    concordancia: number;
+    motivo: string;
+    referencias: { label: string; text: string; similarity: number; votos: boolean }[];
+  } | null;
 }
 
 export interface ListResponse {
@@ -241,6 +249,23 @@ export async function classifyPendingApontamentos(): Promise<{
   if (!res.ok) {
     const data = await res.json().catch(() => ({}));
     throw new Error(data.detail || "Erro ao classificar apontamentos pendentes");
+  }
+  return res.json();
+}
+
+export async function retestAIClassifications(): Promise<{
+  totalAnalisado: number;
+  totalClassificadoIA: number;
+  totalSemConclusao: number;
+  totalExemplosFeedback: number;
+}> {
+  const res = await fetch(`${API_URL}/classificacao/ia/retestar`, {
+    method: "POST",
+    credentials: "include",
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.detail || "Erro ao retestar classificações com IA");
   }
   return res.json();
 }

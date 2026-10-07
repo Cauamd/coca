@@ -566,6 +566,8 @@ __turbopack_context__.s([
     ()=>loginAdmin,
     "logoutAdmin",
     ()=>logoutAdmin,
+    "retestAIClassifications",
+    ()=>retestAIClassifications,
     "savePlano",
     ()=>savePlano,
     "updateClassificacao",
@@ -704,6 +706,17 @@ async function classifyPendingApontamentos() {
     if (!res.ok) {
         const data = await res.json().catch(()=>({}));
         throw new Error(data.detail || "Erro ao classificar apontamentos pendentes");
+    }
+    return res.json();
+}
+async function retestAIClassifications() {
+    const res = await fetch(`${API_URL}/classificacao/ia/retestar`, {
+        method: "POST",
+        credentials: "include"
+    });
+    if (!res.ok) {
+        const data = await res.json().catch(()=>({}));
+        throw new Error(data.detail || "Erro ao retestar classificações com IA");
     }
     return res.json();
 }
